@@ -7,10 +7,12 @@ import java.util.Set;
 
 public class OrderFacade {
 
-    private Map<Integer, Integer> orders = new HashMap<>();
+    private Map<Integer, Integer> productList;
 
-    public void addOrder(){
-
+    public OrderFacade(Map<Integer, Integer> productList){
+        this.productList = productList;
     }
+
+
 
 }
