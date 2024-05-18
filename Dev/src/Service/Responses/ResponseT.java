@@ -7,16 +7,20 @@ public class ResponseT<T> extends Response {
         super();
         this.value = value;
     }
+
     public ResponseT() {
         super();
         this.value = null;
     }
+
     public ResponseT(String errorMessage) {
         super(errorMessage);
     }
+
     public T getValue() {
         return value;
     }
+    
     public void setValue(T value) {
         this.value = value;
     }

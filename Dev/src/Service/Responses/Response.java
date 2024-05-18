@@ -6,10 +6,13 @@ public class Response {
     public Response(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
     public Response() { }
+
     public String getErrorMessage() {
         return errorMessage;
     }
+    
     public boolean errorOccurred() { 
         return errorMessage != null; 
     }

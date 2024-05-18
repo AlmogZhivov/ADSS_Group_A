@@ -1,6 +1,6 @@
 package Service;
 
-import Bussiness.OrderFacade;
+import Business.OrderFacade;
 import netscape.javascript.JSObject;
 
 public class OrderService {
