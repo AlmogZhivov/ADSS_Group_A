@@ -1,4 +1,4 @@
-package Bussiness;
+package Business;
 
 import java.util.*;
 
