@@ -1,18 +1,21 @@
 package Business;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class OrderFacade {
 
-    private Map<Integer, Integer> productList;
+    private Map<Integer, Order> orderList;
+    private int id;
 
-    public OrderFacade(Map<Integer, Integer> productList){
-        this.productList = productList;
+    public OrderFacade(){
+        this.orderList = new HashMap<>();
+        this.id = 0;
     }
 
+    public void addOrder(Map<Integer, Integer> products, Date shipmentDate){
+
+        id++;
+    }
 
 
 }
