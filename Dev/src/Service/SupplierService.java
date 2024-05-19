@@ -125,6 +125,15 @@ public class SupplierService {
         }
     }
 
+    public Response addSupplierAgreement(int supplierId) {
+        try {
+            supplierFacade.addSupplierAgreement(supplierId);
+            return new Response();
+        } catch (Exception e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
     public Response updateProductPrice(int supplierId, int catalogNumber, double newPrice) {
         try {
             supplierFacade.updateProductPrice(supplierId, catalogNumber, newPrice);
@@ -133,7 +142,6 @@ public class SupplierService {
             return new Response(e.getMessage());
         }
     }
-
 
     public Response addProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int discountPercentage) {
         try {
@@ -171,18 +179,18 @@ public class SupplierService {
         }
     }
 
-    public Response removeItemFromSupplier(int supplierId, int catalogNumber) {
+    public Response removeProductFromSupplier(int supplierId, int catalogNumber) {
         try {
-            supplierFacade.removeItem(supplierId, catalogNumber);
+            supplierFacade.removeProduct(supplierId, catalogNumber);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
         }
     }
 
-    public Response updateItemName(int supplierId, int catalogNumber, String newName) {
+    public Response updateProductName(int supplierId, int catalogNumber, String newName) {
         try {
-            supplierFacade.updateItemName(supplierId, catalogNumber, newName);
+            supplierFacade.updateProductName(supplierId, catalogNumber, newName);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
