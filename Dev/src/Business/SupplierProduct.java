@@ -1,5 +1,7 @@
 package Business;
 
+import java.util.Map;
+
 public class SupplierProduct {
 
     private int catalogNumber;
@@ -30,6 +32,12 @@ public class SupplierProduct {
         this.discountThreshold = supplierProduct.getDiscountThreshold();
     }
 
+    public SupplierProduct(int catalogNumber, double price, String name) {
+        this.catalogNumber = catalogNumber;
+        this.price = price;
+        this.name = name;
+    }
+
     private int getDiscountThreshold() {
         return discountThreshold;   
     }
@@ -42,19 +50,59 @@ public class SupplierProduct {
         return priceAfterDiscount;
     }
 
-    private double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    private int getSupplierId() {
+    public int getSupplierId() {
         return supplierId;  
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 
     public int getCatalogNumber() {
         return catalogNumber;
+    }
+
+    public Map<Integer, Double> getProductDiscounts() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getItemDiscounts'");
+    }
+
+    public boolean isAmountExists(int amount) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isAmountExists'");
+    }
+
+    public double getDiscountForOrder(int amount) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDiscountForOrder'");
+    }
+
+    public void setPrice(double price2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setPrice'");
+    }
+
+    public void addProductDiscountAccordingToAmount(int amount, double discount) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addProductDiscountAccordingToAmount'");
+    }
+
+    public void updateProductDiscountAccordingToAmount(int amount, double newDiscount) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateProductDiscountAccordingToAmount'");
+    }
+
+    public void removeProductDiscountAccordingToAmount(int amount) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeProductDiscountAccordingToAmount'");
+    }
+
+    public void setName(String newName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setName'");
     }
 }

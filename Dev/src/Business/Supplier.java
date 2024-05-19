@@ -15,7 +15,7 @@ public class Supplier {
     private String bankNumber;
     private PaymentMethod payment;
     private Contact contact;
-    //private final SupplierAgreement supplierAgreement;
+    private SupplierAgreement supplierAgreement;
 
     public Supplier(int supplierId, String name, String compNumber, String bankNumber, PaymentMethod payment, Contact contact) {
         this.supplierId = supplierId;
@@ -44,6 +44,10 @@ public class Supplier {
         //this.shouldDeliver = supplier.getShouldDeliver();
         this.payment = supplier.getPayment();
         this.contact = supplier.getContact();
+    }
+
+    public void addSupplierAgreement() {
+        supplierAgreement = new SupplierAgreement(supplierId);
     }
 
     public int getSupplierId() {
@@ -85,5 +89,37 @@ public class Supplier {
     // Adds contact to supplier
     public void addContact(String contactName, String phoneNumber) {
         this.contact = new Contact(contactName, phoneNumber, contactId++);
+    }
+
+    public SupplierAgreement getSupplierAgreement() {
+        return supplierAgreement;
+    }
+
+    public void updateProductPrice(int catalogNumber, double newPrice) {
+        supplierAgreement.updateProductPrice(catalogNumber, newPrice);
+    }
+
+    public void addProductDiscountAccordingToAmount(int catalogNumber, int amount, int discountPercentage) {
+        supplierAgreement.addProductDiscountAccordingToAmount(catalogNumber, amount, discountPercentage);
+    }
+
+    public void updateProductDiscountAccordingToAmount(int catalogNumber, int amount, int newDiscountPercentage) {
+        supplierAgreement.updateProductDiscountAccordingToAmount(catalogNumber, amount, newDiscountPercentage);    
+    }
+
+    public void removeProductDiscountAccordingToAmount(int catalogNumber, int amount) {
+        supplierAgreement.removeProductDiscountAccordingToAmount(catalogNumber, amount);
+    }
+
+    public void addProduct(SupplierProduct product) {
+        supplierAgreement.addProduct(product);
+    }
+
+    public void removeProduct(int catalogNumber) {
+        supplierAgreement.removeProduct(catalogNumber);
+    }
+
+    public void updateProductName(int catalogNumber, String newName) {
+        supplierAgreement.updateProductName(catalogNumber, newName);
     }
 }

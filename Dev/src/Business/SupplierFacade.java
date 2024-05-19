@@ -9,6 +9,7 @@ import Business.Supplier.PaymentMethod;
 
 public class SupplierFacade {
 
+    // <supplierId, Supplier>
     private Map<Integer, Supplier> suppliers = new HashMap<>();
 
     public Supplier getSupplier(int supplierId) {
@@ -58,43 +59,40 @@ public class SupplierFacade {
     }
 
     public SupplierAgreement getSupplierAgreement(int supplierId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSupplierAgreement'");
+        return suppliers.get(supplierId).getSupplierAgreement();
     }
 
     public void updateProductPrice(int supplierId, int catalogNumber, double newPrice) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProductPrice'");
+        suppliers.get(supplierId).updateProductPrice(catalogNumber, newPrice);
     }
 
     public void addProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int discountPercentage) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addItemDiscountAccordingToAmount'");
+        suppliers.get(supplierId).addProductDiscountAccordingToAmount(catalogNumber, amount, discountPercentage);
     }
 
     public void updateProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount,
             int newDiscountPercentage) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateItemDiscountAccordingToAmount'");
+        suppliers.get(supplierId).updateProductDiscountAccordingToAmount(catalogNumber, amount, newDiscountPercentage);
     }
 
     public void removeProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeItemDiscountAccordingToAmount'");
+        suppliers.get(supplierId).removeProductDiscountAccordingToAmount(catalogNumber, amount);    
     }
 
     public void addProductToSupplier(int supplierId, int catalogNumber, double price, String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addItemToSupplier'");
+        SupplierProduct product = new SupplierProduct(catalogNumber, price, name);
+        suppliers.get(supplierId).addProduct(product);
     }
 
-    public void removeItem(int supplierId, int catalogNumber) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeItem'");
+    public void removeProduct(int supplierId, int catalogNumber) {
+        suppliers.get(supplierId).removeProduct(catalogNumber);
     }
 
-    public void updateItemName(int supplierId, int catalogNumber, String newName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateItemName'");
+    public void updateProductName(int supplierId, int catalogNumber, String newName) {
+        suppliers.get(supplierId).updateProductName(catalogNumber, newName);
+    }
+
+    public void addSupplierAgreement(int supplierId) {
+        suppliers.get(supplierId).addSupplierAgreement();
     }
 }
