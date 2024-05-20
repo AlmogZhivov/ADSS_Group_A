@@ -10,13 +10,15 @@ public class Order {
     private Map<Integer, Integer> products;
     private Date shipmentDate;
     private final int supplierId;
+    private SupplierAgreement supplierAgreement;
 
 
-    public Order(int orderId, Map<Integer, Integer> products, Date shipmentDate, int supplierId) {
+    public Order(int orderId, Map<Integer, Integer> products, Date shipmentDate, int supplierId, SupplierAgreement supplierAgreement) {
         this.orderId = orderId;
         this.products = products;
         this.shipmentDate = shipmentDate;
         this.supplierId = supplierId;
+        this.supplierAgreement = supplierAgreement;
     }
 
     public int getOrderId() {
@@ -45,5 +47,13 @@ public class Order {
 
     public void removeProduct(int catalogNumber){
         products.remove(catalogNumber);
+    }
+
+    public double getOrderPrice(){
+        double sum = 0;
+        for (Map.Entry<Integer,Integer> product : products.entrySet()){
+            sum += supplierAgreement.getProductPriceAccordingToAmount(product.getKey(), product.getValue());
+        }
+        return sum;
     }
 }

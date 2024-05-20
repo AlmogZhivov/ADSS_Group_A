@@ -1,16 +1,18 @@
 package Service;
 
+import Business.Order;
 import Business.OrderFacade;
 import Service.Responses.Response;
-import jdk.jshell.spi.ExecutionControl;
-import netscape.javascript.JSObject;
+import Service.Responses.ResponseT;
+ddimport netscape.javascript.JSObject;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class OrderService {
 
-    private OrderFacade orderFacade;
+    private final OrderFacade orderFacade;
 
     public OrderService(OrderFacade orderFacade) {
         this.orderFacade = orderFacade;
@@ -53,13 +55,30 @@ public class OrderService {
     }
 
     public Response getOrder(int orderId){
-        //TODO - implement
-         return null;
+        try {
+            Order order = orderFacade.getOrder(orderId);
+            return new ResponseT<>(order);
+        } catch (Exception e) {
+            return new ResponseT<>(e.getMessage());
+        }
     }
 
     public Response getAllOrders(){
-        //TODO - implement
-        return null;
+        try {
+            List<Order> orders = orderFacade.getAllOrders();
+            return new ResponseT<>(orders);
+        } catch (Exception e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public Response getOrderPrice(int orderId){
+        try {
+            double price = orderFacade.getOrderPrice(orderId);
+            return new ResponseT<>(price);
+        } catch (Exception e) {
+            return new ResponseT<>(e.getMessage());
+        }
     }
 
 

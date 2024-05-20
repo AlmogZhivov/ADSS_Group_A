@@ -6,7 +6,7 @@ public class OrderFacade {
 
     private Map<Integer, Order> orders;
     private int id;
-    private SupplierFacade sf;
+    private final SupplierFacade sf;
 
     public OrderFacade(SupplierFacade sf){
         this.orders = new HashMap<>();
@@ -15,7 +15,8 @@ public class OrderFacade {
     }
 
     public void addOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
-        Order order = new Order(this.id, products, shipmentDate, supplierId);
+        SupplierAgreement sa = sf.getSupplierAgreement(supplierId);
+        Order order = new Order(this.id, products, shipmentDate, supplierId, sa);
         orders.put(id, order);
         id++;
     }
@@ -39,12 +40,18 @@ public class OrderFacade {
         order.removeProduct(catalogNumber);
     }
 
-    public void getOrder(int orderId){
-        //TODO - return a response
+    public Order getOrder(int orderId){
+        return orders.get(orderId);
     }
 
-    public void getAllOrders(){
-        //TODO - return a response
+    public List<Order> getAllOrders(){
+        List<Order> orderList = new ArrayList<Order>(orders.values());
+        return orderList;
+    }
+
+    public double getOrderPrice(int orderId){
+        Order order = orders.get(orderId);
+        return order.getOrderPrice();
     }
 
 
