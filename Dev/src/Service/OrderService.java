@@ -18,6 +18,7 @@ public class OrderService {
         this.orderFacade = orderFacade;
     }
 
+    // Adds a single order to the system
     public Response addGeneralOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
         try {
             orderFacade.addGeneralOrder(products, shipmentDate, supplierId);
@@ -27,6 +28,7 @@ public class OrderService {
         }
     }
 
+    // Adds a repeating order for a specific day of the week
     public Response addRepOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId, int day){
         try {
             orderFacade.addRepOrder(products, shipmentDate, supplierId, day);
@@ -36,6 +38,7 @@ public class OrderService {
         }
     }
 
+    // Removes all general (non-repeating) orders that have been shipped
     public Response updateOrders(){
         try {
             orderFacade.updateOrders();
@@ -45,7 +48,7 @@ public class OrderService {
         }
     }
 
-
+    // Removes an order from the system
     public Response removeOrder(int orderId){
         try {
             orderFacade.removeOrder(orderId);
@@ -55,6 +58,7 @@ public class OrderService {
         }
     }
 
+    // Adds a product to an existing order
     public Response addProduct(int orderId, int catalogNumber, int amount){
         try {
             orderFacade.addProduct(orderId, catalogNumber, amount);
@@ -64,6 +68,7 @@ public class OrderService {
         }
     }
 
+    //Removes a product from an existing order
     public Response removeProduct(int orderId, int catalogNumber){
         try {
             orderFacade.removeProduct(orderId, catalogNumber);
@@ -73,6 +78,7 @@ public class OrderService {
         }
     }
 
+    // Returns an order according to the id given
     public Response getOrder(int orderId){
         try {
             Order order = orderFacade.getOrder(orderId);
@@ -82,6 +88,7 @@ public class OrderService {
         }
     }
 
+    // Returns a list of all orders in the system
     public Response getAllOrders(){
         try {
             List<Order> orders = orderFacade.getAllOrders();
@@ -91,6 +98,7 @@ public class OrderService {
         }
     }
 
+    // Returns the price of an order according to the id given
     public Response getOrderPrice(int orderId){
         try {
             double price = orderFacade.getOrderPrice(orderId);
