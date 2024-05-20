@@ -14,11 +14,26 @@ public class OrderFacade {
         this.sf = sf;
     }
 
-    public void addOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
+    public void addGeneralOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
         SupplierAgreement sa = sf.getSupplierAgreement(supplierId);
-        Order order = new Order(this.id, products, shipmentDate, supplierId, sa);
+        Order order = new Order(this.id, products, shipmentDate, supplierId, sa, -1);
         orders.put(id, order);
         id++;
+    }
+
+    public void addRepOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId, int day){
+        SupplierAgreement sa = sf.getSupplierAgreement(supplierId);
+        Order order = new Order(this.id, products, shipmentDate, supplierId, sa, day);
+        orders.put(id, order);
+        id++;
+    }
+
+    public void updateOrders(){
+        for (Order order : orders.values()){
+            if (order.getDay() == -1 && order.getShipmentDate().after(new Date())){
+                removeOrder(order.getOrderId());
+            }
+        }
     }
 
     public void removeOrder(int orderId){
@@ -45,8 +60,7 @@ public class OrderFacade {
     }
 
     public List<Order> getAllOrders(){
-        List<Order> orderList = new ArrayList<Order>(orders.values());
-        return orderList;
+        return new ArrayList<Order>(orders.values());
     }
 
     public double getOrderPrice(int orderId){

@@ -1,5 +1,6 @@
 package Business;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,15 +12,19 @@ public class Order {
     private Date shipmentDate;
     private final int supplierId;
     private SupplierAgreement supplierAgreement;
+    private int day;
 
 
-    public Order(int orderId, Map<Integer, Integer> products, Date shipmentDate, int supplierId, SupplierAgreement supplierAgreement) {
+    public Order(int orderId, Map<Integer, Integer> products, Date shipmentDate, int supplierId, SupplierAgreement supplierAgreement, int day) {
         this.orderId = orderId;
         this.products = products;
         this.shipmentDate = shipmentDate;
         this.supplierId = supplierId;
         this.supplierAgreement = supplierAgreement;
+        this.day = day;
     }
+
+
 
     public int getOrderId() {
         return orderId;
@@ -55,5 +60,9 @@ public class Order {
             sum += supplierAgreement.getProductPriceAccordingToAmount(product.getKey(), product.getValue());
         }
         return sum;
+    }
+
+    public int getDay() {
+        return day;
     }
 }

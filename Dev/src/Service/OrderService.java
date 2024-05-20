@@ -4,7 +4,7 @@ import Business.Order;
 import Business.OrderFacade;
 import Service.Responses.Response;
 import Service.Responses.ResponseT;
-ddimport netscape.javascript.JSObject;
+import netscape.javascript.JSObject;
 
 import java.util.Date;
 import java.util.List;
@@ -18,14 +18,33 @@ public class OrderService {
         this.orderFacade = orderFacade;
     }
 
-    public Response addOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
+    public Response addGeneralOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
         try {
-            orderFacade.addOrder(products, shipmentDate, supplierId);
+            orderFacade.addGeneralOrder(products, shipmentDate, supplierId);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
         }
     }
+
+    public Response addRepOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId, int day){
+        try {
+            orderFacade.addRepOrder(products, shipmentDate, supplierId, day);
+            return new Response();
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
+    public Response updateOrders(){
+        try {
+            orderFacade.updateOrders();
+            return new Response();
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
 
     public Response removeOrder(int orderId){
         try {
