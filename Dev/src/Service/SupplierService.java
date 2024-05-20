@@ -125,6 +125,7 @@ public class SupplierService {
         }
     }
 
+    // Switches the supplier agreement to a new one
     public Response addSupplierAgreement(int supplierId) {
         try {
             supplierFacade.addSupplierAgreement(supplierId);
@@ -134,6 +135,7 @@ public class SupplierService {
         }
     }
 
+    // Changes a product's price
     public Response updateProductPrice(int supplierId, int catalogNumber, double newPrice) {
         try {
             supplierFacade.updateProductPrice(supplierId, catalogNumber, newPrice);
@@ -143,6 +145,7 @@ public class SupplierService {
         }
     }
 
+    // Sets a new product discount according to an amount given
     public Response addProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int discountPercentage) {
         try {
             supplierFacade.addProductDiscountAccordingToAmount(supplierId, catalogNumber, amount, discountPercentage);
@@ -152,6 +155,7 @@ public class SupplierService {
         }
     }
 
+    // Updates the discount to a discount given
     public Response updateProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int newDiscountPercentage) {
         try {
             supplierFacade.updateProductDiscountAccordingToAmount(supplierId, catalogNumber, amount, newDiscountPercentage);
@@ -161,6 +165,7 @@ public class SupplierService {
         }
     }
 
+    // Removes a product discount
     public Response removeProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount) {
         try {
             supplierFacade.removeProductDiscountAccordingToAmount(supplierId, catalogNumber, amount);
@@ -170,6 +175,7 @@ public class SupplierService {
         }
     }
 
+    // Adds a new product supplied by the given supplier
     public Response addProductToSupplier(int supplierId, int catalogNumber, double price, String name) {
         try {
             supplierFacade.addProductToSupplier(supplierId, catalogNumber, price, name);
@@ -179,6 +185,7 @@ public class SupplierService {
         }
     }
 
+    // Removes a product from the supplied products for a given supplier
     public Response removeProductFromSupplier(int supplierId, int catalogNumber) {
         try {
             supplierFacade.removeProduct(supplierId, catalogNumber);
@@ -188,12 +195,23 @@ public class SupplierService {
         }
     }
 
+    // Changes a supplier product's name
     public Response updateProductName(int supplierId, int catalogNumber, String newName) {
         try {
             supplierFacade.updateProductName(supplierId, catalogNumber, newName);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
+        }
+    }
+
+    // Returns a string describing the supplier for printing
+    public Response getSupplierString(int supplierId) {
+        try {
+            String str = supplierFacade.getSupplierString(supplierId);
+            return new ResponseT<>(str);
+        } catch (Exception e) {
+            return new ResponseT<>(e.getMessage());
         }
     }
 }

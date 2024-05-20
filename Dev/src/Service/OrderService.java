@@ -108,6 +108,15 @@ public class OrderService {
         }
     }
 
+    // Returns a string describing the order according to the id given
+    public Response getOrderString(int orderId){
+        try {
+             String str = orderFacade.getOrderString(orderId);
+            return new ResponseT<>(str);
+        } catch (Exception e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
 
 
 

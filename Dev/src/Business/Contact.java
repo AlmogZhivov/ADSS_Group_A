@@ -31,4 +31,8 @@ public class Contact {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    public String toString(){
+        return "id - " + contactId + ", name - " + name + ", phone number - " + phoneNumber;
+    }
 }

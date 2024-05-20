@@ -65,4 +65,21 @@ public class Order {
     public int getDay() {
         return day;
     }
+
+    // Generates a string of the order for printing
+    public String toString(){
+        String str = "";
+        str += "Order Id: " + orderId + "\n";
+        str += "Supplier Id: " + supplierId + "\n";
+        str += "Shipment Date: " + shipmentDate.toString() + "\n";
+        if (day != -1){
+            str += "This is a repeating order\n";
+        }
+        str += "Products (in the format: [catalog number, amount]):\n";
+        for (Map.Entry<Integer,Integer> product : products.entrySet()){
+            str += product.toString() + "\n";
+        }
+
+        return str;
+    }
 }
