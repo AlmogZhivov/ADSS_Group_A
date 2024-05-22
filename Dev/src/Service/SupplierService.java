@@ -117,6 +117,7 @@ public class SupplierService {
 
     // Supplier Agreement related functions
 
+    // Returns the supplier agreement of the supplier with the given id
     public ResponseT<SupplierAgreement> getSupplierAgreement(int supplierId) {
         try {
             return new ResponseT<>(new SupplierAgreement(supplierFacade.getSupplierAgreement(supplierId)));
@@ -125,6 +126,7 @@ public class SupplierService {
         }
     }
 
+    // Adds a supplier agreement to the supplier with the given id
     public Response addSupplierAgreement(int supplierId) {
         try {
             supplierFacade.addSupplierAgreement(supplierId);
@@ -134,6 +136,7 @@ public class SupplierService {
         }
     }
 
+    // updates the price of the product with the given catalog number from the supplier with the given id
     public Response updateProductPrice(int supplierId, int catalogNumber, double newPrice) {
         try {
             supplierFacade.updateProductPrice(supplierId, catalogNumber, newPrice);
@@ -143,6 +146,7 @@ public class SupplierService {
         }
     }
 
+    // Adds a discount to the product with the given catalog number and amount from the supplier with the given id
     public Response addProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int discountPercentage) {
         try {
             supplierFacade.addProductDiscountAccordingToAmount(supplierId, catalogNumber, amount, discountPercentage);
@@ -152,6 +156,7 @@ public class SupplierService {
         }
     }
 
+    // Updates the discount of the product with the given catalog number and amount from the supplier with the given id
     public Response updateProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int newDiscountPercentage) {
         try {
             supplierFacade.updateProductDiscountAccordingToAmount(supplierId, catalogNumber, amount, newDiscountPercentage);
@@ -161,6 +166,7 @@ public class SupplierService {
         }
     }
 
+    // Removes the discount of the product with the given catalog number and amount from the supplier with the given id
     public Response removeProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount) {
         try {
             supplierFacade.removeProductDiscountAccordingToAmount(supplierId, catalogNumber, amount);
@@ -170,6 +176,7 @@ public class SupplierService {
         }
     }
 
+    // adds a product with the given catalog number, price and name to the supplier with the given id
     public Response addProductToSupplier(int supplierId, int catalogNumber, double price, String name) {
         try {
             supplierFacade.addProductToSupplier(supplierId, catalogNumber, price, name);
@@ -178,7 +185,8 @@ public class SupplierService {
             return new Response(e.getMessage());
         }
     }
-
+    
+    // Removes the product with the given catalog number from the supplier with the given id
     public Response removeProductFromSupplier(int supplierId, int catalogNumber) {
         try {
             supplierFacade.removeProduct(supplierId, catalogNumber);
@@ -188,6 +196,7 @@ public class SupplierService {
         }
     }
 
+    // updates the name of the product with the given catalog number from the supplier with the given id
     public Response updateProductName(int supplierId, int catalogNumber, String newName) {
         try {
             supplierFacade.updateProductName(supplierId, catalogNumber, newName);

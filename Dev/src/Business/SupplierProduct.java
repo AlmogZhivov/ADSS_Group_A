@@ -1,5 +1,6 @@
 package Business;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class SupplierProduct {
@@ -11,6 +12,9 @@ public class SupplierProduct {
     private double priceAfterDiscount;
     private int discountPrecentage;
     private int discountThreshold;
+    // <amount, discount>
+    private Map<Integer, Double> discountAccordingToAmount;
+
 
     public SupplierProduct(int catalogNumber, String name, int supplierId, double price, double priceAfterDiscount, int discountPrecentage, int discountThreshold) {
         this.catalogNumber = catalogNumber;
@@ -20,6 +24,8 @@ public class SupplierProduct {
         this.priceAfterDiscount = priceAfterDiscount;
         this.discountPrecentage = discountPrecentage;
         this.discountThreshold = discountThreshold;
+        this.discountAccordingToAmount = new HashMap<>();
+        discountAccordingToAmount.put(0, 0.0);
     }
     
     public SupplierProduct(SupplierProduct supplierProduct) {
@@ -30,79 +36,88 @@ public class SupplierProduct {
         this.priceAfterDiscount = supplierProduct.getPriceAfterDiscount();
         this.discountPrecentage = supplierProduct.getDiscountPrecentage();
         this.discountThreshold = supplierProduct.getDiscountThreshold();
+        this.discountAccordingToAmount = new HashMap<>();
+        discountAccordingToAmount.put(0, 0.0);
     }
 
     public SupplierProduct(int catalogNumber, double price, String name) {
         this.catalogNumber = catalogNumber;
         this.price = price;
         this.name = name;
+        this.discountAccordingToAmount = new HashMap<>();
+        this.discountAccordingToAmount.put(0, 0.0);
     }
 
     private int getDiscountThreshold() {
-        return discountThreshold;   
+        return this.discountThreshold;   
     }
 
     private int getDiscountPrecentage() {
-        return discountPrecentage;
+        return this.discountPrecentage;
     }
 
     private double getPriceAfterDiscount() {
-        return priceAfterDiscount;
+        return this.priceAfterDiscount;
     }
 
     public double getPrice() {
-        return price;
+        return this.price;
     }
 
     public int getSupplierId() {
-        return supplierId;  
+        return this.supplierId;  
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public int getCatalogNumber() {
-        return catalogNumber;
+        return this.catalogNumber;
     }
 
     public Map<Integer, Double> getProductDiscounts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getItemDiscounts'");
+        return this.discountAccordingToAmount;
     }
 
-    public boolean isAmountExists(int amount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isAmountExists'");
+    public boolean isAmountExists(int amount){
+        return this.discountAccordingToAmount.containsKey(amount);
     }
 
     public double getDiscountForOrder(int amount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDiscountForOrder'");
+        if(isAmountExists(amount))
+            return this.discountAccordingToAmount.get(amount);
+        return 0;
     }
 
     public void setPrice(double price2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setPrice'");
+        this.price = price2;    
+    }
+
+    private boolean isLegalDiscount(double discount) {
+        return discount >= 0 && discount <= 100;
     }
 
     public void addProductDiscountAccordingToAmount(int amount, double discount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addProductDiscountAccordingToAmount'");
+        if (!isLegalDiscount((int) discount))
+            throw new IllegalArgumentException("Invalid discount!");
+        this.discountAccordingToAmount.put(amount, discount);
     }
 
     public void updateProductDiscountAccordingToAmount(int amount, double newDiscount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProductDiscountAccordingToAmount'");
+        if (!isLegalDiscount(newDiscount))
+            throw new IllegalArgumentException("Invalid discount!");
+        if (isAmountExists(amount))
+            discountAccordingToAmount.put(amount, newDiscount);
     }
 
     public void removeProductDiscountAccordingToAmount(int amount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeProductDiscountAccordingToAmount'");
+        if (!isAmountExists(amount))
+            throw new IllegalArgumentException("Product does not exist!");
+        discountAccordingToAmount.remove(amount);
     }
 
     public void setName(String newName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setName'");
+        this.name = newName;
     }
 }
