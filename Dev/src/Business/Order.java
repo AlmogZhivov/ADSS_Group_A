@@ -67,7 +67,7 @@ public class Order {
     }
 
     // Generates a string of the order for printing
-    public String toString(){
+    public String toString() {
         String str = "";
         str += "Order Id: " + orderId + "\n";
         str += "Supplier Id: " + supplierId + "\n";

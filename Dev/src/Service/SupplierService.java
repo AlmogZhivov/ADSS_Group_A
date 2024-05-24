@@ -125,7 +125,7 @@ public class SupplierService {
     }
 
     // Switches the supplier agreement to a new one
-    public Response addSupplierAgreement(int supplierId) {
+    public String addSupplierAgreement(int supplierId) {
         try {
             supplierFacade.addSupplierAgreement(supplierId);
             return gson.toJson(new Response());
@@ -135,7 +135,7 @@ public class SupplierService {
     }
 
     // Changes a product's price
-    public Response updateProductPrice(int supplierId, int catalogNumber, double newPrice) {
+    public String updateProductPrice(int supplierId, int catalogNumber, double newPrice) {
         try {
             supplierFacade.updateProductPrice(supplierId, catalogNumber, newPrice);
             return gson.toJson(new Response());
@@ -145,7 +145,7 @@ public class SupplierService {
     }
 
     // Sets a new product discount according to an amount given
-    public Response addProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int discountPercentage) {
+    public String addProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int discountPercentage) {
         try {
             supplierFacade.addProductDiscountAccordingToAmount(supplierId, catalogNumber, amount, discountPercentage);
             return gson.toJson(new Response());
@@ -155,7 +155,7 @@ public class SupplierService {
     }
 
     // Updates the discount to a discount given
-    public Response updateProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int newDiscountPercentage) {
+    public String updateProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int newDiscountPercentage) {
         try {
             supplierFacade.updateProductDiscountAccordingToAmount(supplierId, catalogNumber, amount, newDiscountPercentage);
             return gson.toJson(new Response());
@@ -165,7 +165,7 @@ public class SupplierService {
     }
 
     // Removes a product discount
-    public Response removeProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount) {
+    public String removeProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount) {
         try {
             supplierFacade.removeProductDiscountAccordingToAmount(supplierId, catalogNumber, amount);
             return gson.toJson(new Response());
@@ -175,7 +175,7 @@ public class SupplierService {
     }
 
     // Adds a new product supplied by the given supplier
-    public Response addProductToSupplier(int supplierId, int catalogNumber, double price, String name) {
+    public String addProductToSupplier(int supplierId, int catalogNumber, double price, String name) {
         try {
             supplierFacade.addProductToSupplier(supplierId, catalogNumber, price, name);
             return gson.toJson(new Response());
@@ -185,7 +185,7 @@ public class SupplierService {
     }
 
     // Removes a product from the supplied products for a given supplier
-    public Response removeProductFromSupplier(int supplierId, int catalogNumber) {
+    public String removeProductFromSupplier(int supplierId, int catalogNumber) {
         try {
             supplierFacade.removeProduct(supplierId, catalogNumber);
             return gson.toJson(new Response());
@@ -195,22 +195,22 @@ public class SupplierService {
     }
 
     // Changes a supplier product's name
-    public Response updateProductName(int supplierId, int catalogNumber, String newName) {
+    public String updateProductName(int supplierId, int catalogNumber, String newName) {
         try {
             supplierFacade.updateProductName(supplierId, catalogNumber, newName);
-            return new Response();
+            return gson.toJson(new Response());
         } catch (Exception e) {
-            return new Response(e.getMessage());
+            return gson.toJson(new Response(e.getMessage()));
         }
     }
 
     // Returns a string describing the supplier for printing
-    public Response getSupplierString(int supplierId) {
+    public String getSupplierString(int supplierId) {
         try {
             String str = supplierFacade.getSupplierString(supplierId);
-            return new ResponseT<>(str);
+            return gson.toJson(new ResponseT<>(str));
         } catch (Exception e) {
-            return new ResponseT<>(e.getMessage());
+            return gson.toJson(new ResponseT<>(e.getMessage()));
         }
     }
 }

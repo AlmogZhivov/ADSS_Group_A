@@ -72,6 +72,4 @@ public class OrderFacade {
         Order order = orders.get(orderId);
         return order.toString();
     }
-
-
 }

@@ -96,8 +96,7 @@ public class SupplierFacade {
         suppliers.get(supplierId).addSupplierAgreement();
     }
 
-    public String getSupplierString(int supplierId){
+    public String getSupplierString(int supplierId) {
         return suppliers.get(supplierId).toString();
-
     }
 }
