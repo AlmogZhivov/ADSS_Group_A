@@ -1,5 +1,7 @@
 package Presentation;
 
+import Business.Order;
+
 import java.util.Scanner;
 
 public class OrderPresent {
@@ -10,7 +12,4 @@ public class OrderPresent {
         scanner = new Scanner(System.in);
     }
 
-    public void presentOrder(){
-
-    }
 }

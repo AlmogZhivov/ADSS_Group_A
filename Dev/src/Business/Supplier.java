@@ -122,4 +122,15 @@ public class Supplier {
     public void updateProductName(int catalogNumber, String newName) {
         supplierAgreement.updateProductName(catalogNumber, newName);
     }
+
+    public String toString(){
+        String str = "";
+        str += "Supplier Id: " + supplierId + "\n";
+        str += "Name: " + name + "\n";
+        str += "Company Number: " + compNumber + "\n";
+        str += "Bank Number: " + bankNumber + "\n";
+        str += "Payment Method: " + payment.toString() + "\n";
+        str += "Contact: " + contact.toString() + "\n";
+        return str;
+    }
 }
