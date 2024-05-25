@@ -1,6 +1,0 @@
-com\Superlee\HR\Backend\Business\Role.class
-com\Superlee\HR\Frontend\CLI.class
-com\Superlee\HR\Backend\Business\ShiftFacade.class
-com\Superlee\HR\Backend\Business\WorkerToSend.class
-com\Superlee\HR\Backend\Service\ShiftService.class
-com\Superlee\HR\Backend\Business\ShiftToSend.class
