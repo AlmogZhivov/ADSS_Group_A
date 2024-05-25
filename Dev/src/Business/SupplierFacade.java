@@ -11,14 +11,15 @@ public class SupplierFacade {
 
     // <supplierId, Supplier>
     private Map<Integer, Supplier> suppliers = new HashMap<>();
+    private static int nextId = 0;
 
     public Supplier getSupplier(int supplierId) {
         return suppliers.get(supplierId);
     }
 
-    public void addSupplier(int supplierId, String name, String compNumber, String bankNumber, PaymentMethod payment) {
-        Supplier supplier = new Supplier(supplierId, name, compNumber, bankNumber, payment);
-        suppliers.put(supplierId, supplier);
+    public void addSupplier(String name, String compNumber, String bankNumber, PaymentMethod payment) {
+        Supplier supplier = new Supplier(nextId++, name, compNumber, bankNumber, payment);
+        suppliers.put(nextId, supplier);
     }
 
     public void removeSupplier(int supplierId) {

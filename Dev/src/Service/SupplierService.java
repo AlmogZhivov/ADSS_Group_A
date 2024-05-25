@@ -14,6 +14,7 @@ import java.util.List;
 public class SupplierService {
     private SupplierFacade supplierFacade;
     private Gson gson = new Gson();
+    private static SupplierService instance;
 
     public SupplierService(SupplierFacade supplierFacade) {
         this.supplierFacade = supplierFacade;
@@ -23,9 +24,9 @@ public class SupplierService {
     // Supplier related functions
 
     // Adds a new supplier to the system
-    public String addSupplier(int supplierId, String name, String compNumber, String bankNumber, PaymentMethod payment) {
+    public String addSupplier(String name, String compNumber, String bankNumber, PaymentMethod payment) {
         try {
-            supplierFacade.addSupplier(supplierId, name, compNumber, bankNumber, payment);
+            supplierFacade.addSupplier(name, compNumber, bankNumber, payment);
             return gson.toJson(new Response());
         } catch (Exception e) {
             return gson.toJson(new Response(e.getMessage()));
@@ -212,5 +213,12 @@ public class SupplierService {
         } catch (Exception e) {
             return gson.toJson(new ResponseT<>(e.getMessage()));
         }
+    }
+
+
+    public static SupplierService getInstance(SupplierFacade supplierFacade) {
+        if (instance == null)
+            instance = new SupplierService(supplierFacade);
+        return instance;
     }
 }
