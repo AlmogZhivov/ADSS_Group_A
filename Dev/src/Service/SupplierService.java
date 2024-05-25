@@ -23,9 +23,9 @@ public class SupplierService {
     // Supplier related functions
 
     // Adds a new supplier to the system
-    public String addSupplier(int supplierId, String name, String compNumber, String bankNumber, PaymentMethod payment) {
+    public String addSupplier(String name, String compNumber, String bankNumber, PaymentMethod payment) {
         try {
-            supplierFacade.addSupplier(supplierId, name, compNumber, bankNumber, payment);
+            supplierFacade.addSupplier(name, compNumber, bankNumber, payment);
             return gson.toJson(new Response());
         } catch (Exception e) {
             return gson.toJson(new Response(e.getMessage()));
