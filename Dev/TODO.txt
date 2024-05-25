@@ -1,0 +1,14 @@
+* class diagram
+    add frontend bullshit
+    change wid to string
+    add new classes, fields or fields
+    add dal mock
+
+* write requirements document
+
+* add exceptions
+delete compiled files from git
+add javadoc exceptions
+add calls to the dal
+
+* required stuff

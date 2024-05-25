@@ -7,6 +7,63 @@ import java.util.Map;
 public class ShiftDTO {
     private int id;
     private LocalDateTime startTime;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public Map<Integer, Integer> getRequiredRoles() {
+        return requiredRoles;
+    }
+
+    public void setRequiredRoles(Map<Integer, Integer> requiredRoles) {
+        this.requiredRoles = requiredRoles;
+    }
+
+    public List<String> getAvailableWorkers() {
+        return availableWorkers;
+    }
+
+    public void setAvailableWorkers(List<String> availableWorkers) {
+        this.availableWorkers = availableWorkers;
+    }
+
+    public List<String> getAssignedWorkers() {
+        return assignedWorkers;
+    }
+
+    public void setAssignedWorkers(List<String> assignedWorkers) {
+        this.assignedWorkers = assignedWorkers;
+    }
+
+    public Map<String, Integer> getWorkerRoles() {
+        return workerRoles;
+    }
+
+    public void setWorkerRoles(Map<String, Integer> workerRoles) {
+        this.workerRoles = workerRoles;
+    }
+
     private LocalDateTime endTime;
     private Map<Integer, Integer> requiredRoles;
     private List<String> availableWorkers;

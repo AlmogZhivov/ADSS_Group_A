@@ -40,30 +40,30 @@ public class WorkerService {
         }
     }
 
-    public String getWorkersByName(String name) {
+    public String getWorkersByName(String firstname, String surname) {
         gson = new Gson();
         try {
-            return gson.toJson(new Response(wf.getWorkersByName(name)));
+            return gson.toJson(new Response(wf.getWorkersByName(firstname, surname)));
         } catch (Exception ex) {
             Response res = new Response(ex.getMessage());
             return gson.toJson(new Response(res));
         }
     }
 
-    public String getWorkersById(int id) {
+    public String getWorkerById(String id) {
         gson = new Gson();
         try {
-            return gson.toJson(new Response(wf.getWorkersById(id)));
+            return gson.toJson(new Response(wf.getWorkerById(id)));
         } catch (Exception ex) {
             Response res = new Response(ex.getMessage());
             return gson.toJson(new Response(res));
         }
     }
 
-    public String addNewWorker(String name) {
+    public String addNewWorker(String id, String firstname, String surname) {
         gson = new Gson();
         try {
-            wf.addNewWorker(name);
+            wf.addNewWorker(id, firstname, surname);
             return gson.toJson(new Response());
         } catch (Exception ex) {
             Response res = new Response(ex.getMessage());
@@ -71,14 +71,11 @@ public class WorkerService {
         }
     }
 
-    public String loadData() {
-        gson = new Gson();
+    public boolean loadData() {
         try {
-            wf.loadData();
-            return gson.toJson(new Response());
-        } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return wf.loadData();
+        } catch (Exception ignored) {
+            return false;
         }
     }
 }

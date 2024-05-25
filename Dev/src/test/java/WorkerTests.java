@@ -1,17 +1,31 @@
 import com.Superlee.HR.Backend.Business.WorkerFacade;
+import com.Superlee.HR.Backend.Business.ShiftFacade;
+import com.Superlee.HR.Backend.Business.WorkerToSend;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class WorkerTests {
     private final WorkerFacade workerFacade = WorkerFacade.getInstance();
+    private final ShiftFacade shiftFacade = ShiftFacade.getInstance();
 
     @Before
     public void setUp() {
         workerFacade.reset(0xC0FFEE);
+        shiftFacade.reset(0xC0FFEE);
+    }
+
+    private int addShift() {
+        return shiftFacade.addNewShift("2025-01-01T08:00", "2025-01-01T16:00");
+    }
+
+    private boolean addWorker() {
+        return workerFacade.addNewWorker("0", "Super", "Lee");
+    }
+
+    private boolean addRole() {
+        return workerFacade.addRole("0", "Manager");
     }
 
     @Test
@@ -23,25 +37,80 @@ public class WorkerTests {
     @Test
     public void testAddNewWorkerSuccess() {
         int startSize = workerFacade.getAllWorkers().size();
-        boolean result = workerFacade.addNewWorker("Idan");
+        boolean result = addWorker();
         assertTrue(result);
         int endSize = workerFacade.getAllWorkers().size();
         assertEquals(startSize + 1, endSize);
     }
 
     @Test
-    public void testAddNewWorkerWithBadName() {
+    public void testAddNewWorkerWithEmptyId() {
         int startSize = workerFacade.getAllWorkers().size();
-        boolean result = workerFacade.addNewWorker("");
+        boolean result = workerFacade.addNewWorker("", "Super", "Lee");
         assertFalse(result);
         int endSize = workerFacade.getAllWorkers().size();
         assertEquals(startSize, endSize);
     }
 
     @Test
-    public void testAddNewWorkerWithNullName() {
+    public void testAddNewWorkerWithBadId() {
         int startSize = workerFacade.getAllWorkers().size();
-        boolean result = workerFacade.addNewWorker(null);
+        boolean result = workerFacade.addNewWorker("id", "Super", "Lee");
+        assertFalse(result);
+        int endSize = workerFacade.getAllWorkers().size();
+        assertEquals(startSize, endSize);
+    }
+
+    @Test
+    public void testAddNewWorkerWithNullId() {
+        int startSize = workerFacade.getAllWorkers().size();
+        boolean result = workerFacade.addNewWorker(null, "Super", "Lee");
+        assertFalse(result);
+        int endSize = workerFacade.getAllWorkers().size();
+        assertEquals(startSize, endSize);
+    }
+
+    @Test
+    public void testAddNewWorkerWithDuplicateId() {
+        int startSize = workerFacade.getAllWorkers().size();
+        addWorker();
+        boolean result = addWorker();
+        assertFalse(result);
+        int endSize = workerFacade.getAllWorkers().size();
+        assertEquals(startSize + 1, endSize);
+    }
+
+    @Test
+    public void testAddNewWorkerWithBadFirstname() {
+        int startSize = workerFacade.getAllWorkers().size();
+        boolean result = workerFacade.addNewWorker("0", "", "Lee");
+        assertFalse(result);
+        int endSize = workerFacade.getAllWorkers().size();
+        assertEquals(startSize, endSize);
+    }
+
+    @Test
+    public void testAddNewWorkerWithBadSurname() {
+        int startSize = workerFacade.getAllWorkers().size();
+        boolean result = workerFacade.addNewWorker("0", "Super", "");
+        assertFalse(result);
+        int endSize = workerFacade.getAllWorkers().size();
+        assertEquals(startSize, endSize);
+    }
+
+    @Test
+    public void testAddNewWorkerWithNullFirstname() {
+        int startSize = workerFacade.getAllWorkers().size();
+        boolean result = workerFacade.addNewWorker("0", null, "Lee");
+        assertFalse(result);
+        int endSize = workerFacade.getAllWorkers().size();
+        assertEquals(startSize, endSize);
+    }
+
+    @Test
+    public void testAddNewWorkerWithNullSurname() {
+        int startSize = workerFacade.getAllWorkers().size();
+        boolean result = workerFacade.addNewWorker("0", "Super", null);
         assertFalse(result);
         int endSize = workerFacade.getAllWorkers().size();
         assertEquals(startSize, endSize);
@@ -49,104 +118,141 @@ public class WorkerTests {
 
     @Test
     public void testGetWorkersByNameSuccess() {
-        workerFacade.addNewWorker("Idan");
-        int result = workerFacade.getWorkersByName("Idan").size();
+        addWorker();
+        int result = workerFacade.getWorkersByName("Super", "Lee").size();
         assertEquals(1, result);
     }
 
     @Test
     public void testGetWorkersByNameFailureNonExisting() {
-        int result = workerFacade.getWorkersByName("Idan").size();
+        int result = workerFacade.getWorkersByName("Super", "Lee").size();
         assertEquals(0, result);
     }
 
     @Test
     public void testGetWorkersByIdSuccess() {
-        workerFacade.addNewWorker("Idan");
-        int result = workerFacade.getWorkersById(0).size();
-        assertEquals(1, result);
+        addWorker();
+        WorkerToSend result = workerFacade.getWorkerById("0");
+        assertNotNull(result);
     }
 
     @Test
     public void testGetWorkersByIdFailureNonExisting() {
-        int result = workerFacade.getWorkersById(0).size();
-        assertEquals(0, result);
+        WorkerToSend result = workerFacade.getWorkerById("0");
+        assertNull(result);
     }
 
     @Test
     public void testAddRoleSuccess() {
-        workerFacade.addNewWorker("Idan");
-        boolean result = workerFacade.addRole(0, "Manager");
+        addWorker();
+        boolean result = addRole();
         assertTrue(result);
     }
 
     @Test
     public void testAddRoleFailureDuplicateRole() {
-        workerFacade.addNewWorker("Idan");
-        workerFacade.addRole(0, "Manager");
-        boolean result = workerFacade.addRole(0, "Manager");
+        addWorker();
+        addRole();
+        boolean result = addRole();
         assertFalse(result);
     }
 
     @Test
     public void testAddRoleFailureNonExistingWorker() {
-        boolean result = workerFacade.addRole(0, "Manager");
+        boolean result = addRole();
         assertFalse(result);
     }
 
     @Test
     public void testAddRoleFailureBadRole() {
-        workerFacade.addNewWorker("David");
-        boolean result = workerFacade.addRole(0, "King");
+        addWorker();
+        boolean result = workerFacade.addRole("0", "Emperor");
         assertFalse(result);
     }
 
     @Test
     public void testGetWorkersByRoleSuccess() {
-        workerFacade.addNewWorker("Idan");
-        boolean result = workerFacade.addRole(0, "Manager");
-        assertTrue(result);
+        addWorker();
+        addRole();
+        int result = workerFacade.getWorkersByRole("Manager").size();
+        assertEquals(1, result);
     }
 
     @Test
     public void testAssignWorkerSuccess() {
-        workerFacade.addNewWorker("Idan");
-        workerFacade.addRole(0, "Manager");
-        boolean result = workerFacade.assignWorker(0, 0, "Manager");
+        addWorker();
+        addRole();
+        int sid = addShift();
+        shiftFacade.addAvailability("0", sid);
+        boolean result = workerFacade.assignWorker("0", sid, "Manager");
         assertTrue(result);
     }
 
     @Test
     public void testAssignWorkerFailureNonExisting() {
-        boolean result = workerFacade.assignWorker(0, 0, "Manager");
+        addWorker();
+        shiftFacade.addAvailability("0", 0);
+        boolean result = workerFacade.assignWorker("0", 0, "Manager");
+        assertFalse(result);
+        result = workerFacade.assignWorker("0", -1, "Manager");
         assertFalse(result);
     }
 
     @Test
     public void testAssignWorkerFailureNonExistingRole() {
-        workerFacade.addNewWorker("David");
-        boolean result = workerFacade.assignWorker(0, 0, "King");
+        addWorker();
+        int sid = addShift();
+        shiftFacade.addAvailability("0", sid);
+        boolean result = workerFacade.assignWorker("0", sid, "Manager");
+        assertFalse(result);
+    }
+
+    @Test
+    public void testAssignWorkerFailureNotAvailable() {
+        addWorker();
+        addRole();
+        int sid = addShift();
+        boolean result = workerFacade.assignWorker("0", sid, "Manager");
+        assertFalse(result);
+    }
+
+    @Test
+    public void testAssignWorkerFailureAlreadyAssigned() {
+        addWorker();
+        addRole();
+        int sid = addShift();
+        shiftFacade.addAvailability("0", sid);
+        workerFacade.assignWorker("0", sid, "Manager");
+        boolean result = workerFacade.assignWorker("0", sid, "Manager");
         assertFalse(result);
     }
 
     @Test
     public void testUnassignWorkerSuccess() {
-        workerFacade.addNewWorker("Idan");
-        workerFacade.assignWorker(0, 0, "Manager");
-        boolean result = workerFacade.unassignWorker(0, 0);
+        addWorker();
+        addRole();
+        int sid = addShift();
+        shiftFacade.addAvailability("0", sid);
+        workerFacade.assignWorker("0", sid, "Manager");
+        boolean result = workerFacade.unassignWorker("0", sid);
         assertTrue(result);
     }
 
     @Test
     public void testUnassignWorkerFailureNonExisting() {
-        boolean result = workerFacade.unassignWorker(0, 0);
+        int sid = addShift();
+        boolean result = workerFacade.unassignWorker("0", sid);
         assertFalse(result);
     }
 
     @Test
     public void testUnassignWorkerFailureNonAssigned() {
-        workerFacade.addNewWorker("Idan");
-        boolean result = workerFacade.unassignWorker(0, 0);
+        addWorker();
+        int sid = addShift();
+        boolean result = workerFacade.unassignWorker("0", sid);
+        assertFalse(result);
+        shiftFacade.addAvailability("0", sid);
+        result = workerFacade.unassignWorker("0", sid);
         assertFalse(result);
     }
 }

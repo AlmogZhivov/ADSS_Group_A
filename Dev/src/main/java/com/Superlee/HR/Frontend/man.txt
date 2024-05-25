@@ -1,0 +1,38 @@
+List of available commands:
+
+workers
+    get a list of all workers
+
+workers -r <role>
+    get a list of all workers with the specified role
+
+workers -n <firstname> <surname>
+    get a worker with the specified name
+
+workers -i <id>
+    get a worker with the specified id
+
+workers -s <id>
+    get a list of all workers assigned to the specified shift
+
+addw <id> <firstname> <surname>
+    add a new worker with the specified id, first name and second name
+
+assw <worker_id> <shift_id> <role>
+    assign a worker to a shift
+
+unassw <worker_id> <shift_id>
+    unassign a worker from a shift
+
+shift <id>
+    get a shift with the specified id
+
+shift -a <id>
+    get a list of all workers assignable to the specified shift
+
+shift -r <id> <role> <amount>
+    sets the amount of workers with the specified role needed for a shift
+
+adds <start> <end>
+    add a new shift with the specified start and end time
+    must be formatted as yyyy-MM-ddTHH:mm (e.g. 1996-04-15T00:00)

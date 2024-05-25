@@ -5,27 +5,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Worker {
-    private final int id;
-    private String name;
+    private final String id;
+    private String firstname;
+    private String surname;
     private String email;
     private String phone;
     private String password;
     private String bankDetails;
     private int salary;
-    private List<Role> roles;
+    private List<Integer> roles;
     private List<Integer> futureShifts;
     private List<Integer> availability;
     private List<Integer> pastShifts;
     private final LocalDateTime startDate;
     private String contract;
 
-    Worker(int id, String name) {
-        this(id, name, "", "", "", "", 0, new ArrayList<>(), LocalDateTime.MIN, "");
+    Worker(String id, String firstname, String surname) {
+        this(id, firstname, surname, "", "", "", "", 0, new ArrayList<>(), LocalDateTime.MIN, "");
     }
 
-    Worker(int id, String name, String email, String phone, String password, String bankDetails, int salary, List<Role> roles, LocalDateTime startDate, String contract) {
+    Worker(String id, String firstname, String surname, String email, String phone, String password, String bankDetails, int salary, List<Integer> roles, LocalDateTime startDate, String contract) {
         this.id = id;
-        this.name = name;
+        this.firstname = firstname;
+        this.surname = surname;
         this.email = email;
         this.phone = phone;
         this.password = password;
@@ -53,7 +55,7 @@ class Worker {
         return false;
     }
 
-    boolean hasRole(Role role) {
+    boolean hasRole(int role) {
         return roles.contains(role);
     }
 
@@ -88,16 +90,28 @@ class Worker {
 
     // Getters and setters
 
-    int getId() {
+    String getId() {
         return id;
     }
 
-    String getName() {
-        return name;
+    String getFirstName() {
+        return firstname;
     }
 
-    void setName(String name) {
-        this.name = name;
+    void setFirstName(String firstname) {
+        this.firstname = firstname;
+    }
+
+    String getSurname() {
+        return surname;
+    }
+
+    void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    String getFullName() {
+        return firstname + " " + surname;
     }
 
     String getEmail() {
@@ -140,11 +154,11 @@ class Worker {
         this.salary = salary;
     }
 
-    List<Role> getRoles() {
+    List<Integer> getRoles() {
         return roles;
     }
 
-    void setRoles(List<Role> roles) {
+    void setRoles(List<Integer> roles) {
         this.roles = roles;
     }
 
@@ -184,7 +198,7 @@ class Worker {
         this.contract = contract;
     }
 
-    public boolean addRole(Role role) {
-        return roles.contains(role) ? false : roles.add(role);
+    public boolean addRole(int role) {
+        return !roles.contains(role) && roles.add(role);
     }
 }

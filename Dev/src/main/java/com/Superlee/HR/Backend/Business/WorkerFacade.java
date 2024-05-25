@@ -1,18 +1,21 @@
 package com.Superlee.HR.Backend.Business;
 
+import com.Superlee.HR.Backend.DataAccess.WorkerDTO;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
-import java.util.Collections;
 
 public class WorkerFacade {
     private static WorkerFacade instance;
-    private static int nextWorkerId = 0;
 
-    private static final Map<Integer, Worker> workers = new HashMap<>();
+    private Map<String, Worker> workers;
+    private final Roles roles = Roles.getInstance();
 
     private WorkerFacade() {
+        workers = new HashMap<>();
     }
 
     public static WorkerFacade getInstance() {
@@ -22,42 +25,40 @@ public class WorkerFacade {
     }
 
     public List<WorkerToSend> getAllWorkers() {
-        return workers.values().stream()
-                .map(WorkerFacade::convertToWorkerToSend)
-                .collect(Collectors.toList());
+        return workers.values().stream().map(WorkerFacade::convertToWorkerToSend).collect(Collectors.toList());
     }
 
     public List<WorkerToSend> getWorkersByRole(String role) {
         return workers.values().stream()
-                .filter(worker -> worker.getRoles().stream().anyMatch(r -> r.getValue() == Role.getRoleValue(role)))
+                .filter(worker -> worker.getRoles().stream().anyMatch(r -> r == roles.getId(role)))
                 .map(WorkerFacade::convertToWorkerToSend)
                 .collect(Collectors.toList());
     }
 
-    public List<WorkerToSend> getWorkersByName(String name) {
+    public List<WorkerToSend> getWorkersByName(String firstname, String surname) {
         return workers.values().stream()
-                .filter(worker -> worker.getName().equalsIgnoreCase(name))
+                .filter(worker -> worker.getFirstName().equalsIgnoreCase(firstname) && worker.getSurname().equalsIgnoreCase(surname))
                 .map(WorkerFacade::convertToWorkerToSend)
                 .collect(Collectors.toList());
     }
 
-    public List<WorkerToSend> getWorkersById(int id) {
+    public WorkerToSend getWorkerById(String id) {
         Worker worker = workers.get(id);
         if (worker != null)
-            return Collections.singletonList(convertToWorkerToSend(worker));
+            return convertToWorkerToSend(worker);
 
-        return Collections.emptyList();
+        return null;
     }
 
-    public boolean assignWorker(int workerId, int shiftId, String role) {
+    public boolean assignWorker(String workerId, int shiftId, String role) {
         Worker worker = workers.get(workerId);
-        if (worker != null && worker.hasRole(Role.getRole(role)) && !worker.isAssigned(shiftId))
+        if (worker != null && worker.hasRole(roles.getId(role)) && !worker.isAssigned(shiftId) && worker.isAvailable(shiftId))
             return worker.assign(shiftId);
 
         return false;
     }
 
-    public boolean unassignWorker(int workerId, int shiftId) {
+    public boolean unassignWorker(String workerId, int shiftId) {
         Worker worker = workers.get(workerId);
         if (worker != null && worker.isAssigned(shiftId))
             return worker.unassign(shiftId);
@@ -65,30 +66,62 @@ public class WorkerFacade {
         return false;
     }
 
-    public boolean addNewWorker(String name) {
-        createWorker(name);
+    public boolean addNewWorker(String id, String firstname, String surname) {
+        if (id == null || firstname == null || surname == null)
+            return false;
+
+        if (workers.get(id) != null)
+            return false;
+
+        if (!id.matches("[0-9]+"))
+            return false;
+
+        if (firstname.length() <= 1 || surname.length() <= 1)
+            return false;
+
+        Worker worker = new Worker(id, firstname, surname);
+        workers.put(worker.getId(), worker);
         return true;
     }
 
-    public boolean addRole(int id, String role) {
-        return workers.get(id).addRole(Role.getRole(role));
+    public boolean addRole(String id, String role) {
+        return workers.get(id) != null && roles.getId(role) != -1 && workers.get(id).addRole(roles.getId(role));
+    }
+
+    public boolean addAvailability(String workerId, int shiftId) {
+        Worker worker = workers.get(workerId);
+        if (worker != null && !worker.isAvailable(shiftId))
+            return worker.addAvailability(shiftId);
+
+        return false;
     }
 
     private static WorkerToSend convertToWorkerToSend(Worker worker) {
         return new WorkerToSend(
-                worker.getId(), worker.getName(), worker.getEmail(),
+                worker.getId(), worker.getFirstName(), worker.getSurname(), worker.getEmail(),
                 worker.getPhone(), worker.getSalary(), worker.getRoles(),
-                worker.getStartDate(), worker.getContract());
+                worker.getStartDate().toString(), worker.getContract());
     }
 
     public boolean loadData() {
+        workers = WorkerDTO.getWorkers().stream().map(WorkerFacade::WorkerDTOtoWorker).collect(Collectors.toMap(Worker::getId, w -> w));
         return true;
     }
 
-    private Worker createWorker(String name) {
-        Worker worker = new Worker(nextWorkerId++, name);
-        workers.put(worker.getId(), worker);
-        return worker;
+    private static Worker WorkerDTOtoWorker(WorkerDTO wDTO) {
+        return new Worker(
+                wDTO.getId(),
+                wDTO.getFirstname(),
+                wDTO.getSurname(),
+                wDTO.getEmail(),
+                wDTO.getPhone(),
+                wDTO.getPassword(),
+                wDTO.getBankDetails(),
+                wDTO.getSalary(),
+                wDTO.getRoles(),
+                LocalDateTime.parse(wDTO.getStartDate()),
+                wDTO.getContract()
+        );
     }
 
     /**
@@ -100,6 +133,5 @@ public class WorkerFacade {
         if (safetyCode != 0xC0FFEE)
             System.exit(-1);
         workers.clear();
-        nextWorkerId = 0;
     }
 }

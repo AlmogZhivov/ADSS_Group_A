@@ -10,7 +10,7 @@ public class ShiftService {
     private Gson gson;
 
     private ShiftService() {
-        sf = new ShiftFacade();
+        sf = ShiftFacade.getInstance();
     }
 
     public static ShiftService getInstance() {
@@ -30,7 +30,7 @@ public class ShiftService {
         }
     }
 
-    public String assignWorker(int workerId, int shiftId, String role) {
+    public String assignWorker(String workerId, int shiftId, String role) {
         gson = new Gson();
         try {
             sf.assignWorker(workerId, shiftId, role);
@@ -41,7 +41,7 @@ public class ShiftService {
         }
     }
 
-    public String unassignWorker(int workerId, int shiftId) {
+    public String unassignWorker(String workerId, int shiftId) {
         gson = new Gson();
         try {
             sf.unassignWorker(workerId, shiftId);
@@ -72,10 +72,10 @@ public class ShiftService {
         }
     }
 
-    public String setShiftRequiredWorkersOfRole(String role, int id) {
+    public String setShiftRequiredWorkersOfRole(int id, String role, int amount) {
         gson = new Gson();
         try {
-            sf.setShiftRequiredWorkersOfRole(role, id);
+            sf.setShiftRequiredWorkersOfRole(id, role, amount);
             return gson.toJson(new Response());
         } catch (Exception ex) {
             Response res = new Response(ex.getMessage());
@@ -83,10 +83,29 @@ public class ShiftService {
         }
     }
 
-    public String loadData() {
-        gson = new Gson();
+    public boolean loadData() {
         try {
             sf.loadData();
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    public String addNewShift(String start, String end) {
+        gson = new Gson();
+        try {
+            return gson.toJson(new Response(sf.addNewShift(start, end)));
+        } catch (Exception ex) {
+            Response res = new Response(ex.getMessage());
+            return gson.toJson(new Response(res));
+        }
+    }
+
+    public String addAvailability(String workerId, int shiftId) {
+        gson = new Gson();
+        try {
+            sf.addAvailability(workerId, shiftId);
             return gson.toJson(new Response());
         } catch (Exception ex) {
             Response res = new Response(ex.getMessage());

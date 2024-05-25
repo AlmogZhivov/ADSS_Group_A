@@ -1,9 +1,9 @@
 package com.Superlee.HR.Backend.Business;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 
-public record WorkerToSend(int id, String name, String email, String phone, int salary, List<Role> roles,
-                    LocalDateTime startDate, String contract) implements Serializable {
+public record WorkerToSend(String id, String firstname, String surname, String email, String phone, int salary,
+                           List<Integer> roles,
+                           String startDate, String contract) implements Serializable {
 }

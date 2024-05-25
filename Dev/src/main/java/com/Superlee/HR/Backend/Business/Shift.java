@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 class Shift {
-    private final String id;
+    private final static Roles roles = Roles.getInstance();
+
+    private final int id;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Map<Integer, Integer> requiredRoles;
@@ -15,50 +17,46 @@ class Shift {
     private List<String> assignedWorkers;
     private final Map<String, Integer> workerRoles;
 
-    public Shift(String id) {
+    public Shift(int id, LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
-        this.requiredRoles = new HashMap<>();
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.requiredRoles = new HashMap<>(roles.DEFAULT_SHIFT_ROLES);
         this.availableWorkers = new ArrayList<>();
         this.assignedWorkers = new ArrayList<>();
         this.workerRoles = new HashMap<>();
     }
 
-    public void addAvailableWorker(String worker) {
+    public boolean addAvailableWorker(String worker) {
         if (!availableWorkers.contains(worker))
-            availableWorkers.add(worker);
+            return availableWorkers.add(worker);
+        return false;
     }
 
-    public void removeAvailableWorker(String worker) {
-        availableWorkers.remove(worker);
+    public boolean removeAvailableWorker(String worker) {
+        return availableWorkers.remove(worker);
     }
 
-    public void assignWorker(String worker, Integer role) {
+    public boolean assignWorker(String worker, Integer role) {
         if (availableWorkers.contains(worker) && !assignedWorkers.contains(worker) && requiredRoles.containsKey(role)) {
-            assignedWorkers.add(worker);
             workerRoles.put(worker, role);
+            return assignedWorkers.add(worker);
         }
+        return false;
     }
 
-    public void removeAssignedWorker(String worker) {
-        assignedWorkers.remove(worker);
-        workerRoles.remove(worker);
+    public boolean removeAssignedWorker(String worker) {
+        return assignedWorkers.remove(worker) && workerRoles.remove(worker) != null;
     }
 
+    // TODO check if this is correct and if it is needed
     public boolean isFullyStaffed() {
-        Map<Integer, Integer> roleCount = new HashMap<>();
-        for (Integer role : workerRoles.values())
-            roleCount.put(role, roleCount.getOrDefault(role, 0) + 1);
-
-        for (Map.Entry<Integer, Integer> entry : requiredRoles.entrySet())
-            if (!roleCount.containsKey(entry.getKey()) || roleCount.get(entry.getKey()) < entry.getValue())
-                return false;
-        return true;
+        return requiredRoles.values().stream().allMatch((count) -> assignedWorkers.stream().filter((worker) -> workerRoles.get(worker).equals(count)).count() == count);
     }
 
 
-    // Getters and setters
-
-    public String getId() {
+    // Getters and setter
+    public int getId() {
         return id;
     }
 
@@ -89,5 +87,21 @@ class Shift {
     public Map<String, Integer> getWorkerRoles() {
         return workerRoles;
     }
-}
 
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+}

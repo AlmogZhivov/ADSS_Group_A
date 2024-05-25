@@ -1,16 +1,11 @@
 package com.Superlee.HR.Backend.Service;
 
 public class Response {
-    public String errmsg;
+    public String errMsg;
     public Object value;
 
-    public Response(String msg, Object val) {
-        errmsg = msg;
-        value = val;
-    }
-
     public Response() {
-        errmsg = null;
+        errMsg = null;
         value = null;
     }
 
@@ -19,6 +14,6 @@ public class Response {
     }
 
     public Response(String msg) {
-        errmsg = msg;
+        errMsg = msg;
     }
 }
