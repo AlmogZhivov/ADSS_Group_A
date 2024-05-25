@@ -33,65 +33,65 @@ public class PresentService {
         String[] parts = command.split(" ");
         switch (parts[0]) {
             case "addSupplier":
-                return ss.addSupplier(parts[1], parts[2], parts[3], PaymentMethod.valueOf(parts[4]));
+                return parts.length == 4 ? ss.addSupplier(parts[1], parts[2], parts[3], PaymentMethod.valueOf(parts[4])) : "Invalid number of args";
             case "removeSupplier":
-                return ss.removeSupplier(Integer.parseInt(parts[1]));
+                return parts.length == 2 ? ss.removeSupplier(Integer.parseInt(parts[1])) : "Invalid number of args";
             case "updateSupplierName":
-                return ss.updateSupplierName(Integer.parseInt(parts[1]), parts[2]);
+                return parts.length == 3 ? ss.updateSupplierName(Integer.parseInt(parts[1]), parts[2]) : "Invalid number of args";
             case "updateSupplierBankAccount":
-                return ss.updateSupplierBankAccount(Integer.parseInt(parts[1]), parts[2]);
+                return parts.length == 3 ? ss.updateSupplierBankAccount(Integer.parseInt(parts[1]), parts[2]) : "Invalid number of args";
             case "addGeneralOrder":
                 // Format: catalogNumber1-amount1,catalogNumber2-amount2 supplierId
-                return os.addGeneralOrder(itemIdAndAmount(parts[1]), new Date(Calendar.getInstance().getTime().getTime()), Integer.parseInt(parts[2]));
+                return parts.length == 3 ? os.addGeneralOrder(itemIdAndAmount(parts[1]), new Date(Calendar.getInstance().getTime().getTime()), Integer.parseInt(parts[2])) : "Invalid number of args";
             case "addRepOrder":
                 // Format: catalogNumber1-amount1,catalogNumber2-amount2 supplierId day
-                return os.addRepOrder(itemIdAndAmount(parts[1]), new Date(Calendar.getInstance().getTime().getTime()), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
+                return parts.length == 4 ? os.addRepOrder(itemIdAndAmount(parts[1]), new Date(Calendar.getInstance().getTime().getTime()), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])) : "Invalid number of args";
             case "updateOrders":
                 return os.updateOrders();
             case "removeOrder":
-                return os.removeOrder(Integer.parseInt(parts[1]));
+                return parts.length == 2 ? os.removeOrder(Integer.parseInt(parts[1])) : "Invalid number of args";
             case "addProduct":
-                return os.addProduct(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
+                return parts.length == 4 ? os.addProduct(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])) : "Invalid number of args";
             case "removeProduct":    
-                return os.removeProduct(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                return parts.length == 3 ? os.removeProduct(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])) : "Invalid number of args";
             case "addSupplierAgreement":
-                return ss.addSupplierAgreement(Integer.parseInt(parts[1]));
+                return parts.length == 2 ? ss.addSupplierAgreement(Integer.parseInt(parts[1])) : "Invalid number of args";
             case "addContact":
-                return ss.addContact(Integer.parseInt(parts[1]), parts[2], parts[3]);
+                return parts.length == 4 ? ss.addContact(Integer.parseInt(parts[1]), parts[2], parts[3]) : "Invalid number of args";
             case "updateProductPrice":
-                return ss.updateProductPrice(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Double.parseDouble(parts[3]));
+                return parts.length == 4 ? ss.updateProductPrice(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Double.parseDouble(parts[3])) : "Invalid number of args";
             case "updateSupplierPaymentMethod":
-                return ss.updateSupplierPaymentMethod(Integer.parseInt(parts[1]), PaymentMethod.valueOf(parts[2]));
+                return parts.length == 3 ? ss.updateSupplierPaymentMethod(Integer.parseInt(parts[1]), PaymentMethod.valueOf(parts[2])) : "Invalid number of args";
             case "getAllSuppliers":
                 return ss.getAllSuppliers();
             case "getAllContacts":
                 return ss.getAllContacts();
             case "getSupplierAgreement":
-                return ss.getSupplierAgreement(Integer.parseInt(parts[1]));
+                return parts.length == 2 ? ss.getSupplierAgreement(Integer.parseInt(parts[1])) : "Invalid number of args";
             case "getSupplier":
-                return ss.getSupplier(Integer.parseInt(parts[1]));
+                return parts.length == 2 ? ss.getSupplier(Integer.parseInt(parts[1])) : "Invalid number of args";
             case "getOrder":
-                return os.getOrder(Integer.parseInt(parts[1]));
+                return parts.length == 2 ? os.getOrder(Integer.parseInt(parts[1])) : "Invalid number of args";
             case "getAllOrders":
                 return os.getAllOrders();
             case "getOrderPrice":
-                return os.getOrderPrice(Integer.parseInt(parts[1]));
+                return parts.length == 2 ? os.getOrderPrice(Integer.parseInt(parts[1])) : "Invalid number of args";
             case "getOrderString":
-                return os.getOrderString(Integer.parseInt(parts[1]));
+                return parts.length == 2 ? os.getOrderString(Integer.parseInt(parts[1])) : "Invalid number of args";
             case "addProductDiscountAccordingToAmount":
-                return ss.addProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4]));
+                return parts.length == 5 ? ss.addProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4])) : "Invalid number of args";
             case "updateProductDiscountAccordingToAmount":
-                return ss.updateProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4]));
+                return parts.length == 5 ? ss.updateProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4])) : "Invalid number of args";
             case "removeProductDiscountAccordingToAmount":
-                return ss.removeProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
+                return parts.length == 4 ? ss.removeProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])) : "Invalid number of args";
             case "updateProductName":  
-                return ss.updateProductName(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), parts[3]);
+                return parts.length == 4 ? ss.updateProductName(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), parts[3]) : "Invalid number of args";
             case "addProductToSupplier":
-                return ss.addProductToSupplier(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Double.parseDouble(parts[3]), parts[4]);
+                return parts.length == 5 ? ss.addProductToSupplier(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Double.parseDouble(parts[3]), parts[4]) : "Invalid number of args";
             case "removeProductFromSupplier":
-                return ss.removeProductFromSupplier(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                return parts.length == 3 ? ss.removeProductFromSupplier(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])) : "Invalid number of args";
             case "getSupplierString":
-                return ss.getSupplierString(Integer.parseInt(parts[1]));
+                return parts.length == 2 ? ss.getSupplierString(Integer.parseInt(parts[1])) : "Invalid number of args";
             default:
                 return "Invalid command";
         }
