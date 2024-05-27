@@ -44,10 +44,7 @@ public class Supplier {
         //this.shouldDeliver = supplier.getShouldDeliver();
         this.payment = supplier.getPayment();
         this.contact = supplier.getContact();
-    }
-
-    public void addSupplierAgreement() {
-        supplierAgreement = new SupplierAgreement(supplierId);
+        this.supplierAgreement = new SupplierAgreement(supplierId);
     }
 
     public int getSupplierId() {

@@ -10,114 +10,112 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
 
 public class OrderService {
 
     private final OrderFacade orderFacade;
-    private Gson gson = new Gson();
 
     public OrderService(OrderFacade orderFacade) {
         this.orderFacade = orderFacade;
     }
 
     // Adds a single order to the system
-    public String addGeneralOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
+    public Response addGeneralOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
         try {
             orderFacade.addGeneralOrder(products, shipmentDate, supplierId);
-            return gson.toJson(new Response());
+            return new Response();
         } catch (Exception e) {
-            return gson.toJson(new Response(e.getMessage()));
+            return (new Response(e.getMessage()));
         }
     }
 
     // Adds a repeating order for a specific day of the week
-    public String addRepOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId, int day){
+    public Response addRepOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId, int day){
         try {
             orderFacade.addRepOrder(products, shipmentDate, supplierId, day);
-            return gson.toJson(new Response());
+            return new Response();
         } catch (Exception e) {
-            return gson.toJson(new Response(e.getMessage()));
+            return new Response(e.getMessage());
         }
     }
 
     // Removes all general (non-repeating) orders that have been shipped
-    public String updateOrders(){
+    public Response updateOrders(){
         try {
             orderFacade.updateOrders();
-            return gson.toJson(new Response());
+            return new Response();
         } catch (Exception e) {
-            return gson.toJson(new Response(e.getMessage()));
+            return new Response(e.getMessage());
         }
     }
 
     // Removes an order from the system
-    public String removeOrder(int orderId){
+    public Response removeOrder(int orderId){
         try {
             orderFacade.removeOrder(orderId);
-            return gson.toJson(new Response());
+            return new Response();
         } catch (Exception e) {
-            return gson.toJson(new Response(e.getMessage()));
+            return new Response(e.getMessage());
         }
     }
 
     // Adds a product to an existing order
-    public String addProduct(int orderId, int catalogNumber, int amount){
+    public Response addProduct(int orderId, int catalogNumber, int amount){
         try {
             orderFacade.addProduct(orderId, catalogNumber, amount);
-            return gson.toJson(new Response());
+            return new Response();
         } catch (Exception e) {
-            return gson.toJson(new Response(e.getMessage()));
+            return new Response(e.getMessage());
         }
     }
 
     //Removes a product from an existing order
-    public String removeProduct(int orderId, int catalogNumber){
+    public Response removeProduct(int orderId, int catalogNumber){
         try {
             orderFacade.removeProduct(orderId, catalogNumber);
-            return gson.toJson(new Response());
+            return new Response();
         } catch (Exception e) {
-            return gson.toJson(new Response(e.getMessage()));
+            return new Response(e.getMessage());
         }
     }
 
     // Returns an order according to the id given
-    public String getOrder(int orderId){
+    public ResponseT<Order> getOrder(int orderId){
         try {
             Order order = orderFacade.getOrder(orderId);
-            return gson.toJson(new ResponseT<>(order));
+            return new ResponseT<Order>(order);
         } catch (Exception e) {
-            return gson.toJson(new ResponseT<>(e.getMessage()));
+            return new ResponseT<>(e.getMessage());
         }
     }
 
     // Returns a list of all orders in the system
-    public String getAllOrders(){
+    public ResponseT<List<Order>> getAllOrders(){
         try {
             List<Order> orders = orderFacade.getAllOrders();
-            return gson.toJson(new ResponseT<>(orders));
+            return new ResponseT<>(orders);
         } catch (Exception e) {
-            return gson.toJson(new ResponseT<>(e.getMessage()));
+            return new ResponseT<>(e.getMessage());
         }
     }
 
     // Returns the price of an order according to the id given
-    public String getOrderPrice(int orderId){
+    public ResponseT<Double> getOrderPrice(int orderId){
         try {
             double price = orderFacade.getOrderPrice(orderId);
-            return gson.toJson(new ResponseT<>(price));
+            return new ResponseT<>(price);
         } catch (Exception e) {
-            return gson.toJson(new ResponseT<>(e.getMessage()));
+            return new ResponseT<>(e.getMessage());
         }
     }
 
     // Returns a string describing the order according to the id given
-    public String getOrderString(int orderId){
+    public ResponseT<String> getOrderString(int orderId){
         try {
-             String str = orderFacade.getOrderString(orderId);
-            return gson.toJson(new ResponseT<>(str));
+            String str = orderFacade.getOrderString(orderId);
+            return new ResponseT<>(str);
         } catch (Exception e) {
-            return gson.toJson(new ResponseT<>(e.getMessage()));
+            return new ResponseT<>(e.getMessage());//TODO - check if this goes to the correct constructor
         }
     }
 }

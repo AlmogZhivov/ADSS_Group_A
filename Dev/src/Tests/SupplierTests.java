@@ -1,58 +1,80 @@
 package Tests;
 
 import Business.Supplier;
+import Business.SupplierAgreement;
+import Business.SupplierProduct;
 import Service.OrderService;
+import Service.Responses.Response;
 import Service.Responses.ResponseT;
 import Service.SupplierService;
 import org.junit.*;
 
-import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SupplierTests {
 
     private SupplierService supplierService;
     private OrderService orderService;
-    private final Gson gson = new Gson();
 
     public SupplierTests(SupplierService supplierService, OrderService orderService){
         this.supplierService = supplierService;
         this.orderService = orderService;
     }
 
+    @BeforeEach
     public void setUp(){
         supplierService.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH);
         supplierService.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER);
-        supplierService.addSupplier("C", "2", "1111", Supplier.PaymentMethod.CREDIT_CARD);
-
+        supplierService.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD);
     }
 
     @Test
     public void testAddSupplier(){
-        setUp();
-        ResponseT<List<Supplier>> l = gson.fromJson(supplierService.getAllSuppliers(), ResponseT.class);
+        Response res = supplierService.addSupplier("D", "3", "3333", Supplier.PaymentMethod.CREDIT_CARD);
+        ResponseT<List<Supplier>> l = supplierService.getAllSuppliers();
+        assertFalse(res.errorOccurred());
         assertEquals(3, l.getValue().size());
     }
 
     @Test
     public void testRemoveSupplier(){
-        setUp();
-        supplierService.removeSupplier(2);
-        ResponseT<List<Supplier>> l = gson.fromJson(supplierService.getAllSuppliers(), ResponseT.class);
+        Response res = supplierService.removeSupplier(2);
+        ResponseT<List<Supplier>> l = supplierService.getAllSuppliers();
+        assertFalse(res.errorOccurred());
         assertEquals(2, l.getValue().size());
     }
 
     @Test
     public void testGetSupplier(){
-        setUp();
-        ResponseT<Supplier> l = gson.fromJson(supplierService.getSupplier(1), ResponseT.class);
+        ResponseT<Supplier> l = supplierService.getSupplier(1);
         assertEquals(1, l.getValue().getSupplierId());
+    }
+
+    @Test
+    public void testAddProductToSupplier(){
+        Response res1 = supplierService.addProductToSupplier(0, 0, 5, "Milk");
+        Response res2 = supplierService.addProductToSupplier(0, 1, 6, "Butter");
+        ResponseT<SupplierAgreement> responseAgree = supplierService.getSupplierAgreement(0);
+        assertNotNull(responseAgree.getValue().getProduct(0));
+        assertNotNull(responseAgree.getValue().getProduct(1));
+        assertNull(responseAgree.getValue().getProduct(2));
+    }
+
+    @Test
+    public void testRemoveProductFromSupplier(){
+        supplierService.addProductToSupplier(0, 0, 5, "Milk");
+        ResponseT<SupplierAgreement> responseAgree = supplierService.getSupplierAgreement(0);
+        assertNotNull(responseAgree.getValue().getProduct(0));
+        supplierService.removeProductFromSupplier(0,0);
+        ResponseT<SupplierAgreement> responseAgree2 = supplierService.getSupplierAgreement(0);
+        assertNull(responseAgree2.getValue().getProduct(0));
     }
 
 
