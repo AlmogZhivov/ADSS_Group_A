@@ -25,6 +25,7 @@ public class Supplier {
         this.payment = payment;
         this.contact = contact;
         this.contactId += 1;
+        this.supplierAgreement = new SupplierAgreement(supplierId);
     }
 
     public Supplier(int supplierId, String name, String compNumber, String bankNumber, PaymentMethod payment) {
@@ -33,6 +34,8 @@ public class Supplier {
         this.compNumber = compNumber;
         this.bankNumber = bankNumber;
         this.payment = payment;
+        this.contactId += 1;
+        this.supplierAgreement = new SupplierAgreement(supplierId);
     }
 
     public Supplier(Supplier supplier) {

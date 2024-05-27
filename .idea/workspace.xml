@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab58238a-0bd6-4e23-b473-0406b7cc08a0" name="Changes" comment="" />
+    <list default="true" id="ab58238a-0bd6-4e23-b473-0406b7cc08a0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ADSS_Group_A.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ADSS_Group_A.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/OrderFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/OrderFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/Supplier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/SupplierFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/SupplierFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Tests/OrderTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Tests/OrderTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Tests/SupplierTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Tests/SupplierTests.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,12 +21,24 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "AlmogZhivov"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/AlmogZhivov/ADSS_Group_A.git",
+    "accountId": "08d9ccc5-a833-4555-bd89-aeff15a079d7"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
   "customColor": "",
-  "associatedIndex": -1
+  "associatedIndex": 5
 }]]></component>
   <component name="ProjectId" id="2gfmdYzwMJH13n67LgthOknEqai" />
   <component name="ProjectViewState">
@@ -24,13 +47,89 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.OrderTests.executor": "Run",
+    "JUnit.SupplierTests.executor": "Run",
+    "JUnit.SupplierTests.testAddSupplier.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "325989135__326118460",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager" selected="JUnit.OrderTests">
+    <configuration name="OrderTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_A" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Tests" />
+      <option name="MAIN_CLASS_NAME" value="Tests.OrderTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SupplierTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_A" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Tests" />
+      <option name="MAIN_CLASS_NAME" value="Tests.SupplierTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SupplierTests.testAddSupplier" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADSS_Group_A" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Tests" />
+      <option name="MAIN_CLASS_NAME" value="Tests.SupplierTests" />
+      <option name="METHOD_NAME" value="testAddSupplier" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.OrderTests" />
+        <item itemvalue="JUnit.SupplierTests" />
+        <item itemvalue="JUnit.SupplierTests.testAddSupplier" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -40,6 +139,7 @@
       <option name="presentableId" value="Default" />
       <updated>1716097095452</updated>
       <workItem from="1716097098116" duration="66000" />
+      <workItem from="1716824238660" duration="3051000" />
     </task>
     <servers />
   </component>

@@ -1,7 +1,9 @@
 package Tests;
 
 import Business.Order;
+import Business.OrderFacade;
 import Business.Supplier;
+import Business.SupplierFacade;
 import Service.OrderService;
 import Service.Responses.Response;
 import Service.Responses.ResponseT;
@@ -19,16 +21,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderTests {
 
-    private SupplierService supplierService;
-    private OrderService orderService;
+    private static SupplierFacade supplierFacade = new SupplierFacade();
+    private static SupplierService supplierService = new SupplierService(supplierFacade);
+    private OrderService orderService = new OrderService(new OrderFacade(supplierFacade));
 
-    public OrderTests(SupplierService supplierService, OrderService orderService){
-        this.supplierService = supplierService;
-        this.orderService = orderService;
+    public OrderTests(){
     }
 
     @BeforeAll
-    public void setUp(){
+    public static void setUp(){
+        System.out.println("Setting up");
         supplierService.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH);
         supplierService.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER);
         supplierService.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD);
@@ -65,6 +67,8 @@ public class OrderTests {
 
     @Test
     public void testGetAllOrders(){
+        Map<Integer, Integer> products = new HashMap<>();
+        orderService.addGeneralOrder(products, new Date(), 0);
         ResponseT<List<Order>> res1 = orderService.getAllOrders();
         assertFalse(res1.errorOccurred());
         assertFalse(res1.getValue().isEmpty());
@@ -72,7 +76,7 @@ public class OrderTests {
 
     @Test
     public void testUpdateOrders(){
-        Date shipmentDate = new Date();
+        Date shipmentDate = new Date("2025/12/12");
         Map<Integer, Integer> products = new HashMap<>();
         orderService.addGeneralOrder(products, shipmentDate, 0);
         orderService.addGeneralOrder(products, shipmentDate, 1);

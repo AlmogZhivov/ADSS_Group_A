@@ -43,7 +43,11 @@ public class SupplierFacade {
     }
 
     public List<Supplier> getAllSuppliers() {
-        return (List<Supplier>) suppliers.values();
+        List<Supplier> suppliersList = new ArrayList<>();
+        for (Supplier supplier : suppliers.values()) {
+            suppliersList.add(supplier);
+        }
+        return suppliersList;
     }
 
     // Adds contact to supplier
@@ -61,6 +65,7 @@ public class SupplierFacade {
     }
 
     public SupplierAgreement getSupplierAgreement(int supplierId) {
+        System.out.println(suppliers.get(supplierId).getSupplierId());
         return suppliers.get(supplierId).getSupplierAgreement();
     }
 

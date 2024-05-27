@@ -2,14 +2,11 @@ package Tests;
 
 import Business.Supplier;
 import Business.SupplierAgreement;
-import Business.SupplierProduct;
-import Service.OrderService;
+import Business.SupplierFacade;
 import Service.Responses.Response;
 import Service.Responses.ResponseT;
 import Service.SupplierService;
-import org.junit.*;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,15 +15,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class SupplierTests {
+class SupplierTests {
 
-    private SupplierService supplierService;
+    private final SupplierService supplierService = new SupplierService(new SupplierFacade());
 
-    public SupplierTests(SupplierService supplierService){
-        this.supplierService = supplierService;
+    public SupplierTests(){
+
     }
 
-    @BeforeAll
+    @BeforeEach
     public void setUp(){
         supplierService.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH);
         supplierService.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER);
@@ -38,7 +35,7 @@ public class SupplierTests {
         Response res = supplierService.addSupplier("D", "3", "3333", Supplier.PaymentMethod.CREDIT_CARD);
         ResponseT<List<Supplier>> l = supplierService.getAllSuppliers();
         assertFalse(res.errorOccurred());
-        assertEquals(3, l.getValue().size());
+        assertEquals(4, l.getValue().size());
     }
 
     @Test
