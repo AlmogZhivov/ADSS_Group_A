@@ -15,13 +15,9 @@ public class OrderFacade {
     }
 
     public void addGeneralOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
-        System.out.println("Order added: heree0");
         SupplierAgreement sa = sf.getSupplierAgreement(supplierId);
-        System.out.println("Order added: heree1");
         Order order = new Order(this.id, products, shipmentDate, supplierId, sa, -1);
-        System.out.println("Order added: heree2");
         orders.put(id, order);
-        System.out.println("Order added: heree3");
         id++;
     }
 
@@ -35,11 +31,7 @@ public class OrderFacade {
     public void updateOrders(){
         Map<Integer, Order> copyOrders = new HashMap<>(orders);
         for (Order order : copyOrders.values()){
-            System.out.println("Order day: " + order.getDay());
-            System.out.println("Order shipment date: " + order.getShipmentDate());
-            System.out.println("Current date: " + new Date());
             if (order.getDay() == -1 && order.getShipmentDate().after(new Date())){
-                System.out.println("Order removed: " + order.getOrderId());
                 removeOrder(order.getOrderId());
             }
         }
@@ -70,7 +62,6 @@ public class OrderFacade {
 
     public List<Order> getAllOrders(){
         List<Order> ordersList = new ArrayList<>();
-        System.out.println("Orders size: " + orders.size());
         for (Order order : orders.values()){
             ordersList.add(order);
         }

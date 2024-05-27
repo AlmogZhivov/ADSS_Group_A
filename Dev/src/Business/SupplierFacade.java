@@ -65,7 +65,6 @@ public class SupplierFacade {
     }
 
     public SupplierAgreement getSupplierAgreement(int supplierId) {
-        System.out.println(suppliers.get(supplierId).getSupplierId());
         return suppliers.get(supplierId).getSupplierAgreement();
     }
 
