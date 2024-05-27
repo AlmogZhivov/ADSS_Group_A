@@ -21,14 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SupplierTests {
 
     private SupplierService supplierService;
-    private OrderService orderService;
 
-    public SupplierTests(SupplierService supplierService, OrderService orderService){
+    public SupplierTests(SupplierService supplierService){
         this.supplierService = supplierService;
-        this.orderService = orderService;
     }
 
-    @BeforeEach
+    @BeforeAll
     public void setUp(){
         supplierService.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH);
         supplierService.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER);
@@ -62,6 +60,8 @@ public class SupplierTests {
         Response res1 = supplierService.addProductToSupplier(0, 0, 5, "Milk");
         Response res2 = supplierService.addProductToSupplier(0, 1, 6, "Butter");
         ResponseT<SupplierAgreement> responseAgree = supplierService.getSupplierAgreement(0);
+        assertFalse(res1.errorOccurred());
+        assertFalse(res2.errorOccurred());
         assertNotNull(responseAgree.getValue().getProduct(0));
         assertNotNull(responseAgree.getValue().getProduct(1));
         assertNull(responseAgree.getValue().getProduct(2));
@@ -72,8 +72,9 @@ public class SupplierTests {
         supplierService.addProductToSupplier(0, 0, 5, "Milk");
         ResponseT<SupplierAgreement> responseAgree = supplierService.getSupplierAgreement(0);
         assertNotNull(responseAgree.getValue().getProduct(0));
-        supplierService.removeProductFromSupplier(0,0);
+        Response res = supplierService.removeProductFromSupplier(0,0);
         ResponseT<SupplierAgreement> responseAgree2 = supplierService.getSupplierAgreement(0);
+        assertFalse(res.errorOccurred());
         assertNull(responseAgree2.getValue().getProduct(0));
     }
 
