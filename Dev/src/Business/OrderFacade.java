@@ -29,8 +29,9 @@ public class OrderFacade {
     }
 
     public void updateOrders(){
-        for (Order order : orders.values()){
-            if (order.getDay() == -1 && order.getShipmentDate().after(new Date())){
+        Map<Integer, Order> copyOrders = new HashMap<>(orders);
+        for (Order order : copyOrders.values()){
+            if (order.getDay() == -1 && order.getShipmentDate().before(new Date())){
                 removeOrder(order.getOrderId());
             }
         }
@@ -60,7 +61,11 @@ public class OrderFacade {
     }
 
     public List<Order> getAllOrders(){
-        return new ArrayList<Order>(orders.values());
+        List<Order> ordersList = new ArrayList<>();
+        for (Order order : orders.values()){
+            ordersList.add(order);
+        }
+        return ordersList;
     }
 
     public double getOrderPrice(int orderId){

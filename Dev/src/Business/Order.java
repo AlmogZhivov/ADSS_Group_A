@@ -58,7 +58,7 @@ public class Order {
     public double getOrderPrice(){
         double sum = 0;
         for (Map.Entry<Integer,Integer> product : products.entrySet()){
-            sum += supplierAgreement.getProductPriceAccordingToAmount(product.getKey(), product.getValue());
+            sum += supplierAgreement.getProductPriceAccordingToAmount(product.getKey(), product.getValue()) * product.getValue();
         }
         return sum;
     }

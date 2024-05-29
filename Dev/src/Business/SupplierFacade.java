@@ -11,15 +11,16 @@ public class SupplierFacade {
 
     // <supplierId, Supplier>
     private Map<Integer, Supplier> suppliers = new HashMap<>();
-    private static int nextId = 0;
+    private int id = 0;
 
     public Supplier getSupplier(int supplierId) {
         return suppliers.get(supplierId);
     }
 
     public void addSupplier(String name, String compNumber, String bankNumber, PaymentMethod payment) {
-        Supplier supplier = new Supplier(nextId++, name, compNumber, bankNumber, payment);
-        suppliers.put(nextId, supplier);
+        Supplier supplier = new Supplier(id, name, compNumber, bankNumber, payment);
+        suppliers.put(id, supplier);
+        this.id++;
     }
 
     public void removeSupplier(int supplierId) {
@@ -42,7 +43,11 @@ public class SupplierFacade {
     }
 
     public List<Supplier> getAllSuppliers() {
-        return (List<Supplier>) suppliers.values();
+        List<Supplier> suppliersList = new ArrayList<>();
+        for (Supplier supplier : suppliers.values()) {
+            suppliersList.add(supplier);
+        }
+        return suppliersList;
     }
 
     // Adds contact to supplier
@@ -91,10 +96,6 @@ public class SupplierFacade {
 
     public void updateProductName(int supplierId, int catalogNumber, String newName) {
         suppliers.get(supplierId).updateProductName(catalogNumber, newName);
-    }
-
-    public void addSupplierAgreement(int supplierId) {
-        suppliers.get(supplierId).addSupplierAgreement();
     }
 
     public String getSupplierString(int supplierId) {

@@ -117,4 +117,5 @@ public class SupplierAgreement {
         if(checkProductExists(catalogNumber))
             products.get(catalogNumber).setName(newName);
     }
+
 }
