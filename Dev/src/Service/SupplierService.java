@@ -12,6 +12,7 @@ import java.util.List;
 
 public class SupplierService {
     private final SupplierFacade supplierFacade;
+    private static SupplierService instance;
 
     public SupplierService(SupplierFacade supplierFacade) {
         this.supplierFacade = supplierFacade;

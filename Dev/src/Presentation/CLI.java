@@ -5,6 +5,7 @@ import java.util.Scanner;
 import com.google.gson.Gson;
 
 import Service.PresentService;
+import Service.Responses.Response;
 
 public class CLI {
 
@@ -13,12 +14,15 @@ public class CLI {
     private static final Gson gson = new Gson();
 
     public static void main(String[] args) {
-        String input, output;
+        String input; 
+        Response output;
+        System.out.println("Type 'help' for a list of available commands, or 'exit' to quit");
         while (true) {
             input = scanner.nextLine();
             if (input.equalsIgnoreCase("exit"))
                 break;
             output = prService.call(input);
+            // print the output response as string
             System.out.println(gson.toJson(output));
         }
     }
