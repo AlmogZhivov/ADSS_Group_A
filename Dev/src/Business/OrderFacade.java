@@ -31,7 +31,7 @@ public class OrderFacade {
     public void updateOrders(){
         Map<Integer, Order> copyOrders = new HashMap<>(orders);
         for (Order order : copyOrders.values()){
-            if (order.getDay() == -1 && order.getShipmentDate().after(new Date())){
+            if (order.getDay() == -1 && order.getShipmentDate().before(new Date())){
                 removeOrder(order.getOrderId());
             }
         }
