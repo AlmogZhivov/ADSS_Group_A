@@ -7,6 +7,7 @@ import Service.Responses.Response;
 import Service.Responses.ResponseT;
 import Service.SupplierService;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,9 +26,7 @@ class SupplierTests {
 
     @BeforeEach
     public void setUp(){
-        supplierService.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH);
-        supplierService.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER);
-        supplierService.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD);
+        supplierService.loadData();
     }
 
     @Test

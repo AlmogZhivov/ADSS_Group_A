@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab58238a-0bd6-4e23-b473-0406b7cc08a0" name="Changes" comment="tests done">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dev/src/Business/OrderFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/OrderFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dev/src/Business/SupplierFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/SupplierFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Service/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Service/SupplierService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Tests/OrderTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Tests/OrderTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Tests/SupplierTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Tests/SupplierTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +65,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.SupplierTests">
+  <component name="RunManager" selected="JUnit.OrderTests">
     <configuration name="OrderTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADSS_Group_A" />
       <extension name="coverage">
@@ -112,8 +114,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SupplierTests" />
         <item itemvalue="JUnit.OrderTests" />
+        <item itemvalue="JUnit.SupplierTests" />
         <item itemvalue="JUnit.SupplierTests.testAddSupplier" />
       </list>
     </recent_temporary>
@@ -137,6 +139,7 @@
       <workItem from="1716097098116" duration="66000" />
       <workItem from="1716824238660" duration="3209000" />
       <workItem from="1716827866684" duration="104000" />
+      <workItem from="1716983886432" duration="993000" />
     </task>
     <task id="LOCAL-00001" summary="tests done">
       <option name="closed" value="true" />

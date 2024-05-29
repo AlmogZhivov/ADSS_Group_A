@@ -28,12 +28,9 @@ public class OrderTests {
     public OrderTests(){
     }
 
-    @BeforeAll
-    public static void setUp(){
-        System.out.println("Setting up");
-        supplierService.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH);
-        supplierService.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER);
-        supplierService.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD);
+    @BeforeEach
+    public void setUp(){
+        supplierService.loadData();
     }
 
     @Test

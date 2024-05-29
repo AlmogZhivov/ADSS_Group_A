@@ -20,6 +20,18 @@ public class SupplierService {
     
     // Supplier related functions
 
+    // Loads data into the system for testing
+    public Response loadData(){
+        try {
+            supplierFacade.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH);
+            supplierFacade.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER);
+            supplierFacade.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD);
+            return new Response();
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
     // Adds a new supplier to the system
     public Response addSupplier(String name, String compNumber, String bankNumber, PaymentMethod payment) {
         try {
