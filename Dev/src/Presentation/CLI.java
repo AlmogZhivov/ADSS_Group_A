@@ -1,5 +1,6 @@
 package Presentation;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
@@ -23,7 +24,8 @@ public class CLI {
                 break;
             output = prService.call(input);
             // print the output response as string
-            System.out.println(gson.toJson(output));
+            if (!Objects.equals(gson.toJson(output), "{}"))
+                System.out.println(gson.toJson(output));
         }
     }
 }

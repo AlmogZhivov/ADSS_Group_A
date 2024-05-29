@@ -15,8 +15,9 @@ public class PresentService {
     private static PresentService instance;
     private final SupplierService ss;
     private final OrderService os;
-    private OrderFacade of;
-    private SupplierFacade sf;
+    private SupplierFacade sf = new SupplierFacade();
+    private OrderFacade of = new OrderFacade(sf);
+
 
     private PresentService() {
         ss = SupplierService.getInstance(sf);

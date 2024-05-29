@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ab58238a-0bd6-4e23-b473-0406b7cc08a0" name="Changes" comment="tests done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Presentation/CLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Presentation/CLI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Service/PresentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Service/PresentService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,29 +41,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;JUnit.OrderTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SupplierTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SupplierTests.testAddSupplier.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;325989135__326118460&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.CLI.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.OrderTests.executor": "Run",
+    "JUnit.SupplierTests.executor": "Run",
+    "JUnit.SupplierTests.testAddSupplier.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "4-supplierfeatures",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="JUnit.OrderTests">
+}]]></component>
+  <component name="RunManager" selected="Application.CLI">
+    <configuration name="CLI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Presentation.CLI" />
+      <module name="ADSS_Group_A" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Presentation.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="OrderTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADSS_Group_A" />
       <extension name="coverage">
@@ -110,6 +126,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.CLI" />
         <item itemvalue="JUnit.OrderTests" />
         <item itemvalue="JUnit.SupplierTests" />
         <item itemvalue="JUnit.SupplierTests.testAddSupplier" />
@@ -136,6 +153,7 @@
       <workItem from="1716824238660" duration="3209000" />
       <workItem from="1716827866684" duration="104000" />
       <workItem from="1716983886432" duration="1197000" />
+      <workItem from="1717006784257" duration="460000" />
     </task>
     <task id="LOCAL-00001" summary="tests done">
       <option name="closed" value="true" />
