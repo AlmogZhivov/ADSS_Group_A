@@ -12,6 +12,7 @@ import java.util.List;
 
 public class SupplierService {
     private final SupplierFacade supplierFacade;
+    private static SupplierService instance;
 
     public SupplierService(SupplierFacade supplierFacade) {
         this.supplierFacade = supplierFacade;
@@ -212,5 +213,12 @@ public class SupplierService {
         } catch (Exception e) {
             return new ResponseT<>(e.getMessage());
         }
+    }
+
+
+    public static SupplierService getInstance(SupplierFacade supplierFacade) {
+        if (instance == null)
+            instance = new SupplierService(supplierFacade);
+        return instance;
     }
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 public class Order {
 
     private final int orderId;
+    // <catalogNumber, amount>
     private Map<Integer, Integer> products;
     private Date shipmentDate;
     private final int supplierId;

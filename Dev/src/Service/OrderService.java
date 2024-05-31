@@ -14,6 +14,7 @@ import java.util.Map;
 public class OrderService {
 
     private final OrderFacade orderFacade;
+    private static OrderService instance;
 
     public OrderService(OrderFacade orderFacade) {
         this.orderFacade = orderFacade;
@@ -117,5 +118,11 @@ public class OrderService {
         } catch (Exception e) {
             return new ResponseT<>(e.getMessage());//TODO - check if this goes to the correct constructor
         }
+    }
+
+    public static OrderService getInstance(OrderFacade orderFacade) {
+        if (instance == null)
+            instance = new OrderService(orderFacade);
+        return instance;
     }
 }
