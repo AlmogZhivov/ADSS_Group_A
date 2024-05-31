@@ -15,7 +15,7 @@ public class CLI {
     private static final Gson gson = new Gson();
 
     public static void main(String[] args) {
-        String input; 
+        String input;
         Response output;
         System.out.println("Type 'help' for a list of available commands, or 'exit' to quit");
         while (true) {

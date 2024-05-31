@@ -129,6 +129,26 @@ public class OrderTests {
         assertEquals((5 * 3) + (6 * 2), res1.getValue(), 0.001);
     }
 
+    @Test
+    public void testUpdateProductDiscountAccordingToAmount(){
+        supplierService.addProductToSupplier(0, 0, 5, "Milk");
+        Response res1 = supplierService.updateProductDiscountAccordingToAmount(0, 0, 3, 20);
+        assertFalse(res1.errorOccurred());
+        Date shipmentDate1 = new Date();
+        Map<Integer, Integer> products = new HashMap<>();
+        orderService.addGeneralOrder(products, shipmentDate1, 0);
+        orderService.addProduct(0, 0, 3);
+        ResponseT<Double> res2 = orderService.getOrderPrice(0);
+        assertEquals(12, res2.getValue());
+        Response res3 = supplierService.updateProductDiscountAccordingToAmount(0, 0, 3, 200);
+        assertTrue(res3.errorOccurred());
+        Response res4 = supplierService.removeProductDiscountAccordingToAmount(0, 0, 3);
+        assertFalse(res4.errorOccurred());
+        ResponseT<Double> res5 = orderService.getOrderPrice(0);
+        assertEquals(15, res5.getValue());
+
+    }
+
 
 
 

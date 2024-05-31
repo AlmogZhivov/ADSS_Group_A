@@ -107,8 +107,7 @@ public class SupplierProduct {
     public void updateProductDiscountAccordingToAmount(int amount, double newDiscount) {
         if (!isLegalDiscount(newDiscount))
             throw new IllegalArgumentException("Invalid discount!");
-        if (isAmountExists(amount))
-            discountAccordingToAmount.put(amount, newDiscount);
+        discountAccordingToAmount.put(amount, newDiscount);
     }
 
     public void removeProductDiscountAccordingToAmount(int amount) {
