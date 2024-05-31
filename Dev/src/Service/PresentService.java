@@ -38,7 +38,7 @@ public class PresentService {
                 System.out.println("""
                         Available commands:
                         loadData
-                        addSupplier name compNumber bankNumber paymentMethod
+                        addSupplier name compNumber bankNumber paymentMethod(CASH/BANK_TRANSFER/CREDIT_CARD)
                         removeSupplier supplierId
                         updateSupplierName supplierId newName
                         updateSupplierBankAccount supplierId newBankAccount
@@ -50,7 +50,7 @@ public class PresentService {
                         removeProduct supplierId catalogNumber
                         addContact supplierId name phone
                         updateProductPrice supplierId catalogNumber newPrice
-                        updateSupplierPaymentMethod supplierId paymentMethod
+                        updateSupplierPaymentMethod supplierId paymentMethod(CASH/BANK_TRANSFER/CREDIT_CARD)
                         getAllSuppliers
                         getAllContacts
                         getSupplierAgreement supplierId
@@ -72,7 +72,7 @@ public class PresentService {
             case "loadData":
                 return ss.loadData();            
             case "addSupplier":
-                return parts.length == 4 ? ss.addSupplier(parts[1], parts[2], parts[3], PaymentMethod.valueOf(parts[4])) : errResponse;
+                return parts.length == 5 ? ss.addSupplier(parts[1], parts[2], parts[3], PaymentMethod.valueOf(parts[4])) : errResponse;
             case "removeSupplier":
                 return parts.length == 2 ? ss.removeSupplier(Integer.parseInt(parts[1])) : errResponse;
             case "updateSupplierName":
