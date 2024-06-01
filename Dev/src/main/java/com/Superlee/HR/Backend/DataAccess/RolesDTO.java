@@ -13,11 +13,12 @@ public class RolesDTO {
 
     public static Map<Integer, String> loadRoles() {
         return Map.of(
-                0, "Manager",
-                1, "Cashier",
-                2, "Cleaner",
-                3, "Storekeeper",
-                4, "Security"
+                0, "HRManager",
+                1, "Manager",
+                2, "Cashier",
+                3, "Cleaner",
+                4, "Storekeeper",
+                5, "Security"
         );
     }
 
@@ -37,4 +38,3 @@ public class RolesDTO {
         this.name = name;
     }
 }
-

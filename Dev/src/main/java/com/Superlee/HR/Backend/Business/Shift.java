@@ -16,8 +16,9 @@ class Shift {
     private List<String> availableWorkers;
     private List<String> assignedWorkers;
     private final Map<String, Integer> workerRoles;
+    private String branch;
 
-    public Shift(int id, LocalDateTime startTime, LocalDateTime endTime) {
+    public Shift(int id, LocalDateTime startTime, LocalDateTime endTime, String branch) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -25,6 +26,7 @@ class Shift {
         this.availableWorkers = new ArrayList<>();
         this.assignedWorkers = new ArrayList<>();
         this.workerRoles = new HashMap<>();
+        this.branch = branch;
     }
 
     public boolean addAvailableWorker(String worker) {
@@ -38,7 +40,7 @@ class Shift {
     }
 
     public boolean assignWorker(String worker, Integer role) {
-        if (availableWorkers.contains(worker) && !assignedWorkers.contains(worker) && requiredRoles.containsKey(role)) {
+        if (availableWorkers.contains(worker) && !assignedWorkers.contains(worker)) {
             workerRoles.put(worker, role);
             return assignedWorkers.add(worker);
         }
@@ -55,7 +57,8 @@ class Shift {
     }
 
 
-    // Getters and setter
+    // Getters and setters
+
     public int getId() {
         return id;
     }
@@ -103,5 +106,13 @@ class Shift {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String name) {
+        this.branch = name;
     }
 }

@@ -1,15 +1,21 @@
 package com.Superlee.HR.Backend.Service;
 
+import java.time.DateTimeException;
+import java.util.NoSuchElementException;
+
 public class HRService {
     private static HRService instance;
     private final ShiftService ss;
     private final WorkerService ws;
+    private final BranchService bs;
 
     private HRService() {
         ss = ShiftService.getInstance();
         ws = WorkerService.getInstance();
+        bs = BranchService.getInstance();
         ss.loadData();
         ws.loadData();
+        bs.loadData();
     }
 
     public static HRService getInstance() {
@@ -33,6 +39,8 @@ public class HRService {
      *
      * @param role the role to filter by
      * @return a list of all workers with the specified role
+     * @throws IllegalArgumentException if the role is null or empty
+     * @throws NoSuchElementException   if the role is not found
      */
     public String getWorkersByRole(String role) {
         return ws.getWorkersByRole(role);
@@ -44,6 +52,7 @@ public class HRService {
      * @param firstname the first name of the worker
      * @param surname   the surname of the worker
      * @return all workers with the specified name
+     * @throws IllegalArgumentException if the first name or surname is null or empty
      */
     public String getWorkersByName(String firstname, String surname) {
         return ws.getWorkersByName(firstname, surname);
@@ -54,6 +63,8 @@ public class HRService {
      *
      * @param id the id of the worker
      * @return the worker with the specified id
+     * @throws IllegalArgumentException if the id is null or empty
+     * @throws NoSuchElementException   if the worker is not found
      */
     public String getWorkerById(String id) {
         return ws.getWorkerById(id);
@@ -66,6 +77,7 @@ public class HRService {
      * @param firstname the first name of the worker
      * @param surname   the surname of the worker
      * @return an empty response if successful
+     * @throws IllegalArgumentException if the id, first name or surname is invalid or if the worker already exists
      */
     public String addNewWorker(String id, String firstname, String surname) {
         return ws.addNewWorker(id, firstname, surname);
@@ -76,6 +88,8 @@ public class HRService {
      *
      * @param id the id of the shift
      * @return a list of all workers assigned to the specified shift
+     * @throws IllegalArgumentException if the id is negative
+     * @throws NoSuchElementException   if the shift is not found
      */
     public String getWorkersByShift(int id) {
         return ss.getWorkersByShift(id);
@@ -88,6 +102,11 @@ public class HRService {
      * @param shiftId  the id of the shift
      * @param role     the role of the worker
      * @return an empty response if successful
+     * @throws IllegalArgumentException if the worker id or role is null or empty
+     * @throws NoSuchElementException   if the shift, worker or role is not found
+     * @throws IllegalStateException    if the worker is already assigned to the shift,
+     *                                  if the worker is not available for the shift or
+     *                                  if the worker does not have the required role
      */
     public String assignWorker(String workerId, int shiftId, String role) {
         return ss.assignWorker(workerId, shiftId, role);
@@ -99,6 +118,9 @@ public class HRService {
      * @param workerId the id of the worker
      * @param shiftId  the id of the shift
      * @return an empty response if successful
+     * @throws IllegalArgumentException if the worker id is null or empty
+     * @throws NoSuchElementException   if the shift or worker is not found
+     * @throws IllegalStateException    if the worker is not assigned to the shift
      */
     public String unassignWorker(String workerId, int shiftId) {
         return ss.unassignWorker(workerId, shiftId);
@@ -109,6 +131,8 @@ public class HRService {
      *
      * @param id the id of the shift
      * @return all workers assignable to the specified shift
+     * @throws IllegalArgumentException if the id is negative
+     * @throws NoSuchElementException   if the shift is not found
      */
     public String getAssignableWorkersForShift(int id) {
         return ss.getAssignableWorkersForShift(id);
@@ -119,6 +143,8 @@ public class HRService {
      *
      * @param id the id of the shift
      * @return the shift with the specified id
+     * @throws IllegalArgumentException if the id is negative
+     * @throws NoSuchElementException   if the shift is not found
      */
     public String getShift(int id) {
         return ss.getShift(id);
@@ -131,6 +157,8 @@ public class HRService {
      * @param role   the role of the worker
      * @param amount the amount of workers needed
      * @return an empty response if successful
+     * @throws IllegalArgumentException if the role is null or empty or if the amount or id is negative
+     * @throws NoSuchElementException   if the shift or role is not found
      */
     public String setShiftRequiredWorkersOfRole(int id, String role, int amount) {
         return ss.setShiftRequiredWorkersOfRole(id, role, amount);
@@ -142,9 +170,11 @@ public class HRService {
      * @param start the start time of the shift
      * @param end   the end time of the shift
      * @return the id of the new shift
+     * @throws IllegalArgumentException if the start or end time is invalid
+     * @throws DateTimeException        if the start time is equal to or after the end time
      */
-    public String addNewShift(String start, String end) {
-        return ss.addNewShift(start, end);
+    public String addNewShift(String branch, String start, String end) {
+        return ss.addNewShift(branch, start, end);
     }
 
     /**
@@ -153,8 +183,168 @@ public class HRService {
      * @param workerId the id of the worker
      * @param shiftId  the id of the shift
      * @return an empty response if successful
+     * @throws IllegalArgumentException if the worker id is null or empty or if the shift id is negative
+     * @throws NoSuchElementException   if the worker or shift is not found
+     * @throws IllegalStateException    if the worker is already available for the shift
      */
     public String addAvailability(String workerId, int shiftId) {
         return ss.addAvailability(workerId, shiftId);
     }
+
+    // TODO removeAvailability method
+
+    /**
+     * Get a list of all branches
+     *
+     * @return a list of all branches
+     */
+    public String getAllBranches() {
+        return bs.getAllBranches();
+    }
+
+    /**
+     * Get a branch with the specified name
+     *
+     * @param name the name of the branch
+     * @return the branch with the specified name
+     * @throws IllegalArgumentException if the name is null or empty
+     * @throws NoSuchElementException   if the branch is not found
+     */
+    public String getBranchByName(String name) {
+        return bs.getBranchByName(name);
+    }
+
+    /**
+     * Add a new branch to the system
+     *
+     * @param name      the name of the branch
+     * @param address   the address of the branch
+     * @param managerId the id of the manager
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the arguments are invalid
+     * @throws NoSuchElementException   if the manager is not found
+     * @throws IllegalStateException    if the branch already exists or if the worker is not a manager
+     */
+    public String addNewBranch(String name, String address, String managerId) {
+        return bs.addNewBranch(name, address, managerId);
+    }
+
+    /**
+     * Updates the manager of a branch
+     *
+     * @param branchName the name of the branch
+     * @param managerId  the id of the manager
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the arguments are invalid
+     * @throws NoSuchElementException   if the branch or manager is not found
+     * @throws IllegalStateException    if the worker is not a manager or if the manager is already the manager of the branch
+     */
+    public String updateBranchManager(String branchName, String managerId) {
+        return bs.updateBranchManager(branchName, managerId);
+    }
+
+    /**
+     * Updates the email of a worker
+     *
+     * @param id    the id of the worker
+     * @param email the new email of the worker
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the id or email is null or empty or if the email is invalid
+     * @throws NoSuchElementException   if the worker is not found
+     */
+    public String updateWorkerEmail(String id, String email) {
+        return ws.updateWorkerEmail(id, email);
+    }
+
+    /**
+     * Updates the phone number of a worker
+     *
+     * @param id    the id of the worker
+     * @param phone the new phone number of the worker
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the id or phone number is null or empty
+     * @throws NoSuchElementException   if the worker is not found
+     */
+    public String updateWorkerPhone(String id, String phone) {
+        return ws.updateWorkerPhone(id, phone);
+    }
+
+    /**
+     * Updates the password of a worker
+     *
+     * @param id       the id of the worker
+     * @param password the new password of the worker
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the id or password is null or empty
+     * @throws NoSuchElementException   if the worker is not found
+     */
+    public String updateWorkerPassword(String id, String password) {
+        return ws.updateWorkerPassword(id, password);
+    }
+
+    /**
+     * Updates the bank details of a worker
+     *
+     * @param id          the id of the worker
+     * @param bankDetails the new bank details of the worker
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the id or bank details are null or empty
+     * @throws NoSuchElementException   if the worker is not found
+     */
+    public String updateWorkerBankDetails(String id, String bankDetails) {
+        return ws.updateWorkerBankDetails(id, bankDetails);
+    }
+
+    /**
+     * Updates the salary of a worker
+     *
+     * @param id     the id of the worker
+     * @param salary the new salary of the worker
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the salary is negative or if the id is null or empty
+     * @throws NoSuchElementException   if the worker is not found
+     */
+    public String updateWorkerSalary(String id, int salary) {
+        return ws.updateWorkerSalary(id, salary);
+    }
+
+    /**
+     * Updates the contract details of a worker
+     *
+     * @param id              the id of the worker
+     * @param contractDetails the new contract details of the worker
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the id or contract details are null or empty
+     * @throws NoSuchElementException   if the worker is not found
+     */
+    public String updateWorkerContractDetails(String id, String contractDetails) {
+        return ws.updateWorkerContractDetails(id, contractDetails);
+    }
+
+    /**
+     * Updates the main branch of a worker
+     *
+     * @param id     the id of the worker
+     * @param branch the new main branch of the worker
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the id or branch is null or empty
+     * @throws NoSuchElementException   if the worker or branch is not found
+     */
+    public String updateWorkerMainBranch(String id, String branch) {
+        return bs.updateWorkerMainBranch(id, branch);
+    }
+
+    /**
+     * Log into the system
+     *
+     * @param id       the id of the worker
+     * @param password the password of the worker
+     * @return the worker's details if successful
+     * @throws IllegalArgumentException if the id or password is null or empty or if the password is incorrect
+     * @throws NoSuchElementException   if the worker is not found
+     * @throws IllegalStateException    if the worker is already logged in
+     */
+    public String login(String id, String password) {
+        return ws.login(id, password);
+    } // TODO ensure that every action is performed by an authenticated user with the correct permissions
 }
