@@ -34,7 +34,6 @@ public class Supplier {
         this.compNumber = compNumber;
         this.bankNumber = bankNumber;
         this.payment = payment;
-        this.contactId += 1;
         this.supplierAgreement = new SupplierAgreement(supplierId);
     }
 
@@ -130,7 +129,8 @@ public class Supplier {
         str += "Company Number: " + compNumber + "\n";
         str += "Bank Number: " + bankNumber + "\n";
         str += "Payment Method: " + payment.toString() + "\n";
-        str += "Contact: " + contact.toString() + "\n";
+        if (contact != null)
+            str += "Contact: " + contact.toString() + "\n";
         return str;
     }
 }

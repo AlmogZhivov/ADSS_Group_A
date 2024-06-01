@@ -4,10 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab58238a-0bd6-4e23-b473-0406b7cc08a0" name="Changes" comment="tests done">
+    <list default="true" id="ab58238a-0bd6-4e23-b473-0406b7cc08a0" name="Changes" comment="more debug on Presentation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dev/src/Presentation/CLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Presentation/CLI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/Supplier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dev/src/Service/PresentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Service/PresentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Order.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Order.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/OrderFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/OrderFacade.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Supplier$PaymentMethod.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Supplier$PaymentMethod.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Supplier.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Supplier.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/SupplierAgreement.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/SupplierAgreement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/SupplierFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/SupplierFacade.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Presentation/OrderPresent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Presentation/SupplierPresent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Service/OrderService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Service/OrderService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Service/SupplierService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Service/SupplierService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Tests/OrderTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Tests/OrderTests.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Tests/SupplierTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Tests/SupplierTests.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,29 +54,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.CLI.executor": "Run",
-    "Downloaded.Files.Path.Enabled": "false",
-    "JUnit.OrderTests.executor": "Run",
-    "JUnit.SupplierTests.executor": "Run",
-    "JUnit.SupplierTests.testAddSupplier.executor": "Run",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "4-supplierfeatures",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.CLI.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;JUnit.OrderTests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.SupplierTests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.SupplierTests.testAddSupplier.executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;4-supplierfeatures&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.CLI">
     <configuration name="CLI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Presentation.CLI" />
@@ -136,8 +149,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
-        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
       </set>
     </attachedChunks>
   </component>
@@ -153,7 +166,9 @@
       <workItem from="1716824238660" duration="3209000" />
       <workItem from="1716827866684" duration="104000" />
       <workItem from="1716983886432" duration="1197000" />
-      <workItem from="1717006784257" duration="460000" />
+      <workItem from="1717006784257" duration="833000" />
+      <workItem from="1717061466197" duration="1000" />
+      <workItem from="1717142849049" duration="3439000" />
     </task>
     <task id="LOCAL-00001" summary="tests done">
       <option name="closed" value="true" />
@@ -163,7 +178,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716827459926</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="more debug on Presentation">
+      <option name="closed" value="true" />
+      <created>1717007602952</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1717007602952</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,6 +194,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="tests done" />
-    <option name="LAST_COMMIT_MESSAGE" value="tests done" />
+    <MESSAGE value="more debug on Presentation" />
+    <option name="LAST_COMMIT_MESSAGE" value="more debug on Presentation" />
   </component>
 </project>

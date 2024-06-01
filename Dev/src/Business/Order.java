@@ -78,7 +78,7 @@ public class Order {
         }
         str += "Products (in the format: [catalog number, amount]):\n";
         for (Map.Entry<Integer,Integer> product : products.entrySet()){
-            str += product.toString() + "\n";
+            str += "catalogNumber: "+ product.getKey() + ", amount: " + product.getValue() + "\n";
         }
 
         return str;
