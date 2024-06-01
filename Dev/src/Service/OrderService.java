@@ -110,16 +110,6 @@ public class OrderService {
         }
     }
 
-    // Returns a string describing the order according to the id given
-    public ResponseT<String> getOrderString(int orderId){
-        try {
-            String str = orderFacade.getOrderString(orderId);
-            return new ResponseT<>(str);
-        } catch (Exception e) {
-            return new ResponseT<>(e.getMessage());//TODO - check if this goes to the correct constructor
-        }
-    }
-
     public static OrderService getInstance(OrderFacade orderFacade) {
         if (instance == null)
             instance = new OrderService(orderFacade);

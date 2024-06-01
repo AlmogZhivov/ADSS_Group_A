@@ -72,9 +72,4 @@ public class OrderFacade {
         Order order = orders.get(orderId);
         return order.getOrderPrice();
     }
-
-    public String getOrderString(int orderId){
-        Order order = orders.get(orderId);
-        return order.toString();
-    }
 }

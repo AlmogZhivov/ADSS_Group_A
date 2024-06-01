@@ -7,20 +7,13 @@
     <list default="true" id="ab58238a-0bd6-4e23-b473-0406b7cc08a0" name="Changes" comment="more debug on Presentation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dev/src/Business/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/OrderFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/OrderFacade.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dev/src/Business/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/Supplier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/SupplierAgreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/SupplierAgreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/SupplierFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/SupplierFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Service/OrderService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dev/src/Service/PresentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Service/PresentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Order.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Order.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/OrderFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/OrderFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Supplier$PaymentMethod.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Supplier$PaymentMethod.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Supplier.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/Supplier.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/SupplierAgreement.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/SupplierAgreement.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/SupplierFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Business/SupplierFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Presentation/OrderPresent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Presentation/SupplierPresent.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Service/OrderService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Service/OrderService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Service/SupplierService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Service/SupplierService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Tests/OrderTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Tests/OrderTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ADSS_Group_A/Tests/SupplierTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ADSS_Group_A/Tests/SupplierTests.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Service/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Service/SupplierService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +70,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.CLI">
+  <component name="RunManager" selected="JUnit.SupplierTests">
     <configuration name="CLI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Presentation.CLI" />
       <module name="ADSS_Group_A" />
@@ -139,9 +132,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.CLI" />
-        <item itemvalue="JUnit.OrderTests" />
         <item itemvalue="JUnit.SupplierTests" />
+        <item itemvalue="JUnit.OrderTests" />
+        <item itemvalue="Application.CLI" />
         <item itemvalue="JUnit.SupplierTests.testAddSupplier" />
       </list>
     </recent_temporary>
@@ -169,6 +162,7 @@
       <workItem from="1717006784257" duration="833000" />
       <workItem from="1717061466197" duration="1000" />
       <workItem from="1717142849049" duration="3439000" />
+      <workItem from="1717228790123" duration="1035000" />
     </task>
     <task id="LOCAL-00001" summary="tests done">
       <option name="closed" value="true" />
