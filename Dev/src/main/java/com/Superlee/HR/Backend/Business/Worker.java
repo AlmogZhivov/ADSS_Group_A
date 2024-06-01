@@ -19,12 +19,15 @@ class Worker {
     private List<Integer> pastShifts;
     private final LocalDateTime startDate;
     private String contract;
+    private String branch;
 
     Worker(String id, String firstname, String surname) {
-        this(id, firstname, surname, "", "", "", "", 0, new ArrayList<>(), LocalDateTime.MIN, "");
+        this(id, firstname, surname, "", "", "", "", 0, new ArrayList<>(), LocalDateTime.now(), "", "");
     }
 
-    Worker(String id, String firstname, String surname, String email, String phone, String password, String bankDetails, int salary, List<Integer> roles, LocalDateTime startDate, String contract) {
+    Worker(String id, String firstname, String surname, String email, String phone,
+           String password, String bankDetails, int salary,
+           List<Integer> roles, LocalDateTime startDate, String contract, String branch) {
         this.id = id;
         this.firstname = firstname;
         this.surname = surname;
@@ -39,6 +42,7 @@ class Worker {
         this.pastShifts = new ArrayList<>();
         this.startDate = startDate;
         this.contract = contract;
+        this.branch = branch;
     }
 
     boolean assign(Integer shiftId) {
@@ -200,5 +204,21 @@ class Worker {
 
     public boolean addRole(int role) {
         return !roles.contains(role) && roles.add(role);
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Worker w) {
+            return w.getId().equals(this.getId());
+        }
+        return false;
     }
 }

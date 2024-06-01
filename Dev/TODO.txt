@@ -1,14 +1,16 @@
 * class diagram
     add frontend bullshit
-    change wid to string
-    add new classes, fields or fields
+    add new classes
     add dal mock
 
 * write requirements document
 
-* add exceptions
+* frontend
+    fix gson issues
+    branch related functionality
+
 delete compiled files from git
-add javadoc exceptions
-add calls to the dal
+
+add calls to the dal - next time?
 
 * required stuff

@@ -7,7 +7,7 @@ import java.util.Map;
 
 class Roles {
     public final Map<Integer, Integer> DEFAULT_SHIFT_ROLES = new HashMap<>() {{
-        put(0, 1); // Always require one manager
+        put(1, 1); // Always require one manager
     }};
 
     private static Roles instance;

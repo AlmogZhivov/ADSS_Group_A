@@ -1,7 +1,6 @@
 package com.Superlee.HR.Backend.Service;
 
 import com.Superlee.HR.Backend.Business.ShiftFacade;
-
 import com.google.gson.Gson;
 
 public class ShiftService {
@@ -83,19 +82,10 @@ public class ShiftService {
         }
     }
 
-    public boolean loadData() {
-        try {
-            sf.loadData();
-            return true;
-        } catch (Exception ignored) {
-            return false;
-        }
-    }
-
-    public String addNewShift(String start, String end) {
+    public String addNewShift(String branch, String start, String end) {
         gson = new Gson();
         try {
-            return gson.toJson(new Response(sf.addNewShift(start, end)));
+            return gson.toJson(new Response(sf.addNewShift(branch, start, end)));
         } catch (Exception ex) {
             Response res = new Response(ex.getMessage());
             return gson.toJson(new Response(res));
@@ -110,6 +100,15 @@ public class ShiftService {
         } catch (Exception ex) {
             Response res = new Response(ex.getMessage());
             return gson.toJson(new Response(res));
+        }
+    }
+
+    public boolean loadData() {
+        try {
+            sf.loadData();
+            return true;
+        } catch (Exception ignored) {
+            return false;
         }
     }
 }

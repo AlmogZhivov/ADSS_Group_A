@@ -1,19 +1,53 @@
-List of available commands:
+List of available commands before login:
 
-workers
-    get a list of all workers
+login <username> <password>
+    login to the system
 
-workers -r <role>
-    get a list of all workers with the specified role
+help
+    print this message
 
-workers -n <firstname> <surname>
-    get a worker with the specified name
+exit
+    exit the program
 
-workers -i <id>
-    get a worker with the specified id
 
-workers -s <id>
-    get a list of all workers assigned to the specified shift
+
+
+List of available commands for workers:
+
+avlb <shift_id>
+    add availability for a shift with the specified id
+
+unavlb <shift_id>
+    remove availability for a shift with the specified id
+
+email <email>
+    change your email to the specified email
+
+phone <phone>
+    change your phone number to the specified phone number
+
+password <password>
+    change your password to the specified password
+
+bank <bank>
+    change your bank account to the specified bank account
+
+branch <branch>
+    change your main branch to the specified branch
+
+details [all]
+    print your details
+
+help
+    print this message
+
+exit
+    exit the program
+
+
+
+
+List of available commands for HR managers:
 
 addw <id> <firstname> <surname>
     add a new worker with the specified id, first name and second name
@@ -33,6 +67,27 @@ shift -a <id>
 shift -r <id> <role> <amount>
     sets the amount of workers with the specified role needed for a shift
 
-adds <start> <end>
-    add a new shift with the specified start and end time
+adds <start> <end> <branch>
+    add a new shift with the specified start time, end time and branch
     must be formatted as yyyy-MM-ddTHH:mm (e.g. 1996-04-15T00:00)
+
+workers
+    get a list of all workers
+
+workers -r <role>
+    get a list of all workers with the specified role
+
+workers -n <firstname> <surname>
+    get a worker with the specified name
+
+workers -i <id>
+    get a worker with the specified id
+
+workers -s <id>
+    get a list of all workers assigned to the specified shift
+
+help
+    print this message
+
+exit
+    exit the program

@@ -9,11 +9,11 @@ public class Response {
         value = null;
     }
 
-    public Response(Object res) {
-        value = res;
-    }
-
     public Response(String msg) {
         errMsg = msg;
+    }
+
+    public Response(Object res) {
+        value = res;
     }
 }
