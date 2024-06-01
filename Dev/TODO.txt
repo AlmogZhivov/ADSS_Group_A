@@ -11,6 +11,6 @@
 
 delete compiled files from git
 
-add calls to the dal - next time?
+add calls to the dal - next time!
 
 * required stuff
