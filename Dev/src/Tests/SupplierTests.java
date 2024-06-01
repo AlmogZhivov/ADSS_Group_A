@@ -1,5 +1,6 @@
 package Tests;
 
+import Business.Contact;
 import Business.Supplier;
 import Business.SupplierAgreement;
 import Business.SupplierFacade;
@@ -72,6 +73,15 @@ class SupplierTests {
         ResponseT<SupplierAgreement> responseAgree2 = supplierService.getSupplierAgreement(0);
         assertFalse(res.errorOccurred());
         assertNull(responseAgree2.getValue().getProduct(0));
+    }
+
+    @Test
+    public void testAddContact(){
+        Response res1 = supplierService.addContact(0, "Jacob", "0501234567");
+        assertFalse(res1.errorOccurred());
+        ResponseT<List<Contact>> res2 = supplierService.getAllContacts();
+        assertFalse(res2.errorOccurred());
+        assertEquals("Jacob", res2.getValue().get(0).getName());
     }
 
 
