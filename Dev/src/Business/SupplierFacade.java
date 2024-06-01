@@ -97,8 +97,4 @@ public class SupplierFacade {
     public void updateProductName(int supplierId, int catalogNumber, String newName) {
         suppliers.get(supplierId).updateProductName(catalogNumber, newName);
     }
-
-    public String getSupplierString(int supplierId) {
-        return suppliers.get(supplierId).toString();
-    }
 }

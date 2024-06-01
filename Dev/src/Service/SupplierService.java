@@ -205,17 +205,6 @@ public class SupplierService {
         }
     }
 
-    // Returns a string describing the supplier for printing
-    public ResponseT<String> getSupplierString(int supplierId) {
-        try {
-            String str = supplierFacade.getSupplierString(supplierId);
-            return new ResponseT<>(str);
-        } catch (Exception e) {
-            return new ResponseT<>(e.getMessage());
-        }
-    }
-
-
     public static SupplierService getInstance(SupplierFacade supplierFacade) {
         if (instance == null)
             instance = new SupplierService(supplierFacade);

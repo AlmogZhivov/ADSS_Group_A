@@ -58,14 +58,12 @@ public class PresentService {
                         getOrder orderId
                         getAllOrders
                         getOrderPrice orderId
-                        getOrderString orderId
                         addProductDiscountAccordingToAmount supplierId catalogNumber minAmount discount
                         updateProductDiscountAccordingToAmount supplierId catalogNumber minAmount newDiscount
                         removeProductDiscountAccordingToAmount supplierId catalogNumber minAmount
                         updateProductName supplierId catalogNumber newName
                         addProductToSupplier supplierId catalogNumber price name
                         removeProductFromSupplier supplierId catalogNumber
-                        getSupplierString supplierId
                         exit
                         """);
                         return new Response();
@@ -113,8 +111,6 @@ public class PresentService {
                 return os.getAllOrders();
             case "getOrderPrice":
                 return parts.length == 2 ? os.getOrderPrice(Integer.parseInt(parts[1])) : errResponse;
-            case "getOrderString":
-                return parts.length == 2 ? os.getOrderString(Integer.parseInt(parts[1])) : errResponse;
             case "addProductDiscountAccordingToAmount":
                 return parts.length == 5 ? ss.addProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4])) : errResponse;
             case "updateProductDiscountAccordingToAmount":
@@ -127,8 +123,6 @@ public class PresentService {
                 return parts.length == 5 ? ss.addProductToSupplier(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Double.parseDouble(parts[3]), parts[4]) : errResponse;
             case "removeProductFromSupplier":
                 return parts.length == 3 ? ss.removeProductFromSupplier(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])) : errResponse;
-            case "getSupplierString":
-                return parts.length == 2 ? ss.getSupplierString(Integer.parseInt(parts[1])) : errResponse;
             default:
                 return new Response("Invalid command");
         }
