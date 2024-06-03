@@ -2,13 +2,16 @@ package com.Superlee.HR.Backend.Service;
 
 import com.Superlee.HR.Backend.Business.BranchFacade;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class BranchService {
     private static BranchService instance;
-    private final BranchFacade bf = BranchFacade.getInstance();
-    private Gson gson;
+    private final BranchFacade bf;
+    private final Gson gson;
 
     private BranchService() {
+        bf = BranchFacade.getInstance();
+        gson = new GsonBuilder().serializeNulls().create();
     }
 
     public static BranchService getInstance() {
@@ -19,87 +22,71 @@ public class BranchService {
     }
 
     public String addBranch(String name, String address, String manager) {
-        gson = new Gson();
         try {
             bf.addBranch(name, address, manager);
             return gson.toJson(new Response());
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String getBranch(String name) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(bf.getBranch(name)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String updateManager(String name, String manager) {
-        gson = new Gson();
         try {
             bf.updateManager(name, manager);
             return gson.toJson(new Response());
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String getAllBranches() {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(bf.getAllBranches()));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String getBranchByName(String name) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(bf.getBranchByName(name)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String addNewBranch(String name, String address, String managerId) {
-        gson = new Gson();
         try {
             bf.addBranch(name, address, managerId);
             return gson.toJson(new Response());
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String updateBranchManager(String branchName, String managerId) {
-        gson = new Gson();
         try {
             bf.updateManager(branchName, managerId);
             return gson.toJson(new Response());
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String updateWorkerMainBranch(String id, String branch) {
-        gson = new Gson();
         try {
             bf.updateWorkerMainBranch(id, branch);
             return gson.toJson(new Response());
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 

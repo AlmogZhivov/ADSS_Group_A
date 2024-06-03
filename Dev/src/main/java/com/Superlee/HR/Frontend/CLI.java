@@ -2,6 +2,7 @@ package com.Superlee.HR.Frontend;
 
 import com.Superlee.HR.Backend.Service.HRService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -24,10 +25,10 @@ public class CLI {
 
             login <username> <password>
                 login to the system
-                
+                        
             help
                 print this message
-                
+                        
             exit
                 exit the program
             """;
@@ -58,7 +59,7 @@ public class CLI {
                         
             details [all]
                 print your details
-                
+                        
             help
                 print this message
                         
@@ -70,22 +71,22 @@ public class CLI {
                         
             addw <id> <firstname> <surname>
                 add a new worker with the specified id, first name and second name
-                
+                        
             assw <worker_id> <shift_id> <role>
                 assign a worker to a shift
                         
             unassw <worker_id> <shift_id>
                 unassign a worker from a shift
-                
+                        
             shift <id>
                 get a shift with the specified id
                         
             shift -a <id>
                 get a list of all workers assignable to the specified shift
-                
+                        
             shift -r <id> <role> <amount>
                 sets the amount of workers with the specified role needed for a shift
-                
+                        
             adds <start> <end> <branch>
                 add a new shift with the specified start time, end time and branch
                 must be formatted as yyyy-MM-ddTHH:mm (e.g. 1996-04-15T00:00)
@@ -101,7 +102,7 @@ public class CLI {
                         
             workers -i <id>
                 get a worker with the specified id
-                
+                        
             workers -s <id>
                 get a list of all workers assigned to the specified shift
                         
@@ -131,8 +132,9 @@ public class CLI {
                     Response r = gson.fromJson(output, Response.class);
                     if (r.errMsg != null)
                         System.out.println(r.errMsg);
+
                     else {
-                        WorkerModel worker = gson.fromJson(r.value.toString(), WorkerModel.class);
+                        WorkerModel worker = ModelFactory.createWorkerModel(output);
                         System.out.println("Welcome, " + worker.firstname() + " " + worker.surname());
                         if (worker.roles().contains(0))
                             hrManagerMenu(worker);
@@ -159,8 +161,11 @@ public class CLI {
             String[] parts = input.split("\\s+");
             switch (parts[0]) {
                 case "avlb": {
-                    if (parts.length != 2 || !tryParseInt(parts[1])) {
+                    if (parts.length != 2) {
                         System.out.println("Invalid number of args");
+                        break;
+                    } else if (!tryParseInt(parts[1])) {
+                        System.out.println("Invalid ID");
                         break;
                     } else {
                         output = hrService.addAvailability(worker.id(), Integer.parseInt(parts[1]));
@@ -235,6 +240,7 @@ public class CLI {
                         System.out.println(Objects.requireNonNullElse(r.errMsg, "Branch changed"));
                     }
                 }
+                break;
 
                 // Frontend cases
                 case "details": {
@@ -250,6 +256,10 @@ public class CLI {
                         System.out.println("Invalid number of args");
                 }
                 break;
+
+                default:
+                    System.out.println("Invalid command");
+                    break;
             }
         }
         while (true);
@@ -263,202 +273,212 @@ public class CLI {
                 System.exit(0);
 
             if (input.equals("help"))
-                System.out.println(help_login);
+                System.out.println(help_hr_manager);
 
-            String[] parts = input.split("\\s+");
-            switch (parts[0]) {
-                case "addw": {
-                    if (parts.length != 4) {
-                        System.out.println("Invalid number of args");
-                        break;
-                    } else {
-                        output = hrService.addNewWorker(parts[1], parts[2], parts[3]);
-                        Response r = gson.fromJson(output, Response.class);
-                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Worker added"));
-                    }
-                }
-                break;
-                case "assw": {
-                    if (parts.length != 4 || !tryParseInt(parts[2])) {
-                        System.out.println("Invalid number of args");
-                        break;
-                    } else {
-                        output = hrService.assignWorker(parts[1], Integer.parseInt(parts[2]), parts[3]);
-                        Response r = gson.fromJson(output, Response.class);
-                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Worker assigned"));
-                    }
-                }
-                break;
-                case "unassw": {
-                    if (parts.length != 3 || !tryParseInt(parts[2])) {
-                        System.out.println("Invalid number of args");
-                        break;
-                    } else {
-                        output = hrService.unassignWorker(parts[1], Integer.parseInt(parts[2]));
-                        Response r = gson.fromJson(output, Response.class);
-                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Worker unassigned"));
-                    }
-                }
-                break;
-                case "shift": {
-                    if (parts.length == 2) {
-                        if (parts[1].equals("-a") || parts[1].equals("-r")) {
+            else {
+                String[] parts = input.split("\\s+");
+                switch (parts[0]) {
+                    case "addw": {
+                        if (parts.length != 4) {
                             System.out.println("Invalid number of args");
                             break;
                         } else {
-                            output = hrService.getShift(Integer.parseInt(parts[1]));
+                            output = hrService.addNewWorker(parts[1], parts[2], parts[3]);
                             Response r = gson.fromJson(output, Response.class);
-                            if (r.errMsg != null)
-                                System.out.println(r.errMsg);
-                            else {
-                                ShiftModel shift = gson.fromJson((String) r.value, ShiftModel.class);
-                                System.out.println(shift);
-                            }
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Worker added"));
                         }
-                    } else if (parts.length == 3) {
-                        if (parts[1].equals("-a")) {
-                            output = hrService.getAssignableWorkersForShift(Integer.parseInt(parts[2]));
+                    }
+                    break;
+                    case "assw": {
+                        if (parts.length != 4 || !tryParseInt(parts[2])) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else {
+                            output = hrService.assignWorker(parts[1], Integer.parseInt(parts[2]), parts[3]);
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Worker assigned"));
+                        }
+                    }
+                    break;
+                    case "unassw": {
+                        if (parts.length != 3) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else if (!tryParseInt(parts[1]) || !tryParseInt(parts[2])) {
+                            System.out.println("Invalid ID");
+                            break;
+                        } else {
+                            output = hrService.unassignWorker(parts[1], Integer.parseInt(parts[2]));
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Worker unassigned"));
+                        }
+                    }
+                    break;
+                    case "shift": {
+                        if (parts.length == 2) {
+                            if (parts[1].equals("-a") || parts[1].equals("-r")) {
+                                System.out.println("Invalid number of args");
+                                break;
+                            } else {
+                                if (!tryParseInt(parts[1])) {
+                                    System.out.println("Invalid ID");
+                                    break;
+                                }
+                                output = hrService.getShift(Integer.parseInt(parts[1]));
+                                Response r = gson.fromJson(output, Response.class);
+                                if (r.errMsg != null)
+                                    System.out.println(r.errMsg);
+                                else {
+                                    ShiftModel shift = ModelFactory.createShiftModel(output);
+                                    System.out.println(shift);
+                                }
+                            }
+                        } else if (parts.length == 3) {
+                            if (parts[1].equals("-r")) {
+                                System.out.println("Invalid number of args");
+                            } else if (parts[1].equals("-a")) {
+                                if (!tryParseInt(parts[2])) {
+                                    System.out.println("Invalid ID");
+                                    break;
+                                }
+                                output = hrService.getAssignableWorkersForShift(Integer.parseInt(parts[2]));
+                                Response r = gson.fromJson(output, Response.class);
+                                if (r.errMsg != null)
+                                    System.out.println(r.errMsg);
+                                else {
+                                    List<WorkerModel> workers = ModelFactory.createWorkerModelList(output);
+                                    for (WorkerModel workerModel : workers)
+                                        System.out.println(workerModel);
+                                }
+                            }
+                        } else if (parts.length == 5) {
+                            if (parts[1].equals("-r")) {
+                                if (tryParseInt(parts[2]) && tryParseInt(parts[4])) {
+                                    output = hrService.setShiftRequiredWorkersOfRole(Integer.parseInt(parts[2]), parts[3], Integer.parseInt(parts[4]));
+                                    Response r = gson.fromJson(output, Response.class);
+                                    System.out.println(Objects.requireNonNullElse(r.errMsg, "Shift updated"));
+                                } else
+                                    System.out.println("Invalid ID or amount");
+                            } else
+                                System.out.println("Invalid argument");
+                        } else
+                            System.out.println("Invalid number of args");
+                    }
+                    break;
+                    case "adds": {
+                        if (parts.length == 4) {
+                            if (tryParseDT(parts[1]) && tryParseDT(parts[2])) {
+                                output = hrService.addNewShift(parts[3], parts[1], parts[2]);
+                                Response r = gson.fromJson(output, Response.class);
+                                System.out.println(Objects.requireNonNullElse(r.errMsg, "Shift added"));
+                            } else
+                                System.out.println("Invalid datetime format");
+                        } else
+                            System.out.println("Invalid number of args");
+                    }
+                    break;
+                    case "workers": {
+                        if (parts.length == 1) {
+                            output = hrService.getAllWorkers();
                             Response r = gson.fromJson(output, Response.class);
                             if (r.errMsg != null)
                                 System.out.println(r.errMsg);
                             else {
-                                List<WorkerModel> workers = gson.fromJson((String) r.value, List.class); // TODO check if this is right
+                                List<WorkerModel> workers = ModelFactory.createWorkerModelList(output); // TODO check if this is right
                                 for (WorkerModel workerModel : workers)
                                     System.out.println(workerModel);
                             }
-                        }
-                    } else if (parts.length == 5) {
-                        if (parts[1].equals("-r")) {
-                            if (tryParseInt(parts[2]) && tryParseInt(parts[4])) {
-                                output = hrService.setShiftRequiredWorkersOfRole(Integer.parseInt(parts[2]), parts[3], Integer.parseInt(parts[4]));
-                                Response r = gson.fromJson(output, Response.class);
-                                System.out.println(Objects.requireNonNullElse(r.errMsg, "Shift updated"));
-                            } else
-                                System.out.println("Invalid ID or amount");
-                        } else
-                            System.out.println("Invalid argument");
-                    } else
-                        System.out.println("Invalid number of args");
-                }
-                break;
-                case "adds": {
-                    if (parts.length == 4) {
-                        if (tryParseDT(parts[1]) && tryParseDT(parts[2]) && tryParseInt(parts[3])) {
-                            output = hrService.addNewShift(parts[3], parts[1], parts[2]);
-                            Response r = gson.fromJson(output, Response.class);
-                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Shift added"));
-                        } else
-                            System.out.println("Invalid datetime format");
-                    } else
-                        System.out.println("Invalid number of args");
-                }
-                break;
-                case "workers": {
-                    if (parts.length == 1) {
-                        output = hrService.getAllWorkers();
-                        Response r = gson.fromJson(output, Response.class);
-                        if (r.errMsg != null)
-                            System.out.println(r.errMsg);
-                        else {
-                            List<WorkerModel> workers = gson.fromJson((String) r.value, List.class); // TODO check if this is right
-                            for (WorkerModel workerModel : workers)
-                                System.out.println(workerModel);
-                        }
-                    } else if (parts.length >= 3) {
-                        switch (parts[1]) {
-                            case "-r": {
-                                if (parts.length != 3) {
-                                    System.out.println("Invalid number of args");
-                                    break;
-                                } else {
-                                    output = hrService.getWorkersByRole(parts[2]);
-                                    Response r = gson.fromJson(output, Response.class);
-                                    if (r.errMsg != null)
-                                        System.out.println(r.errMsg);
-                                    else {
-                                        List<WorkerModel> workers = gson.fromJson((String) r.value, List.class); // TODO check if this is right
-                                        for (WorkerModel workerModel : workers)
-                                            System.out.println(workerModel);
-                                    }
-                                }
-                            }
-                            break;
-                            case "-n":
-                                if (parts.length == 4) {
-                                    output = hrService.getWorkersByName(parts[2], parts[3]);
-                                    Response r = gson.fromJson(output, Response.class);
-                                    if (r.errMsg != null)
-                                        System.out.println(r.errMsg);
-                                    else {
-                                        List<WorkerModel> workers = gson.fromJson((String) r.value, List.class); // TODO check if this is right
-                                        for (WorkerModel workerModel : workers)
-                                            System.out.println(workerModel);
-                                    }
-                                } else {
-                                    System.out.println("Invalid number of args");
-                                    break;
-                                }
-                            case "-i": {
-                                if (parts.length != 3) {
-                                    System.out.println("Invalid number of args");
-                                    break;
-                                } else {
-                                    output = hrService.getWorkerById(parts[2]);
-                                    Response r = gson.fromJson(output, Response.class);
-                                    if (r.errMsg != null)
-                                        System.out.println(r.errMsg);
-                                    else {
-                                        WorkerModel workerModel = gson.fromJson((String) r.value, WorkerModel.class);
-                                        System.out.println(workerModel);
-                                    }
-                                }
-                            }
-                            break;
-                            case "-s": {
-                                if (parts.length == 3) {
-                                    if (tryParseInt(parts[2])) {
-                                        output = hrService.getWorkersByShift(Integer.parseInt(parts[2]));
+                        } else if (parts.length >= 3) {
+                            switch (parts[1]) {
+                                case "-r": {
+                                    if (parts.length != 3) {
+                                        System.out.println("Invalid number of args");
+                                        break;
+                                    } else {
+                                        output = hrService.getWorkersByRole(parts[2]);
                                         Response r = gson.fromJson(output, Response.class);
                                         if (r.errMsg != null)
                                             System.out.println(r.errMsg);
                                         else {
-                                            List<WorkerModel> workers = gson.fromJson((String) r.value, List.class); // TODO check if this is right
+                                            List<WorkerModel> workers = ModelFactory.createWorkerModelList(output); // TODO check if this is right
                                             for (WorkerModel workerModel : workers)
                                                 System.out.println(workerModel);
                                         }
-                                    } else {
-                                        System.out.println("Invalid ID");
-                                        break;
                                     }
-                                } else
-                                    System.out.println("Invalid number of args");
-                            }
-                            break;
-                            default:
-                                System.out.println("Invalid flag");
+                                }
                                 break;
+                                case "-n":
+                                    if (parts.length == 4) {
+                                        output = hrService.getWorkersByName(parts[2], parts[3]);
+                                        Response r = gson.fromJson(output, Response.class);
+                                        if (r.errMsg != null)
+                                            System.out.println(r.errMsg);
+                                        else {
+                                            List<WorkerModel> workers = ModelFactory.createWorkerModelList(output); // TODO check if this is right
+                                            for (WorkerModel workerModel : workers)
+                                                System.out.println(workerModel);
+                                        }
+                                    } else
+                                        System.out.println("Invalid number of args");
+                                    break;
+                                case "-i": {
+                                    if (parts.length != 3) {
+                                        System.out.println("Invalid number of args");
+                                        break;
+                                    } else {
+                                        output = hrService.getWorkerById(parts[2]);
+                                        Response r = gson.fromJson(output, Response.class);
+                                        if (r.errMsg != null)
+                                            System.out.println(r.errMsg);
+                                        else {
+                                            WorkerModel workerModel = ModelFactory.createWorkerModel(output);
+                                            System.out.println(workerModel);
+                                        }
+                                    }
+                                }
+                                break;
+                                case "-s": {
+                                    if (parts.length == 3) {
+                                        if (tryParseInt(parts[2])) {
+                                            output = hrService.getWorkersByShift(Integer.parseInt(parts[2]));
+                                            Response r = gson.fromJson(output, Response.class);
+                                            if (r.errMsg != null)
+                                                System.out.println(r.errMsg);
+                                            else {
+                                                List<WorkerModel> workers = ModelFactory.createWorkerModelList(output); // TODO check if this is right
+                                                for (WorkerModel workerModel : workers)
+                                                    System.out.println(workerModel);
+                                            }
+                                        } else {
+                                            System.out.println("Invalid ID");
+                                            break;
+                                        }
+                                    } else
+                                        System.out.println("Invalid number of args");
+                                }
+                                break;
+                                default:
+                                    System.out.println("Invalid flag");
+                                    break;
+                            }
                         }
                     }
-                }
-                break;
-                default:
-                    System.out.println("Invalid command");
                     break;
+                    default:
+                        System.out.println("Invalid command");
+                        break;
+                }
             }
         } while (true);
     }
 
     private static boolean tryParseDT(String part) {
-        return part.length() == 16 &&
-               part.charAt(4) == '-' &&
-               part.charAt(7) == '-' &&
-               part.charAt(10) == 'T' &&
-               part.charAt(13) == ':' &&
-               tryParseInt(part.substring(0, 4)) &&
-               tryParseInt(part.substring(5, 7)) &&
-               tryParseInt(part.substring(8, 10)) &&
-               tryParseInt(part.substring(11, 13)) &&
-               tryParseInt(part.substring(14, 16));
+        try {
+            LocalDateTime.parse(part);
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 
     private static boolean tryParseInt(String val) {

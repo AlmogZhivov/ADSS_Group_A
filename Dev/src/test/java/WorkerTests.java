@@ -231,7 +231,7 @@ public class WorkerTests {
     @Test
     public void testUnassignWorkerFailureNonExisting() {
         int sid = addShift();
-        assertThrows(IllegalStateException.class, () -> workerFacade.unassignWorker("0", sid));
+        assertThrows(NoSuchElementException.class, () -> workerFacade.unassignWorker("0", sid));
     }
 
     @Test

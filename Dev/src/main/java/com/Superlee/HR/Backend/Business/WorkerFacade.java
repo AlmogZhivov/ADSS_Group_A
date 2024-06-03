@@ -90,10 +90,13 @@ public class WorkerFacade {
             throw new IllegalArgumentException("Illegal argument");
 
         Worker worker = workers.get(workerId);
-        if (worker != null && worker.isAssigned(shiftId))
-            return worker.unassign(shiftId);
+        if (worker == null)
+            throw new NoSuchElementException("Worker not found");
 
-        throw new IllegalStateException("Unexpected error");
+        if (!worker.isAssigned(shiftId))
+            throw new IllegalStateException("Worker is not assigned to this shift");
+
+        return worker.unassign(shiftId);
     }
 
     public boolean addNewWorker(String id, String firstname, String surname) {
@@ -249,6 +252,10 @@ public class WorkerFacade {
         Worker w = workers.get(id);
         if (w == null)
             throw new NoSuchElementException("Worker not found");
+
+        if (w.getBranch().equals(branch))
+            throw new IllegalStateException("Worker is already assigned to this branch");
+
         w.setBranch(branch);
         return true;
     }
