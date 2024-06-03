@@ -118,6 +118,16 @@ class SupplierTests {
         assertEquals("No Milk", res2.getValue().getSupplierAgreement().getProduct(0).getName());
     }
 
+    @Test
+    public void testUpdateSupplierPaymentMethod(){
+        Response res1 = supplierService.updateSupplierPaymentMethod(0, Supplier.PaymentMethod.CREDIT_CARD);
+        assertFalse(res1.errorOccurred());
+        ResponseT <Supplier> res2 = supplierService.getSupplier(0);
+        assertEquals(Supplier.PaymentMethod.CREDIT_CARD.toString(), res2.getValue().getPayment().toString());
+    }
+
+
+
 
 
 
