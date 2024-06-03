@@ -118,7 +118,7 @@ public class HRService {
      * @param workerId the id of the worker
      * @param shiftId  the id of the shift
      * @return an empty response if successful
-     * @throws IllegalArgumentException if the worker id is null or empty
+     * @throws IllegalArgumentException if the worker id is null or empty or if the shift id is negative
      * @throws NoSuchElementException   if the shift or worker is not found
      * @throws IllegalStateException    if the worker is not assigned to the shift
      */
@@ -192,6 +192,19 @@ public class HRService {
     }
 
     // TODO removeAvailability method
+    /**
+     * Remove an availability for a worker from a shift
+     *
+     * @param workerId the id of the worker
+     * @param shiftId  the id of the shift
+     * @return an empty response if successful
+     * @throws IllegalArgumentException if the worker id is null or empty or if the shift id is negative
+     * @throws NoSuchElementException   if the worker or shift is not found
+     * @throws IllegalStateException    if the worker is not available for the shift
+     */
+    public String removeAvailability(String workerId, int shiftId) {
+        return ss.removeAvailability(workerId, shiftId);
+    }
 
     /**
      * Get a list of all branches
@@ -329,6 +342,7 @@ public class HRService {
      * @return an empty response if successful
      * @throws IllegalArgumentException if the id or branch is null or empty
      * @throws NoSuchElementException   if the worker or branch is not found
+     * @throws IllegalStateException    if the worker is already assigned to the branch
      */
     public String updateWorkerMainBranch(String id, String branch) {
         return bs.updateWorkerMainBranch(id, branch);

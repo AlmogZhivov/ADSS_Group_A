@@ -9,6 +9,12 @@
     fix gson issues
     branch related functionality
 
+addr <worker> <role>
+    add <role> to <worker>
+    add this functionality to the frontend
+
+adding shifts should check for branch existence
+
 add calls to the dal - next time!
 
 * required stuff

@@ -8,7 +8,7 @@ import com.google.gson.GsonBuilder;
 public class WorkerService {
     private static WorkerService workerService;
     private final WorkerFacade wf;
-    private Gson gson;
+    private final Gson gson;
 
     private WorkerService() {
         wf = WorkerFacade.getInstance();
@@ -23,53 +23,43 @@ public class WorkerService {
     }
 
     public String getAllWorkers() {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.getAllWorkers()));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String getWorkersByRole(String role) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.getWorkersByRole(role)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String getWorkersByName(String firstname, String surname) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.getWorkersByName(firstname, surname)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String getWorkerById(String id) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.getWorkerById(id)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String addNewWorker(String id, String firstname, String surname) {
-        gson = new Gson();
         try {
             wf.addNewWorker(id, firstname, surname);
             return gson.toJson(new Response());
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
@@ -82,63 +72,51 @@ public class WorkerService {
     }
 
     public String updateWorkerEmail(String id, String email) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.updateWorkerEmail(id, email)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
 
     }
 
     public String updateWorkerPhone(String id, String phone) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.updateWorkerPhone(id, phone)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String updateWorkerPassword(String id, String password) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.updateWorkerPassword(id, password)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String updateWorkerBankDetails(String id, String bankDetails) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.updateWorkerBankDetails(id, bankDetails)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String updateWorkerContractDetails(String id, String contractDetails) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.updateWorkerContractDetails(id, contractDetails)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 
     public String updateWorkerSalary(String id, int salary) {
-        gson = new Gson();
         try {
             return gson.toJson(new Response(wf.updateWorkerSalary(id, salary)));
         } catch (Exception ex) {
-            Response res = new Response(ex.getMessage());
-            return gson.toJson(new Response(res));
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 

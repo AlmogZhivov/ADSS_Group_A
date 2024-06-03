@@ -75,6 +75,9 @@ public class ShiftFacade {
         if (workerFacade.getWorkerById(workerId) == null)
             throw new NoSuchElementException("Worker not found");
 
+        if (!shifts.get(shiftId).getAssignedWorkers().contains(workerId))
+            throw new IllegalStateException("Worker is not assigned to this shift");
+
         if (!shifts.get(shiftId).removeAssignedWorker(workerId))
             throw new IllegalStateException("Unexpected error");
 
@@ -192,7 +195,7 @@ public class ShiftFacade {
             throw new NoSuchElementException("Worker not found");
 
         if (!shifts.get(shiftId).addAvailableWorker(workerId))
-            throw new IllegalStateException("Unexpected error");
+            throw new IllegalStateException("Worker is already available for this shift");
 
         if (!workerFacade.addAvailability(workerId, shiftId))
             if (!shifts.get(shiftId).removeAvailableWorker(workerId))
@@ -201,5 +204,9 @@ public class ShiftFacade {
                 throw new IllegalStateException("Unexpected error");
 
         return true;
+    }
+
+    public void removeAvailability(String workerId, int shiftId) {
+        throw new RuntimeException("Coming soon!\n stay with us in adss 2.0");
     }
 }
