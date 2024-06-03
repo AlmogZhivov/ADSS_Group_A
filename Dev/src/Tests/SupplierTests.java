@@ -84,6 +84,43 @@ class SupplierTests {
         assertEquals("Jacob", res2.getValue().get(0).getName());
     }
 
+    @Test
+    public void testUpdateSupplierName(){
+        Response res1 = supplierService.updateSupplierName(0, "Joe");
+        assertFalse(res1.errorOccurred());
+        ResponseT <Supplier> res2 = supplierService.getSupplier(0);
+        assertEquals("Joe", res2.getValue().getName());
+    }
+
+    @Test
+    public void testUpdateSupplierBankAccount(){
+        Response res1 = supplierService.updateSupplierBankAccount(0, "0800");
+        assertFalse(res1.errorOccurred());
+        ResponseT <Supplier> res2 = supplierService.getSupplier(0);
+        assertEquals("0800", res2.getValue().getBankNumber());
+    }
+
+    @Test
+    public void testUpdateProductPrice(){
+        supplierService.addProductToSupplier(0, 0, 5, "Milk");
+        Response res1 = supplierService.updateProductPrice(0, 0, 4);
+        assertFalse(res1.errorOccurred());
+        ResponseT <Supplier> res2 = supplierService.getSupplier(0);
+        assertEquals(4, res2.getValue().getSupplierAgreement().getProduct(0).getPrice());
+    }
+
+    @Test
+    public void testUpdateProductName(){
+        supplierService.addProductToSupplier(0, 0, 5, "Milk");
+        Response res1 = supplierService.updateProductName(0, 0, "No Milk");
+        assertFalse(res1.errorOccurred());
+        ResponseT <Supplier> res2 = supplierService.getSupplier(0);
+        assertEquals("No Milk", res2.getValue().getSupplierAgreement().getProduct(0).getName());
+    }
+
+
+
+
 
 
 

@@ -88,7 +88,7 @@ public class SupplierService {
     public ResponseT<Supplier> getSupplier(int supplierId) {
         try {
             Supplier supplier = supplierFacade.getSupplier(supplierId);
-            return new ResponseT<>(new Supplier(supplier));
+            return new ResponseT<>(supplier);
         } catch (Exception e) {
             return new ResponseT<>(e.getMessage());
         }
