@@ -11,4 +11,5 @@ public record WorkerToSend(String id,
                            List<Integer> roles,
                            String startDate,
                            String contract,
-                           String branch) {}
+                           String branch) {
+}

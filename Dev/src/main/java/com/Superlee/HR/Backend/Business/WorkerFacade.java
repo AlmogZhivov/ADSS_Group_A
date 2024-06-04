@@ -285,6 +285,11 @@ public class WorkerFacade {
         return convertToWorkerToSend(w);
     }
 
+    public String addWorkerRole(String id, String role) {
+        throw new UnsupportedOperationException("Not implemented yet");
+        // TODO - implement this
+    }
+
     public boolean isLoggedIn(String id) {
         return loggedInWorker != null && loggedInWorker.getId().equals(id);
     }
