@@ -126,6 +126,20 @@ public class HRService {
         return ss.unassignWorker(workerId, shiftId);
     }
 
+
+    public String getWorkerHistory(String Id) {
+        return ss.getWorkerHistory(Id);
+    }
+
+    public String getWorkerHistory(String Id, String from, String to) {
+        return ss.getWorkerHistory(Id, from, to);
+    }
+
+
+    public String getShiftsByBranchAndDate(String branchName, String from, String to) {
+        return ss.getShiftsByBranchAndDate(branchName, from, to);
+    }
+
     /**
      * Get all workers assignable to the specified shift
      *
@@ -191,7 +205,6 @@ public class HRService {
         return ss.addAvailability(workerId, shiftId);
     }
 
-    // TODO removeAvailability method
     /**
      * Remove an availability for a worker from a shift
      *
@@ -361,4 +374,9 @@ public class HRService {
     public String login(String id, String password) {
         return ws.login(id, password);
     } // TODO ensure that every action is performed by an authenticated user with the correct permissions
+
+    // TODO
+    public String addWorkerRole(String part, String part1) {
+        return "Not implemented";
+    }
 }

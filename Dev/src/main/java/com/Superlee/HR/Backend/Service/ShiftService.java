@@ -106,4 +106,28 @@ public class ShiftService {
             return gson.toJson(new Response(ex.getMessage()));
         }
     }
+
+    public String getWorkerHistory(String id) {
+        try {
+            return gson.toJson(new Response(sf.getWorkerHistory(id)));
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
+        }
+    }
+
+    public String getWorkerHistory(String id, String from, String to) {
+        try {
+            return gson.toJson(new Response(sf.getWorkerHistory(id, from, to)));
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
+        }
+    }
+
+    public String getShiftsByBranchAndDate(String branchName, String from, String to) {
+        try {
+            return gson.toJson(new Response(sf.getShiftsByBranchAndDate(branchName, from, to)));
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
+        }
+    }
 }

@@ -105,6 +105,9 @@ public class CLI {
                         
             workers -s <id>
                 get a list of all workers assigned to the specified shift
+                
+            addr <worker> <role>
+                add the given role to the specified worker
                         
             help
                 print this message
@@ -464,6 +467,17 @@ public class CLI {
                         }
                     }
                     break;
+                    case "addr": {
+                        if (parts.length != 3) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        }
+                        output = hrService.addWorkerRole(parts[2], parts[3]);
+                        Response r = gson.fromJson(output, Response.class);
+                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Role added"));
+                    }
+                    break;
+
                     default:
                         System.out.println("Invalid command");
                         break;

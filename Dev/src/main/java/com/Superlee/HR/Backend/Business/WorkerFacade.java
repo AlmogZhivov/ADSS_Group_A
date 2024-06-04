@@ -170,7 +170,7 @@ public class WorkerFacade {
 
         requireLoginOrThrow(id);
 
-        if (!Util.validateEmail(email))
+        if (!Util.isValidEmail(email))
             throw new IllegalArgumentException("Invalid email");
 
         Worker w = workers.get(id);

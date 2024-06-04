@@ -2,13 +2,9 @@ package com.Superlee.HR.Backend.Business;
 
 import com.Superlee.HR.Backend.DataAccess.ShiftDTO;
 
-import java.rmi.UnexpectedException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ShiftFacade {
@@ -195,10 +191,10 @@ public class ShiftFacade {
         if (!shifts.get(shiftId).getAvailableWorkers().contains(workerId))
             throw new IllegalStateException("You are not available for this shift");
 
-        if(shifts.get(shiftId).getAssignedWorkers().contains(workerId))
+        if (shifts.get(shiftId).getAssignedWorkers().contains(workerId))
             throw new IllegalStateException("You are already assigned to this shift, contact your manager to unassign you");
 
-        if(!workerFacade.removeAvailability(workerId, shiftId) || !shifts.get(shiftId).removeAvailableWorker(workerId))
+        if (!workerFacade.removeAvailability(workerId, shiftId) || !shifts.get(shiftId).removeAvailableWorker(workerId))
             throw new IllegalStateException("Unexpected error");
     }
 
@@ -241,5 +237,44 @@ public class ShiftFacade {
         if (safetyCode != 0xC0FFEE)
             System.exit(-1);
         shifts.clear();
+    }
+
+    public List<ShiftToSend> getWorkerHistory(String id) {
+        if (Util.isNullOrEmpty(id))
+            throw new IllegalArgumentException("Illegal argument");
+
+        workerFacade.requireLoginOrThrow(id);
+
+        return shifts
+                .values()
+                .stream()
+                .filter(s -> s.getAssignedWorkers().contains(id))
+                .map(ShiftFacade::convertToShiftToSend)
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    public List<ShiftToSend> getWorkerHistory(String id, String from, String to) {
+        List<ShiftToSend> list = getWorkerHistory(id);
+
+        if (!Util.isValidDateTime(from, to))
+            throw new IllegalArgumentException("Invalid date format");
+
+        return list.stream().
+                filter(s -> LocalDateTime.parse(s.endTime()).isBefore(LocalDateTime.parse(to))
+                            && LocalDateTime.parse(s.startTime()).isAfter(LocalDateTime.parse(from)))
+                .toList();
+    }
+
+    public List<ShiftToSend> getShiftsByBranchAndDate(String branchName, String from, String to) {
+        if (Util.isNullOrEmpty(branchName, from, to) || !Util.isValidDateTime(from, to))
+            throw new IllegalArgumentException("Illegal argument");
+        return shifts
+                .values()
+                .stream()
+                .filter(s -> s.getEndTime().isBefore(LocalDateTime.parse(to))
+                             && s.getStartTime().isAfter(LocalDateTime.parse(from))
+                             && s.getBranch().equals(branchName))
+                .map(ShiftFacade::convertToShiftToSend)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 }
