@@ -17,23 +17,54 @@ public class BranchTests {
         workerFacade.reset(0xC0FFEE);
     }
 
-    void addWorker() {
-        workerFacade.addNewWorker("0", "Super", "Lee");
+    private boolean addWorker() {
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        boolean result = workerFacade.addNewWorker("0", "Super", "Lee");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
     }
 
-    void addRole() {
-        workerFacade.addRole("0", "Manager");
+    private boolean addRoleManager() {
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        boolean result = workerFacade.addRole("0", "Manager");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
+    }
+
+    private void login() {
+        workerFacade.login("0", "0");
+    }
+
+    private void fakeLogin(boolean hrm) {
+        workerFacade.fakeLogin(hrm, "000");
+    }
+
+    private void fakeLogout() {
+        workerFacade.fakeLogout();
     }
 
     boolean addBranch() {
-        return branchFacade.addBranch("Hakol BeHinam", "Eliezer Kaplan 1, Jerusalem", "0");
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        boolean result = branchFacade.addBranch("Hakol BeHinam", "Eliezer Kaplan 1, Jerusalem", "0");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
     }
 
     @Test
     public void testAddNewBranchSuccess() {
-        int startSize = branchFacade.getAllBranches().size();
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
+        int startSize = branchFacade.getAllBranches().size();
         boolean result = addBranch();
         assertTrue(result);
         int endSize = branchFacade.getAllBranches().size();
@@ -42,8 +73,9 @@ public class BranchTests {
 
     @Test
     public void testAddNewBranchWithExistingName() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         addBranch();
         int startSize = branchFacade.getAllBranches().size();
         assertThrows(IllegalArgumentException.class, this::addBranch);
@@ -53,8 +85,9 @@ public class BranchTests {
 
     @Test
     public void testAddNewBranchWithNullName() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         int startSize = branchFacade.getAllBranches().size();
         assertThrows(IllegalArgumentException.class, () -> branchFacade.addBranch(null, "Eliezer Kaplan 1, Jerusalem", "0"));
         int endSize = branchFacade.getAllBranches().size();
@@ -63,8 +96,9 @@ public class BranchTests {
 
     @Test
     public void testAddNewBranchWithNullAddress() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         int startSize = branchFacade.getAllBranches().size();
         assertThrows(IllegalArgumentException.class, () -> branchFacade.addBranch("Hakol BeHinam", null, "0"));
         int endSize = branchFacade.getAllBranches().size();
@@ -73,6 +107,7 @@ public class BranchTests {
 
     @Test
     public void testAddNewBranchWithNullManager() {
+        fakeLogin(true);
         int startSize = branchFacade.getAllBranches().size();
         assertThrows(IllegalArgumentException.class, () -> branchFacade.addBranch("Hakol BeHinam", "Eliezer Kaplan 1, Jerusalem", null));
         int endSize = branchFacade.getAllBranches().size();
@@ -81,8 +116,9 @@ public class BranchTests {
 
     @Test
     public void testAddNewBranchWithEmptyName() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         int startSize = branchFacade.getAllBranches().size();
         assertThrows(IllegalArgumentException.class, () -> branchFacade.addBranch("", "Eliezer Kaplan 1, Jerusalem", "0"));
         int endSize = branchFacade.getAllBranches().size();
@@ -91,8 +127,9 @@ public class BranchTests {
 
     @Test
     public void testAddNewBranchWithEmptyAddress() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         int startSize = branchFacade.getAllBranches().size();
         assertThrows(IllegalArgumentException.class, () -> branchFacade.addBranch("Hakol BeHinam", "", "0"));
         int endSize = branchFacade.getAllBranches().size();
@@ -101,6 +138,7 @@ public class BranchTests {
 
     @Test
     public void testAddNewBranchWithEmptyManager() {
+        fakeLogin(true);
         int startSize = branchFacade.getAllBranches().size();
         assertThrows(IllegalArgumentException.class, () -> branchFacade.addBranch("Hakol BeHinam", "Eliezer Kaplan 1, Jerusalem", ""));
         int endSize = branchFacade.getAllBranches().size();
@@ -109,6 +147,7 @@ public class BranchTests {
 
     @Test
     public void testAddNewBranchWithNonExistingManager() {
+        fakeLogin(true);
         int startSize = branchFacade.getAllBranches().size();
         assertThrows(NoSuchElementException.class, this::addBranch);
         int endSize = branchFacade.getAllBranches().size();
@@ -117,6 +156,7 @@ public class BranchTests {
 
     @Test
     public void testAddNewBranchWithNonManager() {
+        fakeLogin(true);
         addWorker();
         int startSize = branchFacade.getAllBranches().size();
         assertThrows(IllegalArgumentException.class, this::addBranch);
@@ -124,21 +164,24 @@ public class BranchTests {
 
     @Test
     public void testGetBranchSuccess() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         addBranch();
         assertNotNull(branchFacade.getBranch("Hakol BeHinam"));
     }
 
     @Test
     public void testGetBranchWithNonExistingName() {
+        fakeLogin(true);
         assertThrows(NoSuchElementException.class, () -> branchFacade.getBranch("Hakol BeHinam"));
     }
 
     @Test
     public void testUpdateManagerSuccess() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         addBranch();
         workerFacade.addNewWorker("1", "Mega", "Lee");
         workerFacade.addRole("1", "Manager");
@@ -148,16 +191,18 @@ public class BranchTests {
 
     @Test
     public void testUpdateManagerWithNonExistingWorker() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         addBranch();
         assertThrows(NoSuchElementException.class, () -> branchFacade.updateManager("Hakol BeHinam", "1"));
     }
 
     @Test
     public void testUpdateManagerWithNonManager() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         addBranch();
         workerFacade.addNewWorker("1", "Mega", "Lee");
         assertThrows(IllegalArgumentException.class, () -> branchFacade.updateManager("Hakol BeHinam", "1"));
@@ -166,12 +211,14 @@ public class BranchTests {
 
     @Test
     public void testUpdateManagerWithNonExistingBranch() {
+        fakeLogin(true);
         addWorker();
         assertThrows(IllegalArgumentException.class, () -> branchFacade.updateManager("Hakol BeHinam", "0"));
     }
 
     @Test
     public void testUpdateManagerWithNullBranch() {
+        fakeLogin(true);
         addWorker();
         assertThrows(IllegalArgumentException.class, () -> branchFacade.updateManager(null, "0"));
     }

@@ -55,24 +55,6 @@ public class ShiftTests {
         workerFacade.login("0", "0");
     }
 
-    private boolean addSecondWorker() {
-        boolean loggedIn = workerFacade.isLoggedInHRManager();
-        if (!loggedIn)
-            fakeLogin(true);
-        boolean result = workerFacade.addNewWorker("1", "Avi", "Ron");
-        if (!loggedIn)
-            fakeLogout();
-        return result;
-    }
-
-    private boolean addSecondRole() {
-        boolean loggedIn = workerFacade.isLoggedInHRManager();
-        boolean result = workerFacade.addRole("1", "Cashier");
-        if (!loggedIn)
-            fakeLogout();
-        return result;
-    }
-
     private void fakeLogin(boolean hrm) {
         workerFacade.fakeLogin(hrm, "000");
     }

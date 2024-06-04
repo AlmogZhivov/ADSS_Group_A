@@ -63,14 +63,6 @@ public class WorkerTests {
         return result;
     }
 
-    private boolean addSecondRole() {
-        boolean loggedIn = workerFacade.isLoggedInHRManager();
-        boolean result = workerFacade.addRole("1", "Cashier");
-        if (!loggedIn)
-            fakeLogout();
-        return result;
-    }
-
     private void fakeLogin(boolean hrm) {
         workerFacade.fakeLogin(hrm, "000");
     }
