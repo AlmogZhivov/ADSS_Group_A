@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab58238a-0bd6-4e23-b473-0406b7cc08a0" name="Changes" comment="more debug on Presentation" />
+    <list default="true" id="ab58238a-0bd6-4e23-b473-0406b7cc08a0" name="Changes" comment="more debug on Presentation">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/SupplierFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/SupplierFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dev/src/Business/SupplierProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/Dev/src/Business/SupplierProduct.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -50,7 +54,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "325989135__326118460",
+    "git-widget-placeholder": "4-supplierfeatures",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -60,7 +64,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.SupplierTests">
+  <component name="RunManager" selected="Application.CLI">
     <configuration name="CLI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Presentation.CLI" />
       <module name="ADSS_Group_A" />
@@ -122,9 +126,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.CLI" />
         <item itemvalue="JUnit.SupplierTests" />
         <item itemvalue="JUnit.OrderTests" />
-        <item itemvalue="Application.CLI" />
         <item itemvalue="JUnit.SupplierTests.testAddSupplier" />
       </list>
     </recent_temporary>
@@ -154,6 +158,7 @@
       <workItem from="1717142849049" duration="3439000" />
       <workItem from="1717228790123" duration="1035000" />
       <workItem from="1717481108804" duration="49000" />
+      <workItem from="1717481233253" duration="569000" />
     </task>
     <task id="LOCAL-00001" summary="tests done">
       <option name="closed" value="true" />
