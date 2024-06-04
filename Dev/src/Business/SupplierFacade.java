@@ -86,7 +86,7 @@ public class SupplierFacade {
     }
 
     public void addProductToSupplier(int supplierId, int catalogNumber, double price, String name) {
-        SupplierProduct product = new SupplierProduct(catalogNumber, price, name);
+        SupplierProduct product = new SupplierProduct(supplierId, catalogNumber, price, name);
         suppliers.get(supplierId).addProduct(product);
     }
 

@@ -40,9 +40,10 @@ public class SupplierProduct {
         discountAccordingToAmount.put(0, 0.0);
     }
 
-    public SupplierProduct(int catalogNumber, double price, String name) {
+    public SupplierProduct(int supplierId, int catalogNumber, double price, String name) {
         this.catalogNumber = catalogNumber;
         this.price = price;
+        this.supplierId = supplierId;
         this.name = name;
         this.discountAccordingToAmount = new HashMap<>();
         this.discountAccordingToAmount.put(0, 0.0);
