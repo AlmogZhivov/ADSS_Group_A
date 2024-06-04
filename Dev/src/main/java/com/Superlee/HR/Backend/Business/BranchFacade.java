@@ -30,6 +30,8 @@ public class BranchFacade {
         if (Util.isNullOrEmpty(name, address, manager))
             throw new IllegalArgumentException("Illegal argument");
 
+        workerFacade.requireHRManagerOrThrow();
+
         WorkerToSend w = workerFacade.getWorkerById(manager);
         if (w == null)
             throw new NoSuchElementException("Manager does not exist");
@@ -49,6 +51,8 @@ public class BranchFacade {
         if (Util.isNullOrEmpty(name))
             throw new IllegalArgumentException("Illegal argument");
 
+        workerFacade.requireHRManagerOrThrow();
+
         if (!branches.containsKey(name))
             throw new NoSuchElementException("Branch not found");
 
@@ -59,6 +63,8 @@ public class BranchFacade {
     public boolean updateManager(String name, String manager) {
         if (Util.isNullOrEmpty(name, manager))
             throw new IllegalArgumentException("Illegal argument");
+
+        workerFacade.requireHRManagerOrThrow();
 
         WorkerToSend w = workerFacade.getWorkerById(manager);
         if (w == null)
@@ -78,27 +84,16 @@ public class BranchFacade {
     }
 
     public List<BranchToSend> getAllBranches() {
+        workerFacade.requireHRManagerOrThrow();
         return branches.values().stream().map(this::convertToBranchToSend).collect(Collectors.toList());
-    }
-
-    private BranchToSend convertToBranchToSend(Branch branch) {
-        return new BranchToSend(branch.getName(), branch.getAddress(), branch.getManager());
-    }
-
-    public BranchToSend getBranchByName(String name) {
-        if (Util.isNullOrEmpty(name))
-            throw new IllegalArgumentException("Illegal argument");
-
-        if (!branches.containsKey(name))
-            throw new NoSuchElementException("Branch not found");
-
-        Branch b = branches.get(name);
-        return new BranchToSend(b.getName(), b.getAddress(), b.getManager());
     }
 
     public boolean updateWorkerMainBranch(String id, String branch) {
         if (Util.isNullOrEmpty(id, branch))
             throw new IllegalArgumentException("Illegal argument");
+
+        if (!workerFacade.isLoggedInHRManager() && !workerFacade.isLoggedIn(id)) // customer question - who can do this?
+            throw new UnpermittedOperationException("Operation requires login");
 
         if (!branches.containsKey(branch))
             throw new NoSuchElementException("Branch not found");
@@ -113,6 +108,10 @@ public class BranchFacade {
                 .map(branch -> new Branch(branch.getName(), branch.getAddress(), branch.getManager()))
                 .collect(Collectors.toMap(Branch::getName, branch -> branch));
         return true;
+    }
+
+    private BranchToSend convertToBranchToSend(Branch branch) {
+        return new BranchToSend(branch.getName(), branch.getAddress(), branch.getManager());
     }
 
     /**

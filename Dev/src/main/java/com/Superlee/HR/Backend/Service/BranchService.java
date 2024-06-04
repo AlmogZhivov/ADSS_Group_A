@@ -22,6 +22,7 @@ public class BranchService {
     }
 
     public String addBranch(String name, String address, String manager) {
+
         try {
             bf.addBranch(name, address, manager);
             return gson.toJson(new Response());
@@ -50,14 +51,6 @@ public class BranchService {
     public String getAllBranches() {
         try {
             return gson.toJson(new Response(bf.getAllBranches()));
-        } catch (Exception ex) {
-            return gson.toJson(new Response(ex.getMessage()));
-        }
-    }
-
-    public String getBranchByName(String name) {
-        try {
-            return gson.toJson(new Response(bf.getBranchByName(name)));
         } catch (Exception ex) {
             return gson.toJson(new Response(ex.getMessage()));
         }

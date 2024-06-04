@@ -224,7 +224,7 @@ public class HRService {
      * @throws NoSuchElementException   if the branch is not found
      */
     public String getBranchByName(String name) {
-        return bs.getBranchByName(name);
+        return bs.getBranch(name);
     }
 
     /**
