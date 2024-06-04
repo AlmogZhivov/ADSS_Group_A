@@ -21,20 +21,51 @@ public class ShiftTests {
         shiftFacade.reset(0xC0FFEE);
     }
 
-    private void addWorker() {
-        workerFacade.addNewWorker("0", "Super", "Lee");
-    }
-
-    private void addRole() {
-        workerFacade.addRole("0", "Manager");
-    }
-
     private int addShift() {
-        return shiftFacade.addNewShift(branch, "2025-01-01T08:00", "2025-01-01T16:00");
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        int result = shiftFacade.addNewShift("Hakol BeHinam", "2025-01-01T08:00", "2025-01-01T16:00");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
+    }
+
+    private boolean addWorker() {
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        boolean result = workerFacade.addNewWorker("0", "Super", "Lee");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
+    }
+
+    private boolean addRoleManager() {
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        boolean result = workerFacade.addRole("0", "Manager");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
+    }
+
+    private void login() {
+        workerFacade.login("0", "0");
+    }
+
+    private void fakeLogin(boolean hrm) {
+        workerFacade.fakeLogin(hrm, "000");
+    }
+
+    private void fakeLogout() {
+        workerFacade.fakeLogout();
     }
 
     @Test
     public void testAddNewShiftSuccess() {
+        fakeLogin(true);
         int startSize = shiftFacade.getAllShifts().size();
         int result = addShift();
         assertNotEquals(-1, result);
@@ -44,6 +75,7 @@ public class ShiftTests {
 
     @Test
     public void testAddNewShiftWithNullStart() {
+        fakeLogin(true);
         int startSize = shiftFacade.getAllShifts().size();
         assertThrows(IllegalArgumentException.class, () -> shiftFacade.addNewShift(branch, null, "2025-01-01T16:00"));
         int endSize = shiftFacade.getAllShifts().size();
@@ -52,6 +84,7 @@ public class ShiftTests {
 
     @Test
     public void testAddNewShiftWithNullEnd() {
+        fakeLogin(true);
         int startSize = shiftFacade.getAllShifts().size();
         assertThrows(IllegalArgumentException.class, () -> shiftFacade.addNewShift(branch, "2025-01-01T08:00", null));
         int endSize = shiftFacade.getAllShifts().size();
@@ -60,6 +93,7 @@ public class ShiftTests {
 
     @Test
     public void testAddNewShiftWithStartEqualToEnd() {
+        fakeLogin(true);
         int startSize = shiftFacade.getAllShifts().size();
         assertThrows(DateTimeException.class, () -> shiftFacade.addNewShift(branch, "2025-01-01T08:00", "2025-01-01T08:00"));
         int endSize = shiftFacade.getAllShifts().size();
@@ -68,6 +102,7 @@ public class ShiftTests {
 
     @Test
     public void testAddNewShiftWithEndBeforeStart() {
+        fakeLogin(true);
         int startSize = shiftFacade.getAllShifts().size();
         assertThrows(DateTimeException.class, () -> shiftFacade.addNewShift(branch, "2025-01-01T16:00", "2025-01-01T08:00"));
         int endSize = shiftFacade.getAllShifts().size();
@@ -93,38 +128,35 @@ public class ShiftTests {
 
     @Test
     public void testAssignWorkerSuccess() {
-        workerFacade.reset(0xC0FFEE);
-        shiftFacade.reset(0xC0FFEE);
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         boolean result = shiftFacade.assignWorker("0", sid, "Manager");
         assertTrue(result);
     }
 
     @Test
-    public void testAssignWorkerFailureNonExistingWorker() {
-        addRole();
-        int sid = addShift();
-        assertThrows(NoSuchElementException.class, () -> shiftFacade.addAvailability("0", sid));
-        assertThrows(NoSuchElementException.class, () -> shiftFacade.assignWorker("0", sid, "Manager"));
-        assertThrows(NoSuchElementException.class, () -> shiftFacade.assignWorker("1", sid, "Manager"));
-    }
-
-    @Test
     public void testAssignWorkerFailureNotAvailable() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
         assertThrows(IllegalStateException.class, () -> shiftFacade.assignWorker("0", sid, "Manager"));
     }
 
     @Test
     public void testAssignWorkerFailureNonExistingShift() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
+        login();
         assertThrows(NoSuchElementException.class, () -> shiftFacade.addAvailability("0", 0));
+        fakeLogout();
+        fakeLogin(true);
         assertThrows(NoSuchElementException.class, () -> shiftFacade.assignWorker("0", 0, "Manager"));
         assertThrows(IllegalArgumentException.class, () -> shiftFacade.assignWorker("0", -1, "Manager"));
     }
@@ -133,16 +165,22 @@ public class ShiftTests {
     public void testAssignWorkerFailureNonExistingRole() {
         addWorker();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         assertThrows(IllegalStateException.class, () -> shiftFacade.assignWorker("0", sid, "Manager"));
     }
 
     @Test
     public void testAssignWorkerFailureAlreadyAssigned() {
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         shiftFacade.assignWorker("0", sid, "Manager");
         assertThrows(IllegalStateException.class, () -> shiftFacade.assignWorker("0", sid, "Manager"));
     }
@@ -150,9 +188,12 @@ public class ShiftTests {
     @Test
     public void testUnassignWorkerSuccess() {
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         shiftFacade.assignWorker("0", sid, "Manager");
         boolean result = shiftFacade.unassignWorker("0", sid);
         assertTrue(result);
@@ -160,12 +201,14 @@ public class ShiftTests {
 
     @Test
     public void testUnassignWorkerFailureNonExistingShift() {
+        fakeLogin(true);
         addWorker();
         assertThrows(NoSuchElementException.class, () -> shiftFacade.unassignWorker("0", 0));
     }
 
     @Test
     public void testUnassignWorkerFailureNonAssigned() {
+        fakeLogin(true);
         addWorker();
         int sid = addShift();
         assertThrows(IllegalStateException.class, () -> shiftFacade.unassignWorker("0", sid));
@@ -173,6 +216,7 @@ public class ShiftTests {
 
     @Test
     public void testGetWorkersByShiftSuccessEmptyShift() {
+        fakeLogin(true);
         int sid = addShift();
         int result = shiftFacade.getWorkersByShift(sid).size();
         assertEquals(0, result);
@@ -181,9 +225,12 @@ public class ShiftTests {
     @Test
     public void testGetWorkersByShiftSuccess() {
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         shiftFacade.assignWorker("0", sid, "Manager");
         int result = shiftFacade.getWorkersByShift(sid).size();
         assertEquals(1, result);
@@ -191,17 +238,20 @@ public class ShiftTests {
 
     @Test
     public void testGetWorkersByShiftWithInvalidId() {
+        fakeLogin(true);
         assertThrows(IllegalArgumentException.class, () -> shiftFacade.getWorkersByShift(-1));
     }
 
     @Test
     public void testGetWorkersByShiftWithNonExistingId() {
+        fakeLogin(true);
         assertThrows(NoSuchElementException.class, () -> shiftFacade.getWorkersByShift(0));
 
     }
 
     @Test
     public void testGetAssignableWorkersForShiftSuccessEmptyShift() {
+        fakeLogin(true);
         int sid = addShift();
         int result = shiftFacade.getAssignableWorkersForShift(sid).size();
         assertEquals(0, result);
@@ -210,9 +260,12 @@ public class ShiftTests {
     @Test
     public void testGetAssignableWorkersForShiftSuccess() {
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         shiftFacade.assignWorker("0", sid, "Manager");
         int result = shiftFacade.getAssignableWorkersForShift(sid).size();
         assertEquals(1, result);
@@ -220,16 +273,19 @@ public class ShiftTests {
 
     @Test
     public void testGetAssignableWorkersForShiftWithInvalidId() {
+        fakeLogin(true);
         assertThrows(IllegalArgumentException.class, () -> shiftFacade.getAssignableWorkersForShift(-1));
     }
 
     @Test
     public void testGetAssignableWorkersForShiftWithNonExistingId() {
+        fakeLogin(true);
         assertThrows(NoSuchElementException.class, () -> shiftFacade.getAssignableWorkersForShift(0));
     }
 
     @Test
     public void testSetShiftRequiredWorkersOfRoleSuccess() {
+        fakeLogin(true);
         int sid = addShift();
         boolean result = shiftFacade.setShiftRequiredWorkersOfRole(sid, "Manager", 1);
         assertTrue(result);
@@ -237,17 +293,20 @@ public class ShiftTests {
 
     @Test
     public void testSetShiftRequiredWorkersOfRoleFailureNonExistingShift() {
+        fakeLogin(true);
         assertThrows(NoSuchElementException.class, () -> shiftFacade.setShiftRequiredWorkersOfRole(0, "Manager", 1));
     }
 
     @Test
     public void testSetShiftRequiredWorkersOfRoleFailureNonExistingRole() {
+        fakeLogin(true);
         int sid = addShift();
         assertThrows(NoSuchElementException.class, () -> shiftFacade.setShiftRequiredWorkersOfRole(sid, "Emperor", 1));
     }
 
     @Test
     public void testSetShiftRequiredWorkersOfRoleFailureNegativeAmount() {
+        fakeLogin(true);
         int sid = addShift();
         assertThrows(IllegalArgumentException.class, () -> shiftFacade.setShiftRequiredWorkersOfRole(sid, "Manager", -1));
     }

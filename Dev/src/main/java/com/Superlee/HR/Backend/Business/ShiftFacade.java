@@ -2,6 +2,7 @@ package com.Superlee.HR.Backend.Business;
 
 import com.Superlee.HR.Backend.DataAccess.ShiftDTO;
 
+import java.rmi.UnexpectedException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -34,6 +35,8 @@ public class ShiftFacade {
         if (id < 0)
             throw new IllegalArgumentException("Illegal argument");
 
+        workerFacade.requireHRManagerOrThrow();
+
         if (!shifts.containsKey(id))
             throw new NoSuchElementException("Shift not found");
 
@@ -43,6 +46,8 @@ public class ShiftFacade {
     public boolean assignWorker(String workerId, int shiftId, String role) {
         if (shiftId < 0 || Util.isNullOrEmpty(workerId, role))
             throw new IllegalArgumentException("Illegal argument");
+
+        workerFacade.requireHRManagerOrThrow();
 
         if (!shifts.containsKey(shiftId))
             throw new NoSuchElementException("Shift not found");
@@ -69,6 +74,8 @@ public class ShiftFacade {
         if (shiftId < 0 || Util.isNullOrEmpty(workerId))
             throw new IllegalArgumentException("Illegal argument");
 
+        workerFacade.requireHRManagerOrThrow();
+
         if (!shifts.containsKey(shiftId))
             throw new NoSuchElementException("Shift not found");
 
@@ -94,6 +101,8 @@ public class ShiftFacade {
         if (id < 0)
             throw new IllegalArgumentException("Illegal argument");
 
+        workerFacade.requireHRManagerOrThrow();
+
         if (!shifts.containsKey(id))
             throw new NoSuchElementException("Shift not found");
 
@@ -114,6 +123,85 @@ public class ShiftFacade {
         return convertToShiftToSend(shifts.get(id));
     }
 
+    public boolean setShiftRequiredWorkersOfRole(int id, String role, int amount) {
+        if (id < 0 || amount < 0 || Util.isNullOrEmpty(role))
+            throw new IllegalArgumentException("Illegal argument");
+
+        workerFacade.requireHRManagerOrThrow();
+
+        if (!shifts.containsKey(id))
+            throw new NoSuchElementException("Shift not found");
+
+        if (roles.getId(role) == null)
+            throw new NoSuchElementException("Role not found");
+
+        shifts.get(id).getRequiredRoles().put(role, amount);
+        return true;
+    }
+
+    public int addNewShift(String branch, String start, String end) {
+        // TODO check if shift is on a saturday, check if branch exists
+        if (Util.isNullOrEmpty(branch, start, end))
+            throw new IllegalArgumentException("Illegal argument");
+
+        workerFacade.requireHRManagerOrThrow();
+
+        LocalDateTime startTime = LocalDateTime.parse(start);
+        LocalDateTime endTime = LocalDateTime.parse(end);
+        if (startTime.isAfter(endTime) || startTime.isEqual(endTime))
+            throw new DateTimeException("Invalid time range");
+
+        Shift s = new Shift(nextId++, startTime, endTime, branch);
+        shifts.put(s.getId(), s);
+        return s.getId();
+    }
+
+    public boolean addAvailability(String workerId, int shiftId) {
+        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
+            throw new IllegalArgumentException("Illegal argument");
+
+        workerFacade.requireLoginOrThrow(workerId);
+
+        if (!shifts.containsKey(shiftId))
+            throw new NoSuchElementException("Shift not found");
+
+        if (workerFacade.getWorkerById(workerId) == null)
+            throw new NoSuchElementException("Worker not found");
+
+        if (!shifts.get(shiftId).addAvailableWorker(workerId))
+            throw new IllegalStateException("Worker is already available for this shift");
+
+        if (!workerFacade.addAvailability(workerId, shiftId))
+            if (!shifts.get(shiftId).removeAvailableWorker(workerId))
+                throw new IllegalStateException("Unexpected error, reverting changes failed");
+            else
+                throw new IllegalStateException("Unexpected error");
+
+        return true;
+    }
+
+    public void removeAvailability(String workerId, int shiftId) {
+        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
+            throw new IllegalArgumentException("Illegal argument");
+
+        workerFacade.requireLoginOrThrow(workerId);
+
+        if (!shifts.containsKey(shiftId))
+            throw new NoSuchElementException("Shift not found");
+
+        if (workerFacade.getWorkerById(workerId) == null)
+            throw new NoSuchElementException("Worker not found");
+
+        if (!shifts.get(shiftId).getAvailableWorkers().contains(workerId))
+            throw new IllegalStateException("You are not available for this shift");
+
+        if(shifts.get(shiftId).getAssignedWorkers().contains(workerId))
+            throw new IllegalStateException("You are already assigned to this shift, contact your manager to unassign you");
+
+        if(!workerFacade.removeAvailability(workerId, shiftId) || !shifts.get(shiftId).removeAvailableWorker(workerId))
+            throw new IllegalStateException("Unexpected error");
+    }
+
     public boolean loadData() {
         shifts = ShiftDTO
                 .getShifts()
@@ -131,35 +219,6 @@ public class ShiftFacade {
                 LocalDateTime.parse(sDTO.getEndTime().toString()),
                 sDTO.getBranch()
         );
-    }
-
-    public boolean setShiftRequiredWorkersOfRole(int id, String role, int amount) {
-        if (id < 0 || amount < 0 || Util.isNullOrEmpty(role))
-            throw new IllegalArgumentException("Illegal argument");
-
-        if (!shifts.containsKey(id))
-            throw new NoSuchElementException("Shift not found");
-
-        if (roles.getId(role) == -1)
-            throw new NoSuchElementException("Role not found");
-
-        shifts.get(id).getRequiredRoles().put(roles.getId(role), amount);
-        return true;
-    }
-
-    public int addNewShift(String branch, String start, String end) {
-        // TODO check if shift is on a saturday, check if branch exists
-        if (Util.isNullOrEmpty(branch, start, end))
-            throw new IllegalArgumentException("Illegal argument");
-
-        LocalDateTime startTime = LocalDateTime.parse(start);
-        LocalDateTime endTime = LocalDateTime.parse(end);
-        if (startTime.isAfter(endTime) || startTime.isEqual(endTime))
-            throw new DateTimeException("Invalid time range");
-
-        Shift s = new Shift(nextId++, startTime, endTime, branch);
-        shifts.put(s.getId(), s);
-        return s.getId();
     }
 
     /**
@@ -182,31 +241,5 @@ public class ShiftFacade {
         if (safetyCode != 0xC0FFEE)
             System.exit(-1);
         shifts.clear();
-    }
-
-    public boolean addAvailability(String workerId, int shiftId) {
-        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
-            throw new IllegalArgumentException("Illegal argument");
-
-        if (!shifts.containsKey(shiftId))
-            throw new NoSuchElementException("Shift not found");
-
-        if (workerFacade.getWorkerById(workerId) == null)
-            throw new NoSuchElementException("Worker not found");
-
-        if (!shifts.get(shiftId).addAvailableWorker(workerId))
-            throw new IllegalStateException("Worker is already available for this shift");
-
-        if (!workerFacade.addAvailability(workerId, shiftId))
-            if (!shifts.get(shiftId).removeAvailableWorker(workerId))
-                throw new IllegalStateException("Unexpected error, reverting changes failed");
-            else
-                throw new IllegalStateException("Unexpected error");
-
-        return true;
-    }
-
-    public void removeAvailability(String workerId, int shiftId) {
-        throw new RuntimeException("Coming soon!\n stay with us in adss 2.0");
     }
 }

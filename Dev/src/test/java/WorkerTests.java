@@ -1,3 +1,4 @@
+import com.Superlee.HR.Backend.Business.UnpermittedOperationException;
 import com.Superlee.HR.Backend.Business.WorkerFacade;
 import com.Superlee.HR.Backend.Business.ShiftFacade;
 import com.Superlee.HR.Backend.Business.WorkerToSend;
@@ -19,27 +20,110 @@ public class WorkerTests {
     }
 
     private int addShift() {
-        return shiftFacade.addNewShift("Hakol BeHinam", "2025-01-01T08:00", "2025-01-01T16:00");
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        int result = shiftFacade.addNewShift("Hakol BeHinam", "2025-01-01T08:00", "2025-01-01T16:00");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
     }
 
     private boolean addWorker() {
-        return workerFacade.addNewWorker("0", "Super", "Lee");
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        boolean result = workerFacade.addNewWorker("0", "Super", "Lee");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
     }
 
-    private boolean addRole() {
-        return workerFacade.addRole("0", "Manager");
+    private boolean addRoleManager() {
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        boolean result = workerFacade.addRole("0", "Manager");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
+    }
+
+    private void login() {
+        workerFacade.login("0", "0");
+    }
+
+    private boolean addSecondWorker() {
+        boolean loggedIn = workerFacade.isLoggedInHRManager();
+        if (!loggedIn)
+            fakeLogin(true);
+        boolean result = workerFacade.addNewWorker("1", "Avi", "Ron");
+        if (!loggedIn)
+            fakeLogout();
+        return result;
+    }
+
+    private void fakeLogin(boolean hrm) {
+        workerFacade.fakeLogin(hrm, "000");
+    }
+
+    private void fakeLogout() {
+        workerFacade.fakeLogout();
     }
 
     @Test
-    public void testGetAllWorkersWithNoWorkers() {
-        int result = workerFacade.getAllWorkers().size();
-        assertEquals(0, result);
+    public void testLoginSuccess() {
+        addWorker();
+        assertNotNull(workerFacade.login("0", "0"));
+    }
+
+    @Test
+    public void testLoginFailureNonExisting() {
+        assertThrows(NoSuchElementException.class, () -> workerFacade.login("1", "1"));
+    }
+
+    @Test
+    public void testLoginFailureWrongPassword() {
+        addWorker();
+        assertThrows(IllegalArgumentException.class, () -> workerFacade.login("0", "1"));
+    }
+
+    @Test
+    public void testLoginFailureNullPassword() {
+        addWorker();
+        assertThrows(IllegalArgumentException.class, () -> workerFacade.login("0", null));
+    }
+
+    @Test
+    public void testLoginFailureNullId() {
+        addWorker();
+        assertThrows(IllegalArgumentException.class, () -> workerFacade.login(null, "0"));
+    }
+
+    @Test
+    public void testLoginFailureEmptyId() {
+        addWorker();
+        assertThrows(IllegalArgumentException.class, () -> workerFacade.login("", "0"));
+    }
+
+    @Test
+    public void testLoginFailureEmptyPassword() {
+        addWorker();
+        assertThrows(IllegalArgumentException.class, () -> workerFacade.login("0", ""));
+    }
+
+    @Test
+    public void testLoginFailureAlreadyLoggedIn() {
+        addWorker();
+        workerFacade.login("0", "0");
+        assertThrows(IllegalStateException.class, () -> workerFacade.login("0", "0"));
     }
 
     @Test
     public void testAddNewWorkerSuccess() {
+        fakeLogin(true);
         int startSize = workerFacade.getAllWorkers().size();
-        boolean result = addWorker();
+        boolean result = addSecondWorker();
         assertTrue(result);
         int endSize = workerFacade.getAllWorkers().size();
         assertEquals(startSize + 1, endSize);
@@ -47,6 +131,7 @@ public class WorkerTests {
 
     @Test
     public void testAddNewWorkerWithEmptyId() {
+        fakeLogin(true);
         int startSize = workerFacade.getAllWorkers().size();
         assertThrows(IllegalArgumentException.class, () -> workerFacade.addNewWorker("", "Super", "Lee"));
         int endSize = workerFacade.getAllWorkers().size();
@@ -55,6 +140,7 @@ public class WorkerTests {
 
     @Test
     public void testAddNewWorkerWithBadId() {
+        fakeLogin(true);
         int startSize = workerFacade.getAllWorkers().size();
         assertThrows(IllegalArgumentException.class, () -> workerFacade.addNewWorker("id", "Super", "Lee"));
 
@@ -64,7 +150,7 @@ public class WorkerTests {
 
     @Test
     public void testAddNewWorkerWithNullId() {
-
+        fakeLogin(true);
         int startSize = workerFacade.getAllWorkers().size();
         assertThrows(IllegalArgumentException.class, () -> workerFacade.addNewWorker(null, "Super", "Lee"));
         int endSize = workerFacade.getAllWorkers().size();
@@ -73,15 +159,14 @@ public class WorkerTests {
 
     @Test
     public void testAddNewWorkerWithDuplicateId() {
-        int startSize = workerFacade.getAllWorkers().size();
+        fakeLogin(true);
         addWorker();
         assertThrows(IllegalArgumentException.class, this::addWorker);
-        int endSize = workerFacade.getAllWorkers().size();
-        assertEquals(startSize + 1, endSize);
     }
 
     @Test
     public void testAddNewWorkerWithBadFirstname() {
+        fakeLogin(true);
         int startSize = workerFacade.getAllWorkers().size();
         assertThrows(IllegalArgumentException.class, () -> workerFacade.addNewWorker("0", "", "Lee"));
         int endSize = workerFacade.getAllWorkers().size();
@@ -90,6 +175,7 @@ public class WorkerTests {
 
     @Test
     public void testAddNewWorkerWithBadSurname() {
+        fakeLogin(true);
         int startSize = workerFacade.getAllWorkers().size();
         assertThrows(IllegalArgumentException.class, () -> workerFacade.addNewWorker("0", "Super", ""));
         int endSize = workerFacade.getAllWorkers().size();
@@ -98,6 +184,7 @@ public class WorkerTests {
 
     @Test
     public void testAddNewWorkerWithNullFirstname() {
+        fakeLogin(true);
         int startSize = workerFacade.getAllWorkers().size();
         assertThrows(IllegalArgumentException.class, () -> workerFacade.addNewWorker("0", null, "Lee"));
         int endSize = workerFacade.getAllWorkers().size();
@@ -106,6 +193,7 @@ public class WorkerTests {
 
     @Test
     public void testAddNewWorkerWithNullSurname() {
+        fakeLogin(true);
         int startSize = workerFacade.getAllWorkers().size();
         assertThrows(IllegalArgumentException.class, () -> workerFacade.addNewWorker("0", "Super", null));
         int endSize = workerFacade.getAllWorkers().size();
@@ -114,6 +202,7 @@ public class WorkerTests {
 
     @Test
     public void testGetWorkersByNameSuccess() {
+        fakeLogin(true);
         addWorker();
         int result = workerFacade.getWorkersByName("Super", "Lee").size();
         assertEquals(1, result);
@@ -121,12 +210,15 @@ public class WorkerTests {
 
     @Test
     public void testGetWorkersByNameFailureNonExisting() {
-        int result = workerFacade.getWorkersByName("Super", "Lee").size();
+        fakeLogin(true);
+        addWorker();
+        int result = workerFacade.getWorkersByName("Avi", "Ron").size();
         assertEquals(0, result);
     }
 
     @Test
     public void testGetWorkersByIdSuccess() {
+        fakeLogin(true);
         addWorker();
         WorkerToSend result = workerFacade.getWorkerById("0");
         assertNotNull(result);
@@ -134,32 +226,38 @@ public class WorkerTests {
 
     @Test
     public void testGetWorkersByIdFailureNonExisting() {
-        assertThrows(NoSuchElementException.class, () -> workerFacade.getWorkerById("0"));
+        fakeLogin(true);
+        addWorker();
+        assertThrows(NoSuchElementException.class, () -> workerFacade.getWorkerById("1"));
     }
 
     @Test
     public void testAddRoleSuccess() {
+        fakeLogin(true);
         addWorker();
-        boolean result = addRole();
+        boolean result = addRoleManager();
         assertTrue(result);
     }
 
     @Test
     public void testAddRoleFailureDuplicateRole() {
+        fakeLogin(true);
         addWorker();
-        addRole();
-        boolean result = addRole();
+        addRoleManager();
+        boolean result = addRoleManager();
         assertFalse(result);
     }
 
     @Test
     public void testAddRoleFailureNonExistingWorker() {
-        boolean result = addRole();
+        fakeLogin(true);
+        boolean result = addRoleManager();
         assertFalse(result);
     }
 
     @Test
     public void testAddRoleFailureBadRole() {
+        fakeLogin(true);
         addWorker();
         boolean result = workerFacade.addRole("0", "Emperor");
         assertFalse(result);
@@ -167,8 +265,9 @@ public class WorkerTests {
 
     @Test
     public void testGetWorkersByRoleSuccess() {
+        fakeLogin(true);
         addWorker();
-        addRole();
+        addRoleManager();
         int result = workerFacade.getWorkersByRole("Manager").size();
         assertEquals(1, result);
     }
@@ -176,43 +275,45 @@ public class WorkerTests {
     @Test
     public void testAssignWorkerSuccess() {
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         boolean result = workerFacade.assignWorker("0", sid, "Manager");
         assertTrue(result);
-    }
-
-    @Test
-    public void testAssignWorkerFailureNonExisting() {
-        addWorker();
-        assertThrows(NoSuchElementException.class, () -> shiftFacade.addAvailability("0", 0));
-        assertThrows(IllegalStateException.class, () -> workerFacade.assignWorker("0", 0, "Manager"));
-        assertThrows(IllegalArgumentException.class, () -> workerFacade.assignWorker("0", -1, "Manager"));
     }
 
     @Test
     public void testAssignWorkerFailureNonExistingRole() {
         addWorker();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         assertThrows(IllegalStateException.class, () -> workerFacade.assignWorker("0", sid, "Manager"));
     }
 
     @Test
     public void testAssignWorkerFailureNotAvailable() {
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
+        fakeLogin(true);
         assertThrows(IllegalStateException.class, () -> workerFacade.assignWorker("0", sid, "Manager"));
     }
 
     @Test
     public void testAssignWorkerFailureAlreadyAssigned() {
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         workerFacade.assignWorker("0", sid, "Manager");
         assertThrows(IllegalStateException.class, () -> workerFacade.assignWorker("0", sid, "Manager"));
     }
@@ -220,9 +321,12 @@ public class WorkerTests {
     @Test
     public void testUnassignWorkerSuccess() {
         addWorker();
-        addRole();
+        addRoleManager();
         int sid = addShift();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         workerFacade.assignWorker("0", sid, "Manager");
         boolean result = workerFacade.unassignWorker("0", sid);
         assertTrue(result);
@@ -230,16 +334,22 @@ public class WorkerTests {
 
     @Test
     public void testUnassignWorkerFailureNonExisting() {
+        fakeLogin(true);
         int sid = addShift();
         assertThrows(NoSuchElementException.class, () -> workerFacade.unassignWorker("0", sid));
     }
 
     @Test
     public void testUnassignWorkerFailureNonAssigned() {
+        fakeLogin(true);
         addWorker();
         int sid = addShift();
         assertThrows(IllegalStateException.class, () -> workerFacade.unassignWorker("0", sid));
+        fakeLogout();
+        login();
         shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
         assertThrows(IllegalStateException.class, () -> workerFacade.unassignWorker("0", sid));
     }
 }

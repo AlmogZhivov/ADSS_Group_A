@@ -22,7 +22,7 @@ class Worker {
     private String branch;
 
     Worker(String id, String firstname, String surname) {
-        this(id, firstname, surname, "", "", "", "", 0, new ArrayList<>(), LocalDateTime.now(), "", "");
+        this(id, firstname, surname, "", "", id, "", 0, new ArrayList<>(), LocalDateTime.now(), "", "");
     }
 
     Worker(String id, String firstname, String surname, String email, String phone,

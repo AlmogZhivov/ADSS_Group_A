@@ -223,8 +223,8 @@ public class HRService {
      * @throws IllegalArgumentException if the name is null or empty
      * @throws NoSuchElementException   if the branch is not found
      */
-    public String getBranchByName(String name) {
-        return bs.getBranchByName(name);
+    public String getBranch(String name) {
+        return bs.getBranch(name);
     }
 
     /**

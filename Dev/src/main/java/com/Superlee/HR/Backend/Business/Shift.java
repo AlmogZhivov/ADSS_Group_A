@@ -12,7 +12,7 @@ class Shift {
     private final int id;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Map<Integer, Integer> requiredRoles;
+    private Map<String, Integer> requiredRoles;
     private List<String> availableWorkers;
     private List<String> assignedWorkers;
     private final Map<String, Integer> workerRoles;
@@ -63,11 +63,11 @@ class Shift {
         return id;
     }
 
-    public Map<Integer, Integer> getRequiredRoles() {
+    public Map<String, Integer> getRequiredRoles() {
         return requiredRoles;
     }
 
-    public void setRequiredRoles(Map<Integer, Integer> requiredRoles) {
+    public void setRequiredRoles(Map<String, Integer> requiredRoles) {
         this.requiredRoles = requiredRoles;
     }
 

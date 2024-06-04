@@ -28,12 +28,15 @@ public class WorkerFacade {
     }
 
     public List<WorkerToSend> getAllWorkers() {
+        requireHRManagerOrThrow();
         return workers.values().stream().map(WorkerFacade::convertToWorkerToSend).collect(Collectors.toList());
     }
 
     public List<WorkerToSend> getWorkersByRole(String role) {
         if (Util.isNullOrEmpty(role))
             throw new IllegalArgumentException("Illegal argument");
+
+        requireHRManagerOrThrow();
 
         if (roles.getId(role) == -1)
             throw new NoSuchElementException("Role not found");
@@ -47,6 +50,8 @@ public class WorkerFacade {
     public List<WorkerToSend> getWorkersByName(String firstname, String surname) {
         if (Util.isNullOrEmpty(firstname, surname))
             throw new IllegalArgumentException("Illegal argument");
+
+        requireHRManagerOrThrow();
 
         return workers.values().stream()
                 .filter(worker -> worker.getFirstName().equalsIgnoreCase(firstname) && worker.getSurname().equalsIgnoreCase(surname))
@@ -69,6 +74,8 @@ public class WorkerFacade {
         if (shiftId < 0 || Util.isNullOrEmpty(workerId, role))
             throw new IllegalArgumentException("Illegal argument");
 
+        requireHRManagerOrThrow();
+
         Worker worker = workers.get(workerId);
         if (worker == null)
             throw new NoSuchElementException("Worker not found");
@@ -89,6 +96,8 @@ public class WorkerFacade {
         if (shiftId < 0 || Util.isNullOrEmpty(workerId))
             throw new IllegalArgumentException("Illegal argument");
 
+        requireHRManagerOrThrow();
+
         Worker worker = workers.get(workerId);
         if (worker == null)
             throw new NoSuchElementException("Worker not found");
@@ -102,6 +111,8 @@ public class WorkerFacade {
     public boolean addNewWorker(String id, String firstname, String surname) {
         if (Util.isNullOrEmpty(id, firstname, surname))
             throw new IllegalArgumentException("Illegal argument");
+
+        requireHRManagerOrThrow();
 
         if (workers.get(id) != null)
             throw new IllegalArgumentException("Worker already exists");
@@ -121,18 +132,175 @@ public class WorkerFacade {
         if (Util.isNullOrEmpty(id, role))
             throw new IllegalArgumentException("Illegal argument");
 
-        return workers.get(id) != null && roles.getId(role) != -1 && workers.get(id).addRole(roles.getId(role));
+        requireHRManagerOrThrow();
+
+        return workers.get(id) != null && roles.getId(role) != null && workers.get(id).addRole(roles.getId(role));
     }
 
     public boolean addAvailability(String workerId, int shiftId) {
         if (shiftId < 0 || Util.isNullOrEmpty(workerId))
             throw new IllegalArgumentException("Illegal argument");
 
+        requireLoginOrThrow(workerId);
+
         Worker worker = workers.get(workerId);
         if (worker != null && !worker.isAvailable(shiftId))
             return worker.addAvailability(shiftId);
 
         throw new IllegalStateException("Unexpected error");
+    }
+
+    public boolean removeAvailability(String workerId, int shiftId) {
+        // TODO - check if this is the correct way to handle this
+        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
+            throw new IllegalArgumentException("Illegal argument");
+
+        requireLoginOrThrow(workerId);
+
+        Worker worker = workers.get(workerId);
+        if (worker != null && worker.isAvailable(shiftId))
+            return worker.removeAvailability(shiftId);
+
+        throw new IllegalStateException("Unexpected error");
+    }
+
+    public boolean updateWorkerEmail(String id, String email) {
+        if (Util.isNullOrEmpty(id, email))
+            throw new IllegalArgumentException("Illegal argument");
+
+        requireLoginOrThrow(id);
+
+        if (!Util.validateEmail(email))
+            throw new IllegalArgumentException("Invalid email");
+
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+
+        w.setEmail(email);
+        return true;
+    }
+
+    public boolean updateWorkerPhone(String id, String phone) {
+        if (Util.isNullOrEmpty(id, phone))
+            throw new IllegalArgumentException("Illegal argument");
+
+        requireLoginOrThrow(id);
+
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+        w.setPhone(phone);
+        return true;
+    }
+
+    public boolean updateWorkerSalary(String id, int salary) {
+        if (salary < 0 || Util.isNullOrEmpty(id))
+            throw new IllegalArgumentException("Illegal argument");
+
+        requireHRManagerOrThrow();
+
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+        w.setSalary(salary);
+        return true;
+    }
+
+    public boolean updateWorkerContractDetails(String id, String contractDetails) {
+        if (Util.isNullOrEmpty(id, contractDetails))
+            throw new IllegalArgumentException("Illegal argument");
+
+        if (!isLoggedInHRManager() && !isLoggedIn(id)) // customer question - who can do this?
+            throw new UnpermittedOperationException("Operation requires login");
+
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+        w.setContract(contractDetails);
+        return true;
+    }
+
+    public boolean updateWorkerBankDetails(String id, String bankDetails) {
+        if (Util.isNullOrEmpty(id, bankDetails))
+            throw new IllegalArgumentException("Illegal argument");
+
+        if (!isLoggedInHRManager() && !isLoggedIn(id)) // customer question - who can do this?
+            throw new UnpermittedOperationException("Operation requires login");
+
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+        w.setBankDetails(bankDetails);
+        return true;
+    }
+
+    public boolean updateWorkerPassword(String id, String password) {
+        if (Util.isNullOrEmpty(id, password))
+            throw new IllegalArgumentException("Illegal argument");
+
+        requireLoginOrThrow(id);
+
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+        w.setPassword(password);
+        return true;
+    }
+
+    public boolean updateWorkerMainBranch(String id, String branch) {
+        if (Util.isNullOrEmpty(id, branch))
+            throw new IllegalArgumentException("Illegal argument");
+
+        if (!isLoggedInHRManager() && !isLoggedIn(id)) // customer question - who can do this?
+            throw new UnpermittedOperationException("Operation requires login");
+
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+
+        if (w.getBranch().equals(branch))
+            throw new IllegalStateException("Worker is already assigned to this branch");
+
+        w.setBranch(branch);
+        return true;
+    }
+
+    public WorkerToSend login(String id, String password) {
+        if (Util.isNullOrEmpty(id, password))
+            throw new IllegalArgumentException("Illegal argument");
+
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+
+        if (w.equals(loggedInWorker)) // we can also check that no one else is logged in
+            throw new IllegalStateException("Worker already logged in");
+
+        if (!w.getPassword().equals(password))
+            throw new IllegalArgumentException("Invalid password");
+
+        loggedInWorker = w;
+
+        return convertToWorkerToSend(w);
+    }
+
+    public boolean isLoggedIn(String id) {
+        return loggedInWorker != null && loggedInWorker.getId().equals(id);
+    }
+
+    public void requireLoginOrThrow(String id) {
+        if (!isLoggedIn(id))
+            throw new UnpermittedOperationException("Operation requires login");
+    }
+
+    public boolean isLoggedInHRManager() {
+        return loggedInWorker != null && loggedInWorker.hasRole(0);
+    }
+
+    public void requireHRManagerOrThrow() {
+        if (!isLoggedInHRManager())
+            throw new UnpermittedOperationException("Operation requires HR manager");
     }
 
     private static WorkerToSend convertToWorkerToSend(Worker worker) {
@@ -175,105 +343,30 @@ public class WorkerFacade {
         workers.clear();
     }
 
-    public boolean updateWorkerEmail(String id, String email) {
-        if (Util.isNullOrEmpty(id, email))
-            throw new IllegalArgumentException("Illegal argument");
-
-        if (!Util.validateEmail(email))
-            throw new IllegalArgumentException("Invalid email");
-
-        Worker w = workers.get(id);
-        if (w == null)
-            throw new NoSuchElementException("Worker not found");
-
-        w.setEmail(email);
-        return true;
+    /**
+     * Fake login for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
+    public void fakeLogin(boolean isHRManager, String id) {
+        loggedInWorker = fakeCreateWorker(isHRManager, id);
     }
 
-    public boolean updateWorkerPhone(String id, String phone) {
-        if (Util.isNullOrEmpty(id, phone))
-            throw new IllegalArgumentException("Illegal argument");
-
-        Worker w = workers.get(id);
-        if (w == null)
-            throw new NoSuchElementException("Worker not found");
-        w.setPhone(phone);
-        return true;
+    /**
+     * Fake create worker for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
+    public Worker fakeCreateWorker(boolean isHRManager, String id) {
+        Worker w = new Worker(id, "Super", "Man");
+        w.addRole(roles.getId(isHRManager ? "HRManager" : "Cashier"));
+        workers.put(w.getId(), w);
+        return w;
     }
 
-    public boolean updateWorkerSalary(String id, int salary) {
-        if (salary < 0 || Util.isNullOrEmpty(id))
-            throw new IllegalArgumentException("Illegal argument");
-
-        Worker w = workers.get(id);
-        if (w == null)
-            throw new NoSuchElementException("Worker not found");
-        w.setSalary(salary);
-        return true;
-    }
-
-    public boolean updateWorkerContractDetails(String id, String contractDetails) {
-        if (Util.isNullOrEmpty(id, contractDetails))
-            throw new IllegalArgumentException("Illegal argument");
-
-        Worker w = workers.get(id);
-        if (w == null)
-            throw new NoSuchElementException("Worker not found");
-        w.setContract(contractDetails);
-        return true;
-    }
-
-    public boolean updateWorkerBankDetails(String id, String bankDetails) {
-        if (Util.isNullOrEmpty(id, bankDetails))
-            throw new IllegalArgumentException("Illegal argument");
-
-        Worker w = workers.get(id);
-        if (w == null)
-            throw new NoSuchElementException("Worker not found");
-        w.setBankDetails(bankDetails);
-        return true;
-    }
-
-    public boolean updateWorkerPassword(String id, String password) {
-        if (Util.isNullOrEmpty(id, password))
-            throw new IllegalArgumentException("Illegal argument");
-
-        Worker w = workers.get(id);
-        if (w == null)
-            throw new NoSuchElementException("Worker not found");
-        w.setPassword(password);
-        return true;
-    }
-
-    public boolean updateWorkerMainBranch(String id, String branch) {
-        if (Util.isNullOrEmpty(id, branch))
-            throw new IllegalArgumentException("Illegal argument");
-
-        Worker w = workers.get(id);
-        if (w == null)
-            throw new NoSuchElementException("Worker not found");
-
-        if (w.getBranch().equals(branch))
-            throw new IllegalStateException("Worker is already assigned to this branch");
-
-        w.setBranch(branch);
-        return true;
-    }
-
-    public WorkerToSend login(String id, String password) {
-        if (Util.isNullOrEmpty(id, password))
-            throw new IllegalArgumentException("Illegal argument");
-
-        Worker w = workers.get(id);
-        if (w == null)
-            throw new NoSuchElementException("Worker not found");
-
-        if (w.equals(loggedInWorker))
-            throw new IllegalStateException("Worker already logged in");
-
-        if (!w.getPassword().equals(password))
-            throw new IllegalArgumentException("Invalid password");
-
-        return convertToWorkerToSend(w);
+    /**
+     * Fake logout for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
+    public void fakeLogout() {
+        loggedInWorker = null;
     }
 }

@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Roles {
-    public final Map<Integer, Integer> DEFAULT_SHIFT_ROLES = new HashMap<>() {{
-        put(1, 1); // Always require one manager
+    public final Map<String, Integer> DEFAULT_SHIFT_ROLES = new HashMap<>() {{
+        put("Manager", 1); // Always require one manager
     }};
 
     private static Roles instance;
-    private Map<Integer, String> roles = new HashMap<>();
+    private Map<String, Integer> roles = new HashMap<>();
 
     private Roles() {
         loadRoles();
@@ -24,14 +24,14 @@ class Roles {
     }
 
     public String getName(int value) {
-        return roles.get(value);
+        for (var entry : roles.entrySet())
+            if (entry.getValue().equals(value))
+                return entry.getKey();
+        return null;
     }
 
-    public int getId(String name) {
-        for (Map.Entry<Integer, String> entry : roles.entrySet())
-            if (entry.getValue().equals(name))
-                return entry.getKey();
-        return -1;
+    public Integer getId(String name) {
+        return roles.get(name);
     }
 
     public void loadRoles() {
