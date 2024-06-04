@@ -63,9 +63,6 @@ public class WorkerFacade {
         if (Util.isNullOrEmpty(id))
             throw new IllegalArgumentException("Illegal argument");
 
-        // TODO should we add a login check?
-        requireHRManagerOrThrow();
-
         Worker worker = workers.get(id);
         if (worker == null)
             throw new NoSuchElementException("Worker not found");
@@ -344,5 +341,32 @@ public class WorkerFacade {
         if (safetyCode != 0xC0FFEE)
             System.exit(-1);
         workers.clear();
+    }
+
+    /**
+     * Fake login for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
+    public void fakeLogin(boolean isHRManager, String id) {
+        loggedInWorker = fakeCreateWorker(isHRManager, id);
+    }
+
+    /**
+     * Fake create worker for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
+    public Worker fakeCreateWorker(boolean isHRManager, String id) {
+        Worker w = new Worker(id, "Super", "Man");
+        w.addRole(roles.getId(isHRManager ? "HRManager" : "Cashier"));
+        workers.put(w.getId(), w);
+        return w;
+    }
+
+    /**
+     * Fake logout for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
+    public void fakeLogout() {
+        loggedInWorker = null;
     }
 }

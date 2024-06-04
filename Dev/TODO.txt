@@ -6,7 +6,6 @@
 * write requirements document
 
 * frontend
-    fix gson issues
     branch related functionality
 
 addr <worker> <role>
