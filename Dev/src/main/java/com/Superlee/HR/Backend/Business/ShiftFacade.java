@@ -117,8 +117,6 @@ public class ShiftFacade {
         if (id < 0)
             throw new IllegalArgumentException("Illegal argument");
 
-        workerFacade.requireHRManagerOrThrow();
-
         if (!shifts.containsKey(id))
             throw new NoSuchElementException("Shift not found");
 
@@ -134,7 +132,7 @@ public class ShiftFacade {
         if (!shifts.containsKey(id))
             throw new NoSuchElementException("Shift not found");
 
-        if (roles.getId(role) == -1)
+        if (roles.getId(role) == null)
             throw new NoSuchElementException("Role not found");
 
         shifts.get(id).getRequiredRoles().put(role, amount);
