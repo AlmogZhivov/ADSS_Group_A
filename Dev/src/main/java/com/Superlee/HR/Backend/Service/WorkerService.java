@@ -127,4 +127,12 @@ public class WorkerService {
             return gson.toJson(new Response(ex.getMessage()));
         }
     }
+
+    public String addWorkerRole(String id, String role) {
+        try {
+            return gson.toJson(new Response(wf.addWorkerRole(id, role)));
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
+        }
+    }
 }

@@ -170,7 +170,7 @@ public class WorkerFacade {
 
         requireLoginOrThrow(id);
 
-        if (!Util.validateEmail(email))
+        if (!Util.isValidEmail(email))
             throw new IllegalArgumentException("Invalid email");
 
         Worker w = workers.get(id);
@@ -283,6 +283,11 @@ public class WorkerFacade {
         loggedInWorker = w;
 
         return convertToWorkerToSend(w);
+    }
+
+    public String addWorkerRole(String id, String role) {
+        throw new UnsupportedOperationException("Not implemented yet");
+        // TODO - implement this
     }
 
     public boolean isLoggedIn(String id) {
