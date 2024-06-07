@@ -472,7 +472,7 @@ public class CLI {
                             System.out.println("Invalid number of args");
                             break;
                         }
-                        output = hrService.addWorkerRole(parts[2], parts[3]);
+                        output = hrService.addWorkerRole(parts[1], parts[2]);
                         Response r = gson.fromJson(output, Response.class);
                         System.out.println(Objects.requireNonNullElse(r.errMsg, "Role added"));
                     }

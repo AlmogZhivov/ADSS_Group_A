@@ -14,9 +14,8 @@ class Worker {
     private String bankDetails;
     private int salary;
     private List<Integer> roles;
-    private List<Integer> futureShifts;
+    private List<Integer> shifts;
     private List<Integer> availability;
-    private List<Integer> pastShifts;
     private final LocalDateTime startDate;
     private String contract;
     private String branch;
@@ -37,25 +36,22 @@ class Worker {
         this.bankDetails = bankDetails;
         this.salary = salary;
         this.roles = roles != null ? roles : new ArrayList<>();
-        this.futureShifts = new ArrayList<>();
+        this.shifts = new ArrayList<>();
         this.availability = new ArrayList<>();
-        this.pastShifts = new ArrayList<>();
         this.startDate = startDate;
         this.contract = contract;
         this.branch = branch;
     }
 
     boolean assign(Integer shiftId) {
-        if (shiftId != null && !futureShifts.contains(shiftId))
-            return futureShifts.add(shiftId);
-
+        if (shiftId != null && !shifts.contains(shiftId))
+            return shifts.add(shiftId);
         return false;
     }
 
     boolean unassign(Integer shiftId) {
         if (shiftId != null)
-            return futureShifts.remove(shiftId);
-
+            return shifts.remove(shiftId);
         return false;
     }
 
@@ -76,21 +72,12 @@ class Worker {
     boolean removeAvailability(Integer shiftId) {
         if (shiftId != null)
             return availability.remove(shiftId);
-
-        return false;
-    }
-
-    boolean addPastShift(Integer shiftId) {
-        if (shiftId != null && !pastShifts.contains(shiftId))
-            return pastShifts.add(shiftId);
-
         return false;
     }
 
     boolean isAssigned(Integer shiftId) {
-        return futureShifts.contains(shiftId);
+        return shifts.contains(shiftId);
     }
-
 
     // Getters and setters
 
@@ -166,12 +153,12 @@ class Worker {
         this.roles = roles;
     }
 
-    List<Integer> getFutureShifts() {
-        return futureShifts;
+    List<Integer> getShifts() {
+        return shifts;
     }
 
-    void setFutureShifts(List<Integer> futureShifts) {
-        this.futureShifts = futureShifts;
+    void setShifts(List<Integer> shifts) {
+        this.shifts = shifts;
     }
 
     List<Integer> getAvailability() {
@@ -180,14 +167,6 @@ class Worker {
 
     void setAvailability(List<Integer> availability) {
         this.availability = availability;
-    }
-
-    List<Integer> getPastShifts() {
-        return pastShifts;
-    }
-
-    void setPastShifts(List<Integer> pastShifts) {
-        this.pastShifts = pastShifts;
     }
 
     LocalDateTime getStartDate() {
@@ -216,9 +195,6 @@ class Worker {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Worker w) {
-            return w.getId().equals(this.getId());
-        }
-        return false;
+        return obj instanceof Worker w && w.getId().equals(this.getId());
     }
 }
