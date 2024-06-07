@@ -46,8 +46,8 @@ public class PresentService {
                         addRepOrder catalogNumber1-amount1,catalogNumber2-amount2 supplierId day
                         updateOrders
                         removeOrder orderId
-                        addProduct supplierId catalogNumber price
-                        removeProduct supplierId catalogNumber
+                        addProduct orderId catalogNumber amount
+                        removeProduct orderId catalogNumber
                         addContact supplierId name phone
                         updateProductPrice supplierId catalogNumber newPrice
                         updateSupplierPaymentMethod supplierId paymentMethod(CASH/BANK_TRANSFER/CREDIT_CARD)
@@ -58,9 +58,9 @@ public class PresentService {
                         getOrder orderId
                         getAllOrders
                         getOrderPrice orderId
-                        addProductDiscountAccordingToAmount supplierId catalogNumber minAmount discount
-                        updateProductDiscountAccordingToAmount supplierId catalogNumber minAmount newDiscount
-                        removeProductDiscountAccordingToAmount supplierId catalogNumber minAmount
+                        addProductDiscountAccordingToAmount supplierId catalogNumber amount discount
+                        updateProductDiscountAccordingToAmount supplierId catalogNumber amount newDiscount
+                        removeProductDiscountAccordingToAmount supplierId catalogNumber amount
                         updateProductName supplierId catalogNumber newName
                         addProductToSupplier supplierId catalogNumber price name
                         removeProductFromSupplier supplierId catalogNumber
