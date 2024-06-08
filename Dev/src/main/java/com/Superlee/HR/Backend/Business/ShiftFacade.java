@@ -51,7 +51,7 @@ public class ShiftFacade {
         if (workerFacade.getWorkerById(workerId) == null)
             throw new NoSuchElementException("Worker not found");
 
-        if (roles.getId(role) == -1)
+        if (roles.getId(role) == null)
             throw new NoSuchElementException("Role not found");
 
         if (!workerFacade.assignWorker(workerId, shiftId, role))
@@ -240,21 +240,22 @@ public class ShiftFacade {
     }
 
     public List<ShiftToSend> getWorkerHistory(String id) {
-        if (Util.isNullOrEmpty(id))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id);
 
-        workerFacade.requireLoginOrThrow(id);
+        // Maybe check if the worker is logged in?
 
         return shifts
                 .values()
                 .stream()
                 .filter(s -> s.getAssignedWorkers().contains(id))
                 .map(ShiftFacade::convertToShiftToSend)
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toList());
     }
 
     public List<ShiftToSend> getWorkerHistory(String id, String from, String to) {
         List<ShiftToSend> list = getWorkerHistory(id);
+
+        // Maybe check if the worker is logged in?
 
         if (!Util.isValidDateTime(from, to))
             throw new IllegalArgumentException("Invalid date format");
@@ -266,8 +267,10 @@ public class ShiftFacade {
     }
 
     public List<ShiftToSend> getShiftsByBranchAndDate(String branchName, String from, String to) {
-        if (Util.isNullOrEmpty(branchName, from, to) || !Util.isValidDateTime(from, to))
+        Util.throwIfNullOrEmpty(branchName, from, to);
+        if (!Util.isValidDateTime(from, to))
             throw new IllegalArgumentException("Illegal argument");
+
         return shifts
                 .values()
                 .stream()
@@ -275,6 +278,6 @@ public class ShiftFacade {
                              && s.getStartTime().isAfter(LocalDateTime.parse(from))
                              && s.getBranch().equals(branchName))
                 .map(ShiftFacade::convertToShiftToSend)
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toList());
     }
 }

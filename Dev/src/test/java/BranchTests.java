@@ -31,7 +31,7 @@ public class BranchTests {
         boolean loggedIn = workerFacade.isLoggedInHRManager();
         if (!loggedIn)
             fakeLogin(true);
-        boolean result = workerFacade.addRole("0", "Manager");
+        boolean result = workerFacade.addWorkerRole("0", "Manager");
         if (!loggedIn)
             fakeLogout();
         return result;
@@ -184,7 +184,7 @@ public class BranchTests {
         addRoleManager();
         addBranch();
         workerFacade.addNewWorker("1", "Mega", "Lee");
-        workerFacade.addRole("1", "Manager");
+        workerFacade.addWorkerRole("1", "Manager");
         boolean result = branchFacade.updateManager("Hakol BeHinam", "1");
         assertEquals("1", branchFacade.getBranch("Hakol BeHinam").manager());
     }

@@ -12,7 +12,6 @@ import static org.junit.Assert.*;
 public class ShiftTests {
     private final WorkerFacade workerFacade = WorkerFacade.getInstance();
     private final ShiftFacade shiftFacade = ShiftFacade.getInstance();
-    // TODO: delete this
     private final String branch = "Hakol BeHinam";
 
     @Before
@@ -25,7 +24,7 @@ public class ShiftTests {
         boolean loggedIn = workerFacade.isLoggedInHRManager();
         if (!loggedIn)
             fakeLogin(true);
-        int result = shiftFacade.addNewShift("Hakol BeHinam", "2025-01-01T08:00", "2025-01-01T16:00");
+        int result = shiftFacade.addNewShift(branch, "2025-01-01T08:00", "2025-01-01T16:00");
         if (!loggedIn)
             fakeLogout();
         return result;
@@ -45,7 +44,7 @@ public class ShiftTests {
         boolean loggedIn = workerFacade.isLoggedInHRManager();
         if (!loggedIn)
             fakeLogin(true);
-        boolean result = workerFacade.addRole("0", "Manager");
+        boolean result = workerFacade.addWorkerRole("0", "Manager");
         if (!loggedIn)
             fakeLogout();
         return result;

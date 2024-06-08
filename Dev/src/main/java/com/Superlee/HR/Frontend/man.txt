@@ -41,6 +41,9 @@ details [all]
 help
     print this message
 
+logout
+    logout from the system and return to the login screen
+
 exit
     exit the program
 
@@ -89,8 +92,20 @@ workers -s <id>
 addr <worker> <role>
     add the given role to the specified worker
 
+addb <branch> <address> <manager>
+    add a new branch with the specified name, address and manager
+
+branch <name>
+    get a branch with the specified name
+
+branches
+    get a list of all branches
+
 help
     print this message
+
+logout
+    logout from the system and return to the login screen
 
 exit
     exit the program

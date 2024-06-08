@@ -14,6 +14,10 @@ public class ModelFactory {
         return gson.fromJson(data.substring(data.indexOf("value") + VALUE_OFFSET, data.length() - 1), BranchModel.class);
     }
 
+    public static List<BranchModel> createBranchModelList(String data) {
+        return Arrays.asList(gson.fromJson(data.substring(data.indexOf("value") + VALUE_OFFSET, data.length() - 1), BranchModel[].class));
+    }
+
     public static WorkerModel createWorkerModel(String data) {
         return gson.fromJson(data.substring(data.indexOf("value") + VALUE_OFFSET, data.length() - 1), WorkerModel.class);
     }

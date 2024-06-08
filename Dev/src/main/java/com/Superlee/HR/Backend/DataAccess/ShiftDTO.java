@@ -103,11 +103,10 @@ public class ShiftDTO {
     }
 
     public static List<ShiftDTO> getShifts() {
-        // TODO: fix branch names
-        ShiftDTO shift1 = new ShiftDTO(1, "", LocalDateTime.of(2024, 7, 1, 8, 0, 0), LocalDateTime.of(2024, 7, 1, 12, 0, 0), null, null, null, null);
-        ShiftDTO shift2 = new ShiftDTO(2, "", LocalDateTime.of(2024, 7, 1, 12, 0, 0), LocalDateTime.of(2024, 7, 1, 16, 0, 0), null, null, null, null);
-        ShiftDTO shift3 = new ShiftDTO(3, "", LocalDateTime.of(2024, 7, 1, 16, 0, 0), LocalDateTime.of(2024, 7, 1, 20, 0, 0), null, null, null, null);
-        ShiftDTO shift4 = new ShiftDTO(4, "", LocalDateTime.of(2024, 7, 2, 8, 0, 0), LocalDateTime.of(2024, 7, 2, 12, 0, 0), null, null, null, null);
+        ShiftDTO shift1 = new ShiftDTO(1, "Branch1", LocalDateTime.of(2024, 7, 1, 8, 0, 0), LocalDateTime.of(2024, 7, 1, 12, 0, 0), null, null, null, null);
+        ShiftDTO shift2 = new ShiftDTO(2, "Branch2", LocalDateTime.of(2024, 7, 1, 12, 0, 0), LocalDateTime.of(2024, 7, 1, 16, 0, 0), null, null, null, null);
+        ShiftDTO shift3 = new ShiftDTO(3, "Branch1", LocalDateTime.of(2024, 7, 1, 16, 0, 0), LocalDateTime.of(2024, 7, 1, 20, 0, 0), null, null, null, null);
+        ShiftDTO shift4 = new ShiftDTO(4, "Branch3", LocalDateTime.of(2024, 7, 2, 8, 0, 0), LocalDateTime.of(2024, 7, 2, 12, 0, 0), null, null, null, null);
 
         return List.of(shift1, shift2, shift3, shift4);
     }

@@ -21,28 +21,9 @@ public class BranchService {
         return instance;
     }
 
-    public String addBranch(String name, String address, String manager) {
-
-        try {
-            bf.addBranch(name, address, manager);
-            return gson.toJson(new Response());
-        } catch (Exception ex) {
-            return gson.toJson(new Response(ex.getMessage()));
-        }
-    }
-
     public String getBranch(String name) {
         try {
             return gson.toJson(new Response(bf.getBranch(name)));
-        } catch (Exception ex) {
-            return gson.toJson(new Response(ex.getMessage()));
-        }
-    }
-
-    public String updateManager(String name, String manager) {
-        try {
-            bf.updateManager(name, manager);
-            return gson.toJson(new Response());
         } catch (Exception ex) {
             return gson.toJson(new Response(ex.getMessage()));
         }
