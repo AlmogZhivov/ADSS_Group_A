@@ -1,19 +1,11 @@
-* class diagram
-    add frontend bullshit
-    add new classes
-    add dal mock
-
-* write requirements document
-
-* frontend
+frontend:
     branch related functionality
+    update help strings
 
-addr <worker> <role>
-    add <role> to <worker>
-    add this functionality to the frontend
+tests:
+    logout
+    getShiftsByBranchAndDate
+    getWorkerHistory
 
-adding shifts should check for branch existence
-
-add calls to the dal - next time!
-
-* required stuff
+backend:
+    adding shifts should check for branch existence

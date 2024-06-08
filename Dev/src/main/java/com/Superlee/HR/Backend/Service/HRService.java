@@ -134,15 +134,41 @@ public class HRService {
     }
 
 
+    /**
+     * Get the shift history of a worker
+     *
+     * @param Id the id of the worker
+     * @return the shift history of a worker
+     * @throws IllegalArgumentException if the id is null or empty
+     * @throws NoSuchElementException   if the worker is not found
+     */
     public String getWorkerHistory(String Id) {
         return ss.getWorkerHistory(Id);
     }
 
+    /**
+     * Get the shift history of a worker between two dates
+     *
+     * @param Id   the id of the worker
+     * @param from the start date
+     * @param to   the end date
+     * @return the shift history of a worker between two dates
+     * @throws IllegalArgumentException if the id is null or empty or if the date is invalid
+     * @throws NoSuchElementException   if the worker is not found
+     */
     public String getWorkerHistory(String Id, String from, String to) {
         return ss.getWorkerHistory(Id, from, to);
     }
 
-
+    /**
+     * Get a list of all shifts by a given branch and date
+     *
+     * @param branchName the name of the branch
+     * @param from       the start date
+     * @param to         the end date
+     * @return a list of all shifts by the given branch and date
+     * @throws IllegalArgumentException if the branch name is null or empty or if the date is invalid
+     */
     public String getShiftsByBranchAndDate(String branchName, String from, String to) {
         return ss.getShiftsByBranchAndDate(branchName, from, to);
     }
@@ -396,7 +422,19 @@ public class HRService {
      */
     public String login(String id, String password) {
         return ws.login(id, password);
-    } // TODO ensure that every action is performed by an authenticated user with the correct permissions
+    }
+
+    /**
+     * Log out of the system
+     *
+     * @param id the id of the worker
+     * @return an empty response if successful
+     * @throws IllegalArgumentException      if the id is null or empty
+     * @throws UnpermittedOperationException if the user is not logged in as the worker with the specified id
+     */
+    public String logout(String id) {
+        return ws.logout(id);
+    }
 
     /**
      * Add a new role to a worker
@@ -404,8 +442,10 @@ public class HRService {
      * @param id   the id of the worker
      * @param role the role to add
      * @return an empty response if successful
-     * @throws IllegalArgumentException if the id or role is null or empty or if the role already exists
-     * @deprecated CURRENTLY NOT IMPLEMENTED
+     * @throws IllegalArgumentException      if the id or role is null or empty or if the role already exists
+     * @throws UnpermittedOperationException if the user is not logged in as the HR manager
+     * @throws NoSuchElementException        if the worker is not found or if the role does not exist
+     * @throws IllegalStateException         if the worker already has the role
      */
     public String addWorkerRole(String id, String role) {
         return ws.addWorkerRole(id, role);

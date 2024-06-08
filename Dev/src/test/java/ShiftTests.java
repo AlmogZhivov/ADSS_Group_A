@@ -45,7 +45,7 @@ public class ShiftTests {
         boolean loggedIn = workerFacade.isLoggedInHRManager();
         if (!loggedIn)
             fakeLogin(true);
-        boolean result = workerFacade.addRole("0", "Manager");
+        boolean result = workerFacade.addWorkerRole("0", "Manager");
         if (!loggedIn)
             fakeLogout();
         return result;

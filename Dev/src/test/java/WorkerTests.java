@@ -1,4 +1,3 @@
-import com.Superlee.HR.Backend.Business.UnpermittedOperationException;
 import com.Superlee.HR.Backend.Business.WorkerFacade;
 import com.Superlee.HR.Backend.Business.ShiftFacade;
 import com.Superlee.HR.Backend.Business.WorkerToSend;
@@ -43,7 +42,7 @@ public class WorkerTests {
         boolean loggedIn = workerFacade.isLoggedInHRManager();
         if (!loggedIn)
             fakeLogin(true);
-        boolean result = workerFacade.addRole("0", "Manager");
+        boolean result = workerFacade.addWorkerRole("0", "Manager");
         if (!loggedIn)
             fakeLogout();
         return result;
@@ -244,23 +243,20 @@ public class WorkerTests {
         fakeLogin(true);
         addWorker();
         addRoleManager();
-        boolean result = addRoleManager();
-        assertFalse(result);
+        assertThrows(IllegalStateException.class, () -> workerFacade.addWorkerRole("0", "Manager"));
     }
 
     @Test
     public void testAddRoleFailureNonExistingWorker() {
         fakeLogin(true);
-        boolean result = addRoleManager();
-        assertFalse(result);
+        assertThrows(NoSuchElementException.class, () -> workerFacade.addWorkerRole("0", "Manager"));
     }
 
     @Test
     public void testAddRoleFailureBadRole() {
         fakeLogin(true);
         addWorker();
-        boolean result = workerFacade.addRole("0", "Emperor");
-        assertFalse(result);
+        assertThrows(NoSuchElementException.class, () -> workerFacade.addWorkerRole("0", "Emperor"));
     }
 
     @Test

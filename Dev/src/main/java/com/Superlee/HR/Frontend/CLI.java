@@ -161,108 +161,115 @@ public class CLI {
             if (input.equals("help"))
                 System.out.println(help_worker);
 
-            String[] parts = input.split("\\s+");
-            switch (parts[0]) {
-                case "avlb": {
-                    if (parts.length != 2) {
-                        System.out.println("Invalid number of args");
+            else if (input.equals("logout")) {
+                output = hrService.logout(worker.id());
+                Response r = gson.fromJson(output, Response.class);
+                System.out.println(Objects.requireNonNullElse(r.errMsg, "Logged out"));
+                return;
+            } else {
+                String[] parts = input.split("\\s+");
+                switch (parts[0]) {
+                    case "avlb": {
+                        if (parts.length != 2) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else if (!tryParseInt(parts[1])) {
+                            System.out.println("Invalid ID");
+                            break;
+                        } else {
+                            output = hrService.addAvailability(worker.id(), Integer.parseInt(parts[1]));
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Availability added"));
+                        }
                         break;
-                    } else if (!tryParseInt(parts[1])) {
-                        System.out.println("Invalid ID");
-                        break;
-                    } else {
-                        output = hrService.addAvailability(worker.id(), Integer.parseInt(parts[1]));
-                        Response r = gson.fromJson(output, Response.class);
-                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Availability added"));
                     }
-                    break;
-                }
-                case "unavlb": {
-                    if (parts.length != 2 || !tryParseInt(parts[1])) {
-                        System.out.println("Invalid number of args");
-                        break;
-                    } else {
+                    case "unavlb": {
+                        if (parts.length != 2 || !tryParseInt(parts[1])) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else {
 //                        output = hrService.removeAvailability(worker.id(), Integer.parseInt(parts[1]));
 //                        Response r = gson.fromJson(output, Response.class);
 //                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Availability removed"));
-                        System.out.println("Not implemented"); // TODO implement this
-                    }
-                    break;
-                }
-                case "email": {
-                    if (parts.length != 2) {
-                        System.out.println("Invalid number of args");
-                        break;
-                    } else {
-                        output = hrService.updateWorkerEmail(worker.id(), parts[1]);
-                        Response r = gson.fromJson(output, Response.class);
-                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Email changed"));
-                    }
-                }
-                break;
-                case "phone": {
-                    if (parts.length != 2) {
-                        System.out.println("Invalid number of args");
-                        break;
-                    } else {
-                        output = hrService.updateWorkerPhone(worker.id(), parts[1]);
-                        Response r = gson.fromJson(output, Response.class);
-                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Phone number changed"));
-                    }
-                }
-                break;
-                case "password": {
-                    if (parts.length != 2) {
-                        System.out.println("Invalid number of args");
-                        break;
-                    } else {
-                        output = hrService.updateWorkerPassword(worker.id(), parts[1]);
-                        Response r = gson.fromJson(output, Response.class);
-                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Password changed"));
-                    }
-                }
-                break;
-                case "bank": {
-                    if (parts.length != 2) {
-                        System.out.println("Invalid number of args");
-                        break;
-                    } else {
-                        output = hrService.updateWorkerBankDetails(worker.id(), parts[1]);
-                        Response r = gson.fromJson(output, Response.class);
-                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Bank account changed"));
-                    }
-                }
-                break;
-                case "branch": {
-                    if (parts.length != 2) {
-                        System.out.println("Invalid number of args");
-                        break;
-                    } else {
-                        output = hrService.updateWorkerMainBranch(worker.id(), parts[1]);
-                        Response r = gson.fromJson(output, Response.class);
-                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Branch changed"));
-                    }
-                }
-                break;
-
-                // Frontend cases
-                case "details": {
-                    if (parts.length == 2) {
-                        if (Objects.equals(parts[1], "all")) {
-                            System.out.println(worker.fullDetails());
-                        } else {
-                            System.out.println("Unknown argument");
+                            System.out.println("Not implemented"); // TODO implement this
                         }
-                    } else if (parts.length == 1)
-                        System.out.println(worker.toString());
-                    else
-                        System.out.println("Invalid number of args");
-                }
-                break;
-
-                default:
-                    System.out.println("Invalid command");
+                        break;
+                    }
+                    case "email": {
+                        if (parts.length != 2) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else {
+                            output = hrService.updateWorkerEmail(worker.id(), parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Email changed"));
+                        }
+                    }
                     break;
+                    case "phone": {
+                        if (parts.length != 2) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else {
+                            output = hrService.updateWorkerPhone(worker.id(), parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Phone number changed"));
+                        }
+                    }
+                    break;
+                    case "password": {
+                        if (parts.length != 2) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else {
+                            output = hrService.updateWorkerPassword(worker.id(), parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Password changed"));
+                        }
+                    }
+                    break;
+                    case "bank": {
+                        if (parts.length != 2) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else {
+                            output = hrService.updateWorkerBankDetails(worker.id(), parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Bank account changed"));
+                        }
+                    }
+                    break;
+                    case "branch": {
+                        if (parts.length != 2) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else {
+                            output = hrService.updateWorkerMainBranch(worker.id(), parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Branch changed"));
+                        }
+                    }
+                    break;
+
+                    // Frontend cases
+                    case "details": {
+                        if (parts.length == 2) {
+                            if (Objects.equals(parts[1], "all")) {
+                                System.out.println(worker.fullDetails());
+                            } else {
+                                System.out.println("Unknown argument");
+                            }
+                        } else if (parts.length == 1)
+                            System.out.println(worker.toString());
+                        else
+                            System.out.println("Invalid number of args");
+                    }
+                    break;
+
+                    default:
+                        System.out.println("Invalid command");
+                        break;
+                }
             }
         }
         while (true);
@@ -278,7 +285,12 @@ public class CLI {
             if (input.equals("help"))
                 System.out.println(help_hr_manager);
 
-            else {
+            else if (input.equals("logout")) {
+                output = hrService.logout(worker.id());
+                Response r = gson.fromJson(output, Response.class);
+                System.out.println(Objects.requireNonNullElse(r.errMsg, "Logged out"));
+                return;
+            } else {
                 String[] parts = input.split("\\s+");
                 switch (parts[0]) {
                     case "addw": {
@@ -477,7 +489,6 @@ public class CLI {
                         System.out.println(Objects.requireNonNullElse(r.errMsg, "Role added"));
                     }
                     break;
-
                     default:
                         System.out.println("Invalid command");
                         break;

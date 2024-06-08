@@ -27,8 +27,7 @@ public class BranchFacade {
     }
 
     public boolean addBranch(String name, String address, String manager) {
-        if (Util.isNullOrEmpty(name, address, manager))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(name, address, manager);
 
         workerFacade.requireHRManagerOrThrow();
 
@@ -48,8 +47,7 @@ public class BranchFacade {
     }
 
     public BranchToSend getBranch(String name) {
-        if (Util.isNullOrEmpty(name))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(name);
 
         workerFacade.requireHRManagerOrThrow();
 
@@ -61,8 +59,7 @@ public class BranchFacade {
     }
 
     public boolean updateManager(String name, String manager) {
-        if (Util.isNullOrEmpty(name, manager))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(name, manager);
 
         workerFacade.requireHRManagerOrThrow();
 
@@ -89,8 +86,7 @@ public class BranchFacade {
     }
 
     public boolean updateWorkerMainBranch(String id, String branch) {
-        if (Util.isNullOrEmpty(id, branch))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id, branch);
 
         if (!workerFacade.isLoggedInHRManager() && !workerFacade.isLoggedIn(id)) // customer question - who can do this?
             throw new UnpermittedOperationException("Operation requires login");

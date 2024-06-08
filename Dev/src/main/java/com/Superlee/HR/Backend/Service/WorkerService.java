@@ -128,6 +128,15 @@ public class WorkerService {
         }
     }
 
+    public String logout(String id) {
+        try {
+            wf.logout(id);
+            return gson.toJson(new Response());
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
+        }
+    }
+
     public String addWorkerRole(String id, String role) {
         try {
             return gson.toJson(new Response(wf.addWorkerRole(id, role)));

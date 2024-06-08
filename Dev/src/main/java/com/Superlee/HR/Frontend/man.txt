@@ -41,6 +41,9 @@ details [all]
 help
     print this message
 
+logout
+    logout from the system and return to the login screen
+
 exit
     exit the program
 
@@ -91,6 +94,9 @@ addr <worker> <role>
 
 help
     print this message
+
+logout
+    logout from the system and return to the login screen
 
 exit
     exit the program

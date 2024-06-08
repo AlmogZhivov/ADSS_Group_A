@@ -33,8 +33,7 @@ public class WorkerFacade {
     }
 
     public List<WorkerToSend> getWorkersByRole(String role) {
-        if (Util.isNullOrEmpty(role))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(role);
 
         requireHRManagerOrThrow();
 
@@ -48,8 +47,7 @@ public class WorkerFacade {
     }
 
     public List<WorkerToSend> getWorkersByName(String firstname, String surname) {
-        if (Util.isNullOrEmpty(firstname, surname))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(firstname, surname);
 
         requireHRManagerOrThrow();
 
@@ -60,8 +58,7 @@ public class WorkerFacade {
     }
 
     public WorkerToSend getWorkerById(String id) {
-        if (Util.isNullOrEmpty(id))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id);
 
         Worker worker = workers.get(id);
         if (worker == null)
@@ -71,8 +68,9 @@ public class WorkerFacade {
     }
 
     public boolean assignWorker(String workerId, int shiftId, String role) {
-        if (shiftId < 0 || Util.isNullOrEmpty(workerId, role))
+        if (shiftId < 0)
             throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(workerId, role);
 
         requireHRManagerOrThrow();
 
@@ -93,8 +91,9 @@ public class WorkerFacade {
     }
 
     public boolean unassignWorker(String workerId, int shiftId) {
-        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
+        if (shiftId < 0)
             throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(workerId);
 
         requireHRManagerOrThrow();
 
@@ -109,15 +108,14 @@ public class WorkerFacade {
     }
 
     public boolean addNewWorker(String id, String firstname, String surname) {
-        if (Util.isNullOrEmpty(id, firstname, surname))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id, firstname, surname);
 
         requireHRManagerOrThrow();
 
         if (workers.get(id) != null)
             throw new IllegalArgumentException("Worker already exists");
 
-        if (!id.matches("[0-9]+"))
+        if (!Util.isValidId(id))
             throw new IllegalArgumentException("Invalid id");
 
         if (firstname.length() <= 1 || surname.length() <= 1)
@@ -128,18 +126,29 @@ public class WorkerFacade {
         return true;
     }
 
-    public boolean addRole(String id, String role) {
-        if (Util.isNullOrEmpty(id, role))
-            throw new IllegalArgumentException("Illegal argument");
+    public boolean addWorkerRole(String id, String role) {
+        Util.throwIfNullOrEmpty(id, role);
 
         requireHRManagerOrThrow();
 
-        return workers.get(id) != null && roles.getId(role) != null && workers.get(id).addRole(roles.getId(role));
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+
+        if (roles.getId(role) == null)
+            throw new NoSuchElementException("Role not found");
+
+        if (w.hasRole(roles.getId(role)))
+            throw new IllegalStateException("Worker already has this role");
+
+        w.addRole(roles.getId(role));
+        return true;
     }
 
     public boolean addAvailability(String workerId, int shiftId) {
-        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
+        if (shiftId < 0)
             throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(workerId);
 
         requireLoginOrThrow(workerId);
 
@@ -152,8 +161,9 @@ public class WorkerFacade {
 
     public boolean removeAvailability(String workerId, int shiftId) {
         // TODO - check if this is the correct way to handle this
-        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
+        if (shiftId < 0)
             throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(workerId);
 
         requireLoginOrThrow(workerId);
 
@@ -165,8 +175,7 @@ public class WorkerFacade {
     }
 
     public boolean updateWorkerEmail(String id, String email) {
-        if (Util.isNullOrEmpty(id, email))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id, email);
 
         requireLoginOrThrow(id);
 
@@ -182,8 +191,7 @@ public class WorkerFacade {
     }
 
     public boolean updateWorkerPhone(String id, String phone) {
-        if (Util.isNullOrEmpty(id, phone))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id, phone);
 
         requireLoginOrThrow(id);
 
@@ -195,8 +203,9 @@ public class WorkerFacade {
     }
 
     public boolean updateWorkerSalary(String id, int salary) {
-        if (salary < 0 || Util.isNullOrEmpty(id))
+        if (salary < 0)
             throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id);
 
         requireHRManagerOrThrow();
 
@@ -208,8 +217,7 @@ public class WorkerFacade {
     }
 
     public boolean updateWorkerContractDetails(String id, String contractDetails) {
-        if (Util.isNullOrEmpty(id, contractDetails))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id, contractDetails);
 
         if (!isLoggedInHRManager() && !isLoggedIn(id)) // customer question - who can do this?
             throw new UnpermittedOperationException("Operation requires login");
@@ -222,8 +230,7 @@ public class WorkerFacade {
     }
 
     public boolean updateWorkerBankDetails(String id, String bankDetails) {
-        if (Util.isNullOrEmpty(id, bankDetails))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id, bankDetails);
 
         if (!isLoggedInHRManager() && !isLoggedIn(id)) // customer question - who can do this?
             throw new UnpermittedOperationException("Operation requires login");
@@ -236,8 +243,7 @@ public class WorkerFacade {
     }
 
     public boolean updateWorkerPassword(String id, String password) {
-        if (Util.isNullOrEmpty(id, password))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id, password);
 
         requireLoginOrThrow(id);
 
@@ -249,8 +255,7 @@ public class WorkerFacade {
     }
 
     public boolean updateWorkerMainBranch(String id, String branch) {
-        if (Util.isNullOrEmpty(id, branch))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id, branch);
 
         if (!isLoggedInHRManager() && !isLoggedIn(id)) // customer question - who can do this?
             throw new UnpermittedOperationException("Operation requires login");
@@ -267,8 +272,7 @@ public class WorkerFacade {
     }
 
     public WorkerToSend login(String id, String password) {
-        if (Util.isNullOrEmpty(id, password))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(id, password);
 
         Worker w = workers.get(id);
         if (w == null)
@@ -285,9 +289,11 @@ public class WorkerFacade {
         return convertToWorkerToSend(w);
     }
 
-    public String addWorkerRole(String id, String role) {
-        throw new UnsupportedOperationException("Not implemented yet");
-        // TODO - implement this
+    public boolean logout(String id) {
+        Util.throwIfNullOrEmpty(id);
+        requireLoginOrThrow(id);
+        loggedInWorker = null;
+        return true;
     }
 
     public boolean isLoggedIn(String id) {
@@ -316,7 +322,11 @@ public class WorkerFacade {
     }
 
     public boolean loadData() {
-        workers = WorkerDTO.getWorkers().stream().map(WorkerFacade::WorkerDTOtoWorker).collect(Collectors.toMap(Worker::getId, w -> w));
+        workers = WorkerDTO
+                .getWorkers()
+                .stream()
+                .map(WorkerFacade::WorkerDTOtoWorker)
+                .collect(Collectors.toMap(Worker::getId, w -> w));
         return true;
     }
 
