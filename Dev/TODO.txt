@@ -1,6 +1,5 @@
 frontend:
-    branch related functionality
-    update help strings
+    all unused services
 
 tests:
     logout

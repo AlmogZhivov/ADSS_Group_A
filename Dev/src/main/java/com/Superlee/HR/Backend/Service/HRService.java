@@ -133,7 +133,6 @@ public class HRService {
         return ss.unassignWorker(workerId, shiftId);
     }
 
-
     /**
      * Get the shift history of a worker
      *

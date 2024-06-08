@@ -25,93 +25,108 @@ public class CLI {
 
             login <username> <password>
                 login to the system
-                        
+            
             help
                 print this message
-                        
+            
             exit
                 exit the program
             """;
 
     private static final String help_worker = """
             List of available commands:
-                        
+            
             avlb <shift_id>
                 add availability for a shift with the specified id
-                        
+            
             unavlb <shift_id>
                 remove availability for a shift with the specified id
-                        
+            
             email <email>
                 change your email to the specified email
-                        
+            
             phone <phone>
                 change your phone number to the specified phone number
-                        
+            
             password <password>
                 change your password to the specified password
-                        
+            
             bank <bank>
                 change your bank account to the specified bank account
-                        
+            
             branch <branch>
                 change your main branch to the specified branch
-                        
+            
             details [all]
                 print your details
-                        
+            
             help
                 print this message
-                        
+            
+            logout
+                logout from the system and return to the login screen
+            
             exit
                 exit the program
             """;
     private static final String help_hr_manager = """
             List of available commands:
-                        
+            
             addw <id> <firstname> <surname>
                 add a new worker with the specified id, first name and second name
-                        
+            
             assw <worker_id> <shift_id> <role>
                 assign a worker to a shift
-                        
+            
             unassw <worker_id> <shift_id>
                 unassign a worker from a shift
-                        
+            
             shift <id>
                 get a shift with the specified id
-                        
+            
             shift -a <id>
                 get a list of all workers assignable to the specified shift
-                        
+            
             shift -r <id> <role> <amount>
-                sets the amount of workers with the specified role needed for a shift
-                        
+                set the amount of workers with the specified role needed for a shift
+            
             adds <start> <end> <branch>
                 add a new shift with the specified start time, end time and branch
                 must be formatted as yyyy-MM-ddTHH:mm (e.g. 1996-04-15T00:00)
-                        
+            
             workers
                 get a list of all workers
-                        
+            
             workers -r <role>
                 get a list of all workers with the specified role
-                        
+            
             workers -n <firstname> <surname>
                 get a worker with the specified name
-                        
+            
             workers -i <id>
                 get a worker with the specified id
-                        
+            
             workers -s <id>
                 get a list of all workers assigned to the specified shift
-                
+            
             addr <worker> <role>
                 add the given role to the specified worker
-                        
+            
+            addb <branch> <address> <manager>
+                add a new branch with the specified name, address and manager
+            
+            branch <name>
+                get a branch with the specified name
+            
+            branches
+                get a list of all branches
+            
             help
                 print this message
-                        
+            
+            logout
+                logout from the system and return to the login screen
+            
             exit
                 exit the program
             """;
@@ -188,10 +203,9 @@ public class CLI {
                             System.out.println("Invalid number of args");
                             break;
                         } else {
-//                        output = hrService.removeAvailability(worker.id(), Integer.parseInt(parts[1]));
-//                        Response r = gson.fromJson(output, Response.class);
-//                        System.out.println(Objects.requireNonNullElse(r.errMsg, "Availability removed"));
-                            System.out.println("Not implemented"); // TODO implement this
+                            output = hrService.removeAvailability(worker.id(), Integer.parseInt(parts[1]));
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Availability removed"));
                         }
                         break;
                     }
@@ -487,6 +501,48 @@ public class CLI {
                         output = hrService.addWorkerRole(parts[1], parts[2]);
                         Response r = gson.fromJson(output, Response.class);
                         System.out.println(Objects.requireNonNullElse(r.errMsg, "Role added"));
+                    }
+                    break;
+                    case "addb": {
+                        if (parts.length != 4) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else {
+                            output = hrService.addNewBranch(parts[1], parts[2], parts[3]);
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Branch added"));
+                        }
+                    }
+                    break;
+                    case "branch": {
+                        if (parts.length != 2) {
+                            System.out.println("Invalid number of args");
+                            break;
+                        } else {
+                            output = hrService.getBranch(parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            if (r.errMsg != null)
+                                System.out.println(r.errMsg);
+                            else {
+                                BranchModel branch = ModelFactory.createBranchModel(output);
+                                System.out.println(branch);
+                            }
+                        }
+                    }
+                    break;
+                    case "branches": {
+                        if (parts.length == 1) {
+                            output = hrService.getAllBranches();
+                            Response r = gson.fromJson(output, Response.class);
+                            if (r.errMsg != null)
+                                System.out.println(r.errMsg);
+                            else {
+                                List<BranchModel> branches = ModelFactory.createBranchModelList(output);
+                                for (BranchModel branch : branches)
+                                    System.out.println(branch);
+                            }
+                        } else
+                            System.out.println("Invalid number of args");
                     }
                     break;
                     default:
