@@ -9,3 +9,4 @@ tests:
 
 backend:
     adding shifts should check for branch existence
+    role related functionality

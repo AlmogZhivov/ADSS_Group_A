@@ -450,4 +450,57 @@ public class HRService {
     public String addWorkerRole(String id, String role) {
         return ws.addWorkerRole(id, role);
     }
+
+    /**
+     * Remove a role from a worker
+     *
+     * @param id   the id of the worker
+     * @param role the role to remove
+     * @return an empty response if successful
+     * @throws IllegalArgumentException      if the id or role is null or empty or if the role does not exist
+     * @throws UnpermittedOperationException if the user is not logged in as the HR manager
+     * @throws NoSuchElementException        if the worker is not found or if the role does not exist
+     * @throws IllegalStateException         if the worker does not have the role
+     * @deprecated NOT IMPLEMENTED
+     */
+    public String removeWorkerRole(String id, String role) {
+        return ws.removeWorkerRole(id, role);
+    }
+
+    /**
+     * Get all roles of a worker
+     *
+     * @param id the id of the worker
+     * @return a list of all roles of the worker
+     * @throws IllegalArgumentException if the id is null or empty
+     * @throws NoSuchElementException   if the worker is not found
+     * @deprecated NOT IMPLEMENTED
+     */
+    public String getWorkerRoles(String id) {
+        return ws.getWorkerRoles(id);
+    }
+
+    /**
+     * Get all roles
+     *
+     * @return a list of all roles
+     * @throws UnpermittedOperationException if the user is not logged in as the HR manager
+     * @deprecated NOT IMPLEMENTED
+     */
+    public String getAllRoles() {
+        return ws.getAllRoles();
+    }
+
+    /**
+     * Add a new role to the system
+     *
+     * @param role the role to add
+     * @return an empty response if successful
+     * @throws IllegalArgumentException      if the role is null or empty or if the role already exists
+     * @throws UnpermittedOperationException if the user is not logged in as the HR manager
+     * @deprecated NOT IMPLEMENTED
+     */
+    public String addNewRole(String role) {
+        return ws.addNewRole(role);
+    }
 }

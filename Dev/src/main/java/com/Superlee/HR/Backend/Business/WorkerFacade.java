@@ -384,4 +384,20 @@ public class WorkerFacade {
     public void fakeLogout() {
         loggedInWorker = null;
     }
+
+    public boolean removeWorkerRole(String id, String role) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public List<String> getWorkerRoles(String id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public List<String> getAllRoles() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public boolean addNewRole(String role) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }

@@ -144,4 +144,38 @@ public class WorkerService {
             return gson.toJson(new Response(ex.getMessage()));
         }
     }
+
+    public String removeWorkerRole(String id, String role) {
+        try {
+            wf.removeWorkerRole(id, role);
+            return gson.toJson(new Response());
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
+        }
+    }
+
+    public String getWorkerRoles(String id) {
+        try {
+            return gson.toJson(new Response(wf.getWorkerRoles(id)));
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
+        }
+    }
+
+    public String getAllRoles() {
+        try {
+            return gson.toJson(new Response(wf.getAllRoles()));
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
+        }
+    }
+
+    public String addNewRole(String role) {
+        try {
+            wf.addNewRole(role);
+            return gson.toJson(new Response());
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
+        }
+    }
 }
