@@ -181,15 +181,15 @@ class Worker {
         this.contract = contract;
     }
 
-    public boolean addRole(int role) {
-        return !roles.contains(role) && roles.add(role);
+    void addRole(int role) {
+        roles.add(role);
     }
 
-    public void setBranch(String branch) {
+    void setBranch(String branch) {
         this.branch = branch;
     }
 
-    public String getBranch() {
+    String getBranch() {
         return branch;
     }
 

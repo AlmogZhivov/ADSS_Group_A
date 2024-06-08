@@ -37,11 +37,11 @@ public class WorkerFacade {
 
         requireHRManagerOrThrow();
 
-        if (roles.getId(role) == -1)
+        if (roles.getId(role) == null)
             throw new NoSuchElementException("Role not found");
 
         return workers.values().stream()
-                .filter(worker -> worker.getRoles().stream().anyMatch(r -> r == roles.getId(role)))
+                .filter(worker -> worker.getRoles().stream().anyMatch(r -> r.equals(roles.getId(role))))
                 .map(WorkerFacade::convertToWorkerToSend)
                 .collect(Collectors.toList());
     }
@@ -160,7 +160,6 @@ public class WorkerFacade {
     }
 
     public boolean removeAvailability(String workerId, int shiftId) {
-        // TODO - check if this is the correct way to handle this
         if (shiftId < 0)
             throw new IllegalArgumentException("Illegal argument");
         Util.throwIfNullOrEmpty(workerId);

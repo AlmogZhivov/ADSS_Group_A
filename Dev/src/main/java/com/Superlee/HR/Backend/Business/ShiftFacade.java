@@ -51,7 +51,7 @@ public class ShiftFacade {
         if (workerFacade.getWorkerById(workerId) == null)
             throw new NoSuchElementException("Worker not found");
 
-        if (roles.getId(role) == -1)
+        if (roles.getId(role) == null)
             throw new NoSuchElementException("Role not found");
 
         if (!workerFacade.assignWorker(workerId, shiftId, role))

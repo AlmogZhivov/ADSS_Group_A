@@ -3,7 +3,7 @@ package com.Superlee.HR.Backend.Business;
 import java.time.LocalDateTime;
 
 public class Util {
-    private static final String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+    private static final String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"; // TODO check if this is correct
     private static final String idRegex = "[0-9]+";
 
     public static boolean isNullOrEmpty(String... strings) {
@@ -21,7 +21,6 @@ public class Util {
 
     public static boolean isValidEmail(String email) {
         return email.matches(emailRegex);
-        // TODO check if this is correct
     }
 
     public static boolean isValidId(String id) {

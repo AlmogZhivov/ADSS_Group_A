@@ -376,8 +376,7 @@ public class CLI {
                                     System.out.println(r.errMsg);
                                 else {
                                     List<WorkerModel> workers = ModelFactory.createWorkerModelList(output);
-                                    for (WorkerModel workerModel : workers)
-                                        System.out.println(workerModel);
+                                    printList(workers);
                                 }
                             }
                         } else if (parts.length == 5) {
@@ -413,9 +412,8 @@ public class CLI {
                             if (r.errMsg != null)
                                 System.out.println(r.errMsg);
                             else {
-                                List<WorkerModel> workers = ModelFactory.createWorkerModelList(output); // TODO check if this is right
-                                for (WorkerModel workerModel : workers)
-                                    System.out.println(workerModel);
+                                List<WorkerModel> workers = ModelFactory.createWorkerModelList(output);
+                                printList(workers);
                             }
                         } else if (parts.length >= 3) {
                             switch (parts[1]) {
@@ -429,9 +427,8 @@ public class CLI {
                                         if (r.errMsg != null)
                                             System.out.println(r.errMsg);
                                         else {
-                                            List<WorkerModel> workers = ModelFactory.createWorkerModelList(output); // TODO check if this is right
-                                            for (WorkerModel workerModel : workers)
-                                                System.out.println(workerModel);
+                                            List<WorkerModel> workers = ModelFactory.createWorkerModelList(output);
+                                            printList(workers);
                                         }
                                     }
                                 }
@@ -443,9 +440,8 @@ public class CLI {
                                         if (r.errMsg != null)
                                             System.out.println(r.errMsg);
                                         else {
-                                            List<WorkerModel> workers = ModelFactory.createWorkerModelList(output); // TODO check if this is right
-                                            for (WorkerModel workerModel : workers)
-                                                System.out.println(workerModel);
+                                            List<WorkerModel> workers = ModelFactory.createWorkerModelList(output);
+                                            printList(workers);
                                         }
                                     } else
                                         System.out.println("Invalid number of args");
@@ -474,9 +470,8 @@ public class CLI {
                                             if (r.errMsg != null)
                                                 System.out.println(r.errMsg);
                                             else {
-                                                List<WorkerModel> workers = ModelFactory.createWorkerModelList(output); // TODO check if this is right
-                                                for (WorkerModel workerModel : workers)
-                                                    System.out.println(workerModel);
+                                                List<WorkerModel> workers = ModelFactory.createWorkerModelList(output);
+                                                printList(workers);
                                             }
                                         } else {
                                             System.out.println("Invalid ID");
@@ -538,8 +533,7 @@ public class CLI {
                                 System.out.println(r.errMsg);
                             else {
                                 List<BranchModel> branches = ModelFactory.createBranchModelList(output);
-                                for (BranchModel branch : branches)
-                                    System.out.println(branch);
+                                printList(branches);
                             }
                         } else
                             System.out.println("Invalid number of args");
@@ -569,5 +563,13 @@ public class CLI {
         } catch (Exception ignored) {
             return false;
         }
+    }
+
+    private static <T> void printList(List<T> list) {
+        if (list.isEmpty())
+            System.out.println("No results");
+        else
+            for (T item : list)
+                System.out.println(item);
     }
 }
