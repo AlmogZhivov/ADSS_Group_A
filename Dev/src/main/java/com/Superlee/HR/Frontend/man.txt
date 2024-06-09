@@ -93,6 +93,9 @@ workers -i <id>
 workers -s <id>
     get a list of all workers assigned to the specified shift
 
+wh <id>
+    get the work history of a worker with the specified id
+
 addr <worker> <role>
     add the given role to the specified worker
 

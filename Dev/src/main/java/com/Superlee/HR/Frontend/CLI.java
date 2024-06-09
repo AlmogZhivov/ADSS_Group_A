@@ -90,6 +90,10 @@ public class CLI {
             shift -r <id> <role> <amount>
                 set the amount of workers with the specified role needed for a shift
             
+            shift <start> <end> <branch>
+                get a list of all shifts at the specified branch between the specified start and end time
+                must be formatted as yyyy-MM-ddTHH:mm (e.g. 1996-04-15T00:00)
+            
             adds <start> <end> <branch>
                 add a new shift with the specified start time, end time and branch
                 must be formatted as yyyy-MM-ddTHH:mm (e.g. 1996-04-15T00:00)
@@ -108,6 +112,9 @@ public class CLI {
             
             workers -s <id>
                 get a list of all workers assigned to the specified shift
+            
+            wh <id>
+                get the work history of a worker with the specified id
             
             addr <worker> <role>
                 add the given role to the specified worker
@@ -506,6 +513,20 @@ public class CLI {
                                     break;
                             }
                         }
+                    }
+                    break;
+                    case "wh": {
+                        if (parts.length == 2) {
+                            output = hrService.getWorkerHistory(parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            if (r.errMsg != null)
+                                System.out.println(r.errMsg);
+                            else {
+                                List<ShiftModel> shifts = ModelFactory.createShiftModelList(output);
+                                printList(shifts);
+                            }
+                        } else
+                            System.out.println("Invalid number of args");
                     }
                     break;
                     case "addr": {
