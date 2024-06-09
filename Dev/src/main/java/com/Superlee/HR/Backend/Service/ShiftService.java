@@ -72,9 +72,9 @@ public class ShiftService {
         }
     }
 
-    public String addNewShift(String branch, String start, String end) {
+    public String addNewShift(String start, String end, String branch) {
         try {
-            return gson.toJson(new Response(sf.addNewShift(branch, start, end)));
+            return gson.toJson(new Response(sf.addNewShift(start, end, branch)));
         } catch (Exception ex) {
             return gson.toJson(new Response(ex.getMessage()));
         }
@@ -123,9 +123,9 @@ public class ShiftService {
         }
     }
 
-    public String getShiftsByBranchAndDate(String branchName, String from, String to) {
+    public String getShiftsByBranchAndDate(String from, String to, String branchName) {
         try {
-            return gson.toJson(new Response(sf.getShiftsByBranchAndDate(branchName, from, to)));
+            return gson.toJson(new Response(sf.getShiftsByBranchAndDate(from, to, branchName)));
         } catch (Exception ex) {
             return gson.toJson(new Response(ex.getMessage()));
         }

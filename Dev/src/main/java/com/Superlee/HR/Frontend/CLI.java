@@ -385,6 +385,20 @@ public class CLI {
                                     printList(workers);
                                 }
                             }
+                        } else if (parts.length == 4) {
+                            if (!tryParseDT(parts[1]) || !tryParseDT(parts[2])) {
+                                System.out.println("Invalid datetime format");
+                                break;
+                            } else {
+                                output = hrService.getShiftsByBranchAndDate(parts[1], parts[2], parts[3]);
+                                Response r = gson.fromJson(output, Response.class);
+                                if (r.errMsg != null)
+                                    System.out.println(r.errMsg);
+                                else {
+                                    List<ShiftModel> shifts = ModelFactory.createShiftModelList(output);
+                                    printList(shifts);
+                                }
+                            }
                         } else if (parts.length == 5) {
                             if (parts[1].equals("-r")) {
                                 if (tryParseInt(parts[2]) && tryParseInt(parts[4])) {
@@ -402,7 +416,7 @@ public class CLI {
                     case "adds": {
                         if (parts.length == 4) {
                             if (tryParseDT(parts[1]) && tryParseDT(parts[2])) {
-                                output = hrService.addNewShift(parts[3], parts[1], parts[2]);
+                                output = hrService.addNewShift(parts[1], parts[2], parts[3]);
                                 Response r = gson.fromJson(output, Response.class);
                                 System.out.println(Objects.requireNonNullElse(r.errMsg, "Shift added"));
                             } else

@@ -168,8 +168,8 @@ public class HRService {
      * @return a list of all shifts by the given branch and date
      * @throws IllegalArgumentException if the branch name is null or empty or if the date is invalid
      */
-    public String getShiftsByBranchAndDate(String branchName, String from, String to) {
-        return ss.getShiftsByBranchAndDate(branchName, from, to);
+    public String getShiftsByBranchAndDate(String from, String to, String branchName) {
+        return ss.getShiftsByBranchAndDate(from, to, branchName);
     }
 
     /**
@@ -215,15 +215,16 @@ public class HRService {
     /**
      * Add a new shift to the system
      *
-     * @param start the start time of the shift
-     * @param end   the end time of the shift
+     * @param start  the start time of the shift
+     * @param end    the end time of the shift
+     * @param branch the branch of the shift
      * @return the id of the new shift
      * @throws IllegalArgumentException      if the start or end time is invalid
      * @throws UnpermittedOperationException if the user is not logged in as the HR manager
      * @throws DateTimeException             if the start time is equal to or after the end time
      */
-    public String addNewShift(String branch, String start, String end) {
-        return ss.addNewShift(branch, start, end);
+    public String addNewShift(String start, String end, String branch) {
+        return ss.addNewShift(start, end, branch);
     }
 
     /**
