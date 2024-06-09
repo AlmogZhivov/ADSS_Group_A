@@ -22,7 +22,7 @@ public class WorkerTests {
         boolean loggedIn = workerFacade.isLoggedInHRManager();
         if (!loggedIn)
             fakeLogin(true);
-        int result = shiftFacade.addNewShift("Hakol BeHinam", "2025-01-01T08:00", "2025-01-01T16:00");
+        int result = shiftFacade.addNewShift("2025-01-01T08:00", "2025-01-01T16:00", "Hakol BeHinam");
         if (!loggedIn)
             fakeLogout();
         return result;
