@@ -29,4 +29,8 @@ public class ModelFactory {
     public static ShiftModel createShiftModel(String data) {
         return gson.fromJson(data.substring(data.indexOf("value") + VALUE_OFFSET, data.length() - 1), ShiftModel.class);
     }
+
+    public static List<String> createStringList(String output) {
+        return Arrays.asList(gson.fromJson(output.substring(output.indexOf("value") + VALUE_OFFSET, output.length() - 1), String[].class));
+    }
 }

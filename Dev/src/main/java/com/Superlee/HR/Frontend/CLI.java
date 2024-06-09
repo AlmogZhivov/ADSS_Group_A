@@ -121,6 +121,12 @@ public class CLI {
             branches
                 get a list of all branches
             
+            roles [worker]
+                get a list of all roles or all roles for a worker if specified
+            
+            roles -a <role>
+                add a new role with the specified name
+            
             help
                 print this message
             
@@ -535,6 +541,33 @@ public class CLI {
                                 List<BranchModel> branches = ModelFactory.createBranchModelList(output);
                                 printList(branches);
                             }
+                        } else
+                            System.out.println("Invalid number of args");
+                    }
+                    break;
+                    case "roles": {
+                        if (parts.length == 1) {
+                            output = hrService.getAllRoles();
+                            Response r = gson.fromJson(output, Response.class);
+                            if (r.errMsg != null)
+                                System.out.println(r.errMsg);
+                            else {
+                                List<String> roles = ModelFactory.createStringList(output);
+                                printList(roles);
+                            }
+                        } else if (parts.length == 2) {
+                            output = hrService.getWorkerRoles(parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            if (r.errMsg != null)
+                                System.out.println(r.errMsg);
+                            else {
+                                List<String> roles = ModelFactory.createStringList(output);
+                                printList(roles);
+                            }
+                        } else if (parts.length == 3 && parts[1].equals("-a")) {
+                            output = hrService.addNewRole(parts[2]);
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Role added"));
                         } else
                             System.out.println("Invalid number of args");
                     }

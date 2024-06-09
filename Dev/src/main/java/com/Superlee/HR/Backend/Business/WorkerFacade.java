@@ -3,11 +3,12 @@ package com.Superlee.HR.Backend.Business;
 import com.Superlee.HR.Backend.DataAccess.WorkerDTO;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class WorkerFacade {
     private static WorkerFacade instance;
@@ -389,14 +390,31 @@ public class WorkerFacade {
     }
 
     public List<String> getWorkerRoles(String id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        Util.throwIfNullOrEmpty(id);
+
+        requireHRManagerOrThrow(); // should we allow workers to get their own roles?
+
+        Worker w = workers.get(id);
+        if (w == null)
+            throw new NoSuchElementException("Worker not found");
+
+        return w.getRoles().stream().map(roles::getName).collect(Collectors.toList());
     }
 
-    public List<String> getAllRoles() {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public Set<String> getAllRoles() {
+        requireHRManagerOrThrow();
+        return roles.getAllRoleNames();
     }
 
     public boolean addNewRole(String role) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        Util.throwIfNullOrEmpty(role);
+
+        requireHRManagerOrThrow();
+
+        if (roles.getId(role) != null)
+            throw new IllegalArgumentException("Role already exists");
+
+        roles.addNewRole(role);
+        return true;
     }
 }

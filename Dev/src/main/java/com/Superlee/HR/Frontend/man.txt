@@ -101,6 +101,12 @@ branch <name>
 branches
     get a list of all branches
 
+roles [worker]
+    get a list of all roles or all roles for a worker if specified
+
+roles -a <role>
+    add a new role with the specified name
+
 help
     print this message
 

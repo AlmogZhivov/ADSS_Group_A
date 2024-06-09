@@ -470,10 +470,9 @@ public class HRService {
      * Get all roles of a worker
      *
      * @param id the id of the worker
-     * @return a list of all roles of the worker
+     * @return a set of all roles of the worker
      * @throws IllegalArgumentException if the id is null or empty
      * @throws NoSuchElementException   if the worker is not found
-     * @deprecated NOT IMPLEMENTED
      */
     public String getWorkerRoles(String id) {
         return ws.getWorkerRoles(id);
@@ -482,9 +481,8 @@ public class HRService {
     /**
      * Get all roles
      *
-     * @return a list of all roles
+     * @return a set of all roles
      * @throws UnpermittedOperationException if the user is not logged in as the HR manager
-     * @deprecated NOT IMPLEMENTED
      */
     public String getAllRoles() {
         return ws.getAllRoles();
@@ -497,7 +495,6 @@ public class HRService {
      * @return an empty response if successful
      * @throws IllegalArgumentException      if the role is null or empty or if the role already exists
      * @throws UnpermittedOperationException if the user is not logged in as the HR manager
-     * @deprecated NOT IMPLEMENTED
      */
     public String addNewRole(String role) {
         return ws.addNewRole(role);
