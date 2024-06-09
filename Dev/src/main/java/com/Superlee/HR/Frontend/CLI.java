@@ -90,6 +90,10 @@ public class CLI {
             shift -r <id> <role> <amount>
                 set the amount of workers with the specified role needed for a shift
             
+            shift <start> <end> <branch>
+                get a list of all shifts at the specified branch between the specified start and end time
+                must be formatted as yyyy-MM-ddTHH:mm (e.g. 1996-04-15T00:00)
+            
             adds <start> <end> <branch>
                 add a new shift with the specified start time, end time and branch
                 must be formatted as yyyy-MM-ddTHH:mm (e.g. 1996-04-15T00:00)
@@ -109,6 +113,9 @@ public class CLI {
             workers -s <id>
                 get a list of all workers assigned to the specified shift
             
+            wh <id>
+                get the work history of a worker with the specified id
+            
             addr <worker> <role>
                 add the given role to the specified worker
             
@@ -120,6 +127,12 @@ public class CLI {
             
             branches
                 get a list of all branches
+            
+            roles [worker]
+                get a list of all roles or all roles for a worker if specified
+            
+            roles -a <role>
+                add a new role with the specified name
             
             help
                 print this message
@@ -379,6 +392,20 @@ public class CLI {
                                     printList(workers);
                                 }
                             }
+                        } else if (parts.length == 4) {
+                            if (!tryParseDT(parts[1]) || !tryParseDT(parts[2])) {
+                                System.out.println("Invalid datetime format");
+                                break;
+                            } else {
+                                output = hrService.getShiftsByBranchAndDate(parts[1], parts[2], parts[3]);
+                                Response r = gson.fromJson(output, Response.class);
+                                if (r.errMsg != null)
+                                    System.out.println(r.errMsg);
+                                else {
+                                    List<ShiftModel> shifts = ModelFactory.createShiftModelList(output);
+                                    printList(shifts);
+                                }
+                            }
                         } else if (parts.length == 5) {
                             if (parts[1].equals("-r")) {
                                 if (tryParseInt(parts[2]) && tryParseInt(parts[4])) {
@@ -396,7 +423,7 @@ public class CLI {
                     case "adds": {
                         if (parts.length == 4) {
                             if (tryParseDT(parts[1]) && tryParseDT(parts[2])) {
-                                output = hrService.addNewShift(parts[3], parts[1], parts[2]);
+                                output = hrService.addNewShift(parts[1], parts[2], parts[3]);
                                 Response r = gson.fromJson(output, Response.class);
                                 System.out.println(Objects.requireNonNullElse(r.errMsg, "Shift added"));
                             } else
@@ -488,6 +515,20 @@ public class CLI {
                         }
                     }
                     break;
+                    case "wh": {
+                        if (parts.length == 2) {
+                            output = hrService.getWorkerHistory(parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            if (r.errMsg != null)
+                                System.out.println(r.errMsg);
+                            else {
+                                List<ShiftModel> shifts = ModelFactory.createShiftModelList(output);
+                                printList(shifts);
+                            }
+                        } else
+                            System.out.println("Invalid number of args");
+                    }
+                    break;
                     case "addr": {
                         if (parts.length != 3) {
                             System.out.println("Invalid number of args");
@@ -535,6 +576,33 @@ public class CLI {
                                 List<BranchModel> branches = ModelFactory.createBranchModelList(output);
                                 printList(branches);
                             }
+                        } else
+                            System.out.println("Invalid number of args");
+                    }
+                    break;
+                    case "roles": {
+                        if (parts.length == 1) {
+                            output = hrService.getAllRoles();
+                            Response r = gson.fromJson(output, Response.class);
+                            if (r.errMsg != null)
+                                System.out.println(r.errMsg);
+                            else {
+                                List<String> roles = ModelFactory.createStringList(output);
+                                printList(roles);
+                            }
+                        } else if (parts.length == 2) {
+                            output = hrService.getWorkerRoles(parts[1]);
+                            Response r = gson.fromJson(output, Response.class);
+                            if (r.errMsg != null)
+                                System.out.println(r.errMsg);
+                            else {
+                                List<String> roles = ModelFactory.createStringList(output);
+                                printList(roles);
+                            }
+                        } else if (parts.length == 3 && parts[1].equals("-a")) {
+                            output = hrService.addNewRole(parts[2]);
+                            Response r = gson.fromJson(output, Response.class);
+                            System.out.println(Objects.requireNonNullElse(r.errMsg, "Role added"));
                         } else
                             System.out.println("Invalid number of args");
                     }

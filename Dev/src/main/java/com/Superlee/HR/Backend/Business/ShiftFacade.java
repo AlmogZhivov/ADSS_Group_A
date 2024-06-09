@@ -135,9 +135,9 @@ public class ShiftFacade {
         return true;
     }
 
-    public int addNewShift(String branch, String start, String end) {
+    public int addNewShift(String start, String end, String branch) {
         // TODO check if shift is on a saturday, check if branch exists
-        if (Util.isNullOrEmpty(branch, start, end))
+        if (Util.isNullOrEmpty(start, end, branch))
             throw new IllegalArgumentException("Illegal argument");
 
         workerFacade.requireHRManagerOrThrow();
@@ -266,8 +266,8 @@ public class ShiftFacade {
                 .toList();
     }
 
-    public List<ShiftToSend> getShiftsByBranchAndDate(String branchName, String from, String to) {
-        Util.throwIfNullOrEmpty(branchName, from, to);
+    public List<ShiftToSend> getShiftsByBranchAndDate(String from, String to, String branchName) {
+        Util.throwIfNullOrEmpty(from, to, branchName);
         if (!Util.isValidDateTime(from, to))
             throw new IllegalArgumentException("Illegal argument");
 
