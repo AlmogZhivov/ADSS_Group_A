@@ -43,7 +43,7 @@ class Roles {
         if (roles.containsKey(name))
             throw new IllegalArgumentException("Role already exists");
 
-        roles.put(name, roles.size());
+        roles.put(name, roles.size() + 1);
     }
 
     Set<String> getAllRoleNames() {

@@ -1,5 +1,6 @@
 package com.Superlee.HR.Backend.DataAccess;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class RolesDTO {
@@ -12,14 +13,14 @@ public class RolesDTO {
     }
 
     public static Map<String, Integer> loadRoles() {
-        return Map.of(
-                "HRManager", 0,
-                "Manager", 1,
-                "Cashier", 2,
-                "Cleaner", 3,
-                "Storekeeper", 4,
-                "Security", 5
-        );
+        Map<String, Integer> roles = new HashMap<>();
+        roles.put("HRManager", 0);
+        roles.put("Manager", 1);
+        roles.put("Cashier", 2);
+        roles.put("Cleaner", 3);
+        roles.put("Storekeeper", 4);
+        roles.put("Security", 5);
+        return roles;
     }
 
     public int getValue() {
