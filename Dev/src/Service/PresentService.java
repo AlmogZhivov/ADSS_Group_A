@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import Business.OrderFacade;
 import Business.SupplierFacade;
@@ -17,7 +18,7 @@ public class PresentService {
     private final OrderService os;
     private SupplierFacade sf = new SupplierFacade();
     private OrderFacade of = new OrderFacade(sf);
-
+    private static Scanner scanner = new Scanner(System.in);
 
     private PresentService() {
         ss = SupplierService.getInstance(sf);
@@ -34,98 +35,297 @@ public class PresentService {
         String[] parts = command.split(" ");
         Response errResponse = new Response("Invalid number of args");
         switch (parts[0]) {
-            case "help":
-                System.out.println("""
-                        Available commands:
-                        loadData
-                        addSupplier name compNumber bankNumber paymentMethod(CASH/BANK_TRANSFER/CREDIT_CARD)
-                        removeSupplier supplierId
-                        updateSupplierName supplierId newName
-                        updateSupplierBankAccount supplierId newBankAccount
-                        addGeneralOrder catalogNumber1-amount1,catalogNumber2-amount2 supplierId
-                        addRepOrder catalogNumber1-amount1,catalogNumber2-amount2 supplierId day
-                        updateOrders
-                        removeOrder orderId
-                        addProduct orderId catalogNumber amount
-                        removeProduct orderId catalogNumber
-                        addContact supplierId name phone
-                        updateProductPrice supplierId catalogNumber newPrice
-                        updateSupplierPaymentMethod supplierId paymentMethod(CASH/BANK_TRANSFER/CREDIT_CARD)
-                        getAllSuppliers
-                        getAllContacts
-                        getSupplierAgreement supplierId
-                        getSupplier supplierId
-                        getOrder orderId
-                        getAllOrders
-                        getOrderPrice orderId
-                        addProductDiscountAccordingToAmount supplierId catalogNumber amount discount
-                        updateProductDiscountAccordingToAmount supplierId catalogNumber amount newDiscount
-                        removeProductDiscountAccordingToAmount supplierId catalogNumber amount
-                        updateProductName supplierId catalogNumber newName
-                        addProductToSupplier supplierId catalogNumber price name
-                        removeProductFromSupplier supplierId catalogNumber
-                        exit
-                        """);
-                        return new Response();
-            case "loadData":
-                return ss.loadData();            
-            case "addSupplier":
-                return parts.length == 5 ? ss.addSupplier(parts[1], parts[2], parts[3], PaymentMethod.valueOf(parts[4])) : errResponse;
-            case "removeSupplier":
-                return parts.length == 2 ? ss.removeSupplier(Integer.parseInt(parts[1])) : errResponse;
-            case "updateSupplierName":
-                return parts.length == 3 ? ss.updateSupplierName(Integer.parseInt(parts[1]), parts[2]) : errResponse;
-            case "updateSupplierBankAccount":
-                return parts.length == 3 ? ss.updateSupplierBankAccount(Integer.parseInt(parts[1]), parts[2]) : errResponse;
-            case "addGeneralOrder":
-                // Format: catalogNumber1-amount1,catalogNumber2-amount2 supplierId
-                return parts.length == 3 ? os.addGeneralOrder(itemIdAndAmount(parts[1]), new Date(Calendar.getInstance().getTime().getTime()), Integer.parseInt(parts[2])) : errResponse;
-            case "addRepOrder":
-                // Format: catalogNumber1-amount1,catalogNumber2-amount2 supplierId day
-                return parts.length == 4 ? os.addRepOrder(itemIdAndAmount(parts[1]), new Date(Calendar.getInstance().getTime().getTime()), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])) : errResponse;
-            case "updateOrders":
+            case "28":
+                printMenu();
+                return new Response();
+            case "27":
+                return ss.loadData();
+            case "1":
+                return addSupplier();
+            case "2":
+                return removeSupplier();
+            case "3":
+                return updateSupplierName();
+            case "4":
+                return updateSupplierBankAccount();
+            case "18":
+                return addGeneralOrder();
+            case "19":
+                return addRepOrder();
+            case "20":
                 return os.updateOrders();
-            case "removeOrder":
-                return parts.length == 2 ? os.removeOrder(Integer.parseInt(parts[1])) : errResponse;
-            case "addProduct":
-                return parts.length == 4 ? os.addProduct(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])) : errResponse;
-            case "removeProduct":    
-                return parts.length == 3 ? os.removeProduct(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])) : errResponse;
-            case "addContact":
-                return parts.length == 4 ? ss.addContact(Integer.parseInt(parts[1]), parts[2], parts[3]) : errResponse;
-            case "updateProductPrice":
-                return parts.length == 4 ? ss.updateProductPrice(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Double.parseDouble(parts[3])) : errResponse;
-            case "updateSupplierPaymentMethod":
-                return parts.length == 3 ? ss.updateSupplierPaymentMethod(Integer.parseInt(parts[1]), PaymentMethod.valueOf(parts[2])) : errResponse;
-            case "getAllSuppliers":
+            case "21":
+                return removeOrder();
+            case "22":
+                return addProduct();
+            case "23":
+                return removeProduct();
+            case "5":
+                return addContact();
+            case "6":
+                return updateProductPrice();
+            case "7":
+                return updateSupplierPaymentMethod();
+            case "8":
                 return ss.getAllSuppliers();
-            case "getAllContacts":
+            case "9":
                 return ss.getAllContacts();
-            case "getSupplierAgreement":
-                return parts.length == 2 ? ss.getSupplierAgreement(Integer.parseInt(parts[1])) : errResponse;
-            case "getSupplier":
-                return parts.length == 2 ? ss.getSupplier(Integer.parseInt(parts[1])) : errResponse;
-            case "getOrder":
-                return parts.length == 2 ? os.getOrder(Integer.parseInt(parts[1])) : errResponse;
-            case "getAllOrders":
+            case "10":
+                return getSupplierAgreement();
+            case "11":
+                return getSupplier();
+            case "24":
+                return getOrder();
+            case "25":
                 return os.getAllOrders();
-            case "getOrderPrice":
-                return parts.length == 2 ? os.getOrderPrice(Integer.parseInt(parts[1])) : errResponse;
-            case "addProductDiscountAccordingToAmount":
-                return parts.length == 5 ? ss.addProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4])) : errResponse;
-            case "updateProductDiscountAccordingToAmount":
-                return parts.length == 5 ? ss.updateProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4])) : errResponse;
-            case "removeProductDiscountAccordingToAmount":
-                return parts.length == 4 ? ss.removeProductDiscountAccordingToAmount(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])) : errResponse;
-            case "updateProductName":  
-                return parts.length == 4 ? ss.updateProductName(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), parts[3]) : errResponse;
-            case "addProductToSupplier":
-                return parts.length == 5 ? ss.addProductToSupplier(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Double.parseDouble(parts[3]), parts[4]) : errResponse;
-            case "removeProductFromSupplier":
-                return parts.length == 3 ? ss.removeProductFromSupplier(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])) : errResponse;
+            case "26":
+                return getOrderPrice();
+            case "12":
+                return addProductDiscountAccordingToAmount();
+            case "13":
+                return updateProductDiscountAccordingToAmount();
+            case "14":
+                return removeProductDiscountAccordingToAmount();
+            case "15":
+                return updateProductName();
+            case "16":
+                return addProductToSupplier();
+            case "17":
+                return removeProductFromSupplier();
             default:
                 return new Response("Invalid command");
         }
+    }
+    public void printMenu() {
+        System.out.println("""
+                        Welcome to the Super-Lee System. Here are the available commands:
+
+                        Supplier Commands:
+                        1. addSupplier
+                        2. removeSupplier
+                        3. updateSupplierName
+                        4. updateSupplierBankAccount
+                        5. addContact
+                        6. updateProductPrice
+                        7. updateSupplierPaymentMethod
+                        8. getAllSuppliers
+                        9. getAllContacts
+                        10. getSupplierAgreement
+                        11. getSupplier
+                        12. addProductDiscountAccordingToAmount
+                        13. updateProductDiscountAccordingToAmount
+                        14. removeProductDiscountAccordingToAmount
+                        15. updateProductName
+                        16. addProductToSupplier
+                        17. removeProductFromSupplier
+
+                        Order Commands:
+                        18. addGeneralOrder
+                        19. addRepOrder
+                        20. updateOrders
+                        21. removeOrder
+                        22. addProduct
+                        23. removeProduct
+                        24. getOrder
+                        25. getAllOrders
+                        26. getOrderPrice
+
+                        General Commands:
+                        27. loadData
+                        28. help
+                        29. exit
+                        """);
+    }
+    private Response addSupplier() {
+        System.out.print("Enter supplier name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter company number: ");
+        String companyNumber = scanner.nextLine();
+        System.out.print("Enter bank number: ");
+        String bankNumber = scanner.nextLine();
+        System.out.print("Enter payment method (CASH/CHECK/BANK_TRANSFER/CREDIT_CARD): ");
+        PaymentMethod paymentMethod = PaymentMethod.valueOf(scanner.nextLine().toUpperCase());
+        return ss.addSupplier(name, companyNumber, bankNumber, paymentMethod);
+    }
+
+    private Response removeSupplier() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        return ss.removeSupplier(supplierId);
+    }
+
+    private Response updateSupplierName() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter new supplier name: ");
+        String newName = scanner.nextLine();
+        return ss.updateSupplierName(supplierId, newName);
+    }
+
+    private Response updateSupplierBankAccount() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter new bank account number: ");
+        String newBankAccount = scanner.nextLine();
+        return ss.updateSupplierBankAccount(supplierId, newBankAccount);
+    }
+
+    private Response addGeneralOrder() {
+        System.out.print("Enter order details (catalogNumber1-amount1,catalogNumber2-amount2,...): ");
+        String orderDetails = scanner.nextLine();
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        return os.addGeneralOrder(itemIdAndAmount(orderDetails), new Date(Calendar.getInstance().getTime().getTime()), supplierId);
+    }
+
+    private Response addRepOrder() {
+        System.out.print("Enter order details (catalogNumber1-amount1,catalogNumber2-amount2,...): ");
+        String orderDetails = scanner.nextLine();
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter day of the week (0-6 where 0 is Sunday): ");
+        int day = Integer.parseInt(scanner.nextLine());
+        return os.addRepOrder(itemIdAndAmount(orderDetails), new Date(Calendar.getInstance().getTime().getTime()), supplierId, day);
+    }
+
+    private Response removeOrder() {
+        System.out.print("Enter order ID: ");
+        int orderId = Integer.parseInt(scanner.nextLine());
+        return os.removeOrder(orderId);
+    }
+
+    private Response addProduct() {
+        System.out.print("Enter order ID: ");
+        int orderId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter catalog number: ");
+        int catalogNumber = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter amount: ");
+        int amount = Integer.parseInt(scanner.nextLine());
+        return os.addProduct(orderId, catalogNumber, amount);
+    }
+
+    private Response removeProduct() {
+        System.out.print("Enter order ID: ");
+        int orderId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter catalog number: ");
+        int catalogNumber = Integer.parseInt(scanner.nextLine());
+        return os.removeProduct(orderId, catalogNumber);
+    }
+
+    private Response addContact() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter contact name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter contact phone: ");
+        String phone = scanner.nextLine();
+        return ss.addContact(supplierId, name, phone);
+    }
+
+    private Response updateProductPrice() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter catalog number: ");
+        int catalogNumber = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter new price: ");
+        double newPrice = Double.parseDouble(scanner.nextLine());
+        return ss.updateProductPrice(supplierId, catalogNumber, newPrice);
+    }
+
+    private Response updateSupplierPaymentMethod() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter new payment method (CASH/BANK_TRANSFER/CHECK/CREDIT_CARD): ");
+        PaymentMethod paymentMethod = PaymentMethod.valueOf(scanner.nextLine().toUpperCase());
+        return ss.updateSupplierPaymentMethod(supplierId, paymentMethod);
+    }
+
+    private Response getSupplierAgreement() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        return ss.getSupplierAgreement(supplierId);
+    }
+
+    private Response getSupplier() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        return ss.getSupplier(supplierId);
+    }
+
+    private Response getOrder() {
+        System.out.print("Enter order ID: ");
+        int orderId = Integer.parseInt(scanner.nextLine());
+        return os.getOrder(orderId);
+    }
+
+    private Response getOrderPrice() {
+        System.out.print("Enter order ID: ");
+        int orderId = Integer.parseInt(scanner.nextLine());
+        return os.getOrderPrice(orderId);
+    }
+
+    private Response addProductDiscountAccordingToAmount() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter catalog number: ");
+        int catalogNumber = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter amount: ");
+        int amount = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter discount: ");
+        int discount = Integer.parseInt(scanner.nextLine());
+        return ss.addProductDiscountAccordingToAmount(supplierId, catalogNumber, amount, discount);
+    }
+
+    private Response updateProductDiscountAccordingToAmount() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter catalog number: ");
+        int catalogNumber = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter amount: ");
+        int amount = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter new discount: ");
+        int newDiscount = Integer.parseInt(scanner.nextLine());
+        return ss.updateProductDiscountAccordingToAmount(supplierId, catalogNumber, amount, newDiscount);
+    }
+
+    private Response removeProductDiscountAccordingToAmount() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter catalog number: ");
+        int catalogNumber = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter amount: ");
+        int amount = Integer.parseInt(scanner.nextLine());
+        return ss.removeProductDiscountAccordingToAmount(supplierId, catalogNumber, amount);
+    }
+
+    private Response updateProductName() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter catalog number: ");
+        int catalogNumber = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter new product name: ");
+        String newName = scanner.nextLine();
+        return ss.updateProductName(supplierId, catalogNumber, newName);
+    }
+
+    private Response addProductToSupplier() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter catalog number: ");
+        int catalogNumber = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter price: ");
+        double price = Double.parseDouble(scanner.nextLine());
+        System.out.print("Enter product name: ");
+        String name = scanner.nextLine();
+        return ss.addProductToSupplier(supplierId, catalogNumber, price, name);
+    }
+
+    private Response removeProductFromSupplier() {
+        System.out.print("Enter supplier ID: ");
+        int supplierId = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter catalog number: ");
+        int catalogNumber = Integer.parseInt(scanner.nextLine());
+        return ss.removeProductFromSupplier(supplierId, catalogNumber);
     }
 
     // A helper method to parse the item id and amount from the command

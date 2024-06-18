@@ -17,11 +17,13 @@ public class CLI {
     public static void main(String[] args) {
         String input;
         Response output;
-        System.out.println("Type 'help' for a list of available commands, or 'exit' to quit");
+        prService.printMenu();
         while (true) {
             input = scanner.nextLine();
-            if (input.equalsIgnoreCase("exit"))
+            if (input.equalsIgnoreCase("29")) {
+                System.out.println("Goodbye!");
                 break;
+            }
             output = prService.call(input);
             // print the output response as string
             if (!Objects.equals(gson.toJson(output), "{}"))
