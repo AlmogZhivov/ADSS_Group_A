@@ -176,7 +176,7 @@ public class ShiftFacade {
         return true;
     }
 
-    public void removeAvailability(String workerId, int shiftId) {
+    public boolean removeAvailability(String workerId, int shiftId) {
         if (shiftId < 0 || Util.isNullOrEmpty(workerId))
             throw new IllegalArgumentException("Illegal argument");
 
@@ -196,6 +196,8 @@ public class ShiftFacade {
 
         if (!workerFacade.removeAvailability(workerId, shiftId) || !shifts.get(shiftId).removeAvailableWorker(workerId))
             throw new IllegalStateException("Unexpected error");
+
+        return true;
     }
 
     public boolean loadData() {
