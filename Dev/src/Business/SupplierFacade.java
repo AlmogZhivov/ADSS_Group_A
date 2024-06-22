@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import Business.Supplier.PaymentMethod;
+import DataAccess.ContactDAO;
+import DataAccess.ContactDTO;
+import DataAccess.SupplierDAO;
+import DataAccess.SupplierDTO;
 
 public class SupplierFacade {
 
@@ -17,29 +21,37 @@ public class SupplierFacade {
         return suppliers.get(supplierId);
     }
 
-    public void addSupplier(String name, String compNumber, String bankNumber, PaymentMethod payment) {
-        Supplier supplier = new Supplier(id, name, compNumber, bankNumber, payment);
+    public void addSupplier(String name, String compNumber, String bankNumber, PaymentMethod payment, String address) {
+        Supplier supplier = new Supplier(id, name, compNumber, bankNumber, payment, address);
+        supplier.supplierDTO.insert();
         suppliers.put(id, supplier);
         this.id++;
     }
 
     public void removeSupplier(int supplierId) {
+        if (!suppliers.containsKey(supplierId))
+            throw new IllegalArgumentException("Supplier does not exist");
+        Supplier supplier = suppliers.get(supplierId);
         suppliers.remove(supplierId);
+        supplier.supplierDTO.delete();
     }
 
     public void updateSupplierName(int supplierId, String newName) {
         Supplier supplier = suppliers.get(supplierId);
         supplier.setName(newName);
+        supplier.supplierDTO.setName(newName);
     }
 
     public void updateSupplierBankAccount(int supplierId, String newBankAccount) {
         Supplier supplier = suppliers.get(supplierId);
         supplier.setBankNumber(newBankAccount);
+        supplier.supplierDTO.setBankNumber(newBankAccount);
     }
 
     public void updateSupplierPaymentMethod(int supplierId, PaymentMethod newPaymentMethod) {
         Supplier supplier = suppliers.get(supplierId);
         supplier.setPayment(newPaymentMethod);
+        supplier.supplierDTO.setPayment(newPaymentMethod.toString());
     }
 
     public List<Supplier> getAllSuppliers() {
@@ -62,6 +74,29 @@ public class SupplierFacade {
             contacts.add(supplier.getContact());
         }
         return contacts;
+    }
+
+    public void loadAllContacts() {
+        ContactDAO contactDAO = new ContactDAO();
+        List<ContactDTO> contacts = contactDAO.LoadAllContacts();
+        for (ContactDTO contact : contacts) {
+            Supplier supplier = suppliers.get(contact.getSupplierId());
+            if (supplier != null)
+                supplier.contact = new Contact(contact.getName(), contact.getPhoneNumber(), contact.getContactId());
+        }
+    }
+
+    public void loadAllSuppliers() {
+        SupplierDAO supplierDAO = new SupplierDAO();
+        List<SupplierDTO> suppliers = supplierDAO.loadAllSuppliers();
+        for (SupplierDTO supplier : suppliers) {
+            Supplier newSupplier = new Supplier(supplier.getSupplierId(), supplier.getName(), supplier.getCompNumber(),
+                    supplier.getBankNumber(), PaymentMethod.valueOf(supplier.getPayment()), supplier.getAddress());
+            this.id++;
+            // check if the newSupplier already exists in this.suppliers
+            if (!this.suppliers.containsKey(supplier.getSupplierId()))
+                this.suppliers.put(supplier.getSupplierId(), newSupplier);
+        }
     }
 
     public SupplierAgreement getSupplierAgreement(int supplierId) {

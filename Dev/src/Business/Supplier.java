@@ -1,5 +1,8 @@
 package Business;
 
+import DataAccess.ContactDTO;
+import DataAccess.SupplierDTO;
+
 public class Supplier {
     public enum PaymentMethod {
         CASH,
@@ -9,13 +12,16 @@ public class Supplier {
     }
 
     private int supplierId;
+    private String address;
     private int contactId = 0;
     private String name;
     private String compNumber;
     private String bankNumber;
     private PaymentMethod payment;
-    private Contact contact;
+    public Contact contact;
     private SupplierAgreement supplierAgreement;
+    private ContactDTO contactDTO;
+    public SupplierDTO supplierDTO;
 
     public Supplier(int supplierId, String name, String compNumber, String bankNumber, PaymentMethod payment, Contact contact) {
         this.supplierId = supplierId;
@@ -28,13 +34,15 @@ public class Supplier {
         this.supplierAgreement = new SupplierAgreement(supplierId);
     }
 
-    public Supplier(int supplierId, String name, String compNumber, String bankNumber, PaymentMethod payment) {
+    public Supplier(int supplierId, String name, String compNumber, String bankNumber, PaymentMethod payment, String address) {
         this.supplierId = supplierId;
         this.name = name;
+        this.address = address;
         this.compNumber = compNumber;
         this.bankNumber = bankNumber;
         this.payment = payment;
         this.supplierAgreement = new SupplierAgreement(supplierId);
+        this.supplierDTO = new SupplierDTO(supplierId, name, bankNumber, compNumber, payment.toString(), address);
     }
 
     public Supplier(Supplier supplier) {
@@ -85,8 +93,18 @@ public class Supplier {
         this.payment = newPaymentMethod;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
     // Adds contact to supplier
     public void addContact(String contactName, String phoneNumber) {
+        this.contactDTO = new ContactDTO(contactId, supplierId, contactName, phoneNumber);
+        this.contactDTO.insert();
         this.contact = new Contact(contactName, phoneNumber, contactId++);
     }
 
