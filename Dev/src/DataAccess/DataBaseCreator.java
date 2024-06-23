@@ -31,6 +31,7 @@ public class DataBaseCreator {
             s.addBatch(createSuppliersTableCommand());
             s.addBatch(createContactsTableCommand());
             s.addBatch(createSupplierAgreementTableCommand());
+            s.addBatch(createSupplierItemsDiscountsTableCommand());
             s.executeBatch();
             conn.close();
         }
@@ -76,6 +77,19 @@ public class DataBaseCreator {
         return command;
     }
 
+    private String createSupplierItemsDiscountsTableCommand() {
+        String command =  "CREATE TABLE IF NOT EXISTS SupplierItemsDiscounts  ("+
+                "SupplierId 	INTEGER,"+
+                "CatalogNumber 	INTEGER,"+
+                "Amount 	INTEGER NOT NULL,"+
+                "Discounts 	REAL,"+
+                "PRIMARY KEY(SupplierId ,CatalogNumber, Amount)," +
+                "FOREIGN KEY(SupplierId) REFERENCES SupplierAgreement(SupplierId)," +
+                "FOREIGN KEY(CatalogNumber) REFERENCES SupplierAgreement(CatalogNumber));";
+
+        return command;
+    }
+
     public void deleteAllTables() {
         try(Connection conn = DriverManager.getConnection(connectionString);
             Statement s = conn.createStatement()){
@@ -83,6 +97,7 @@ public class DataBaseCreator {
             s.addBatch( "DROP TABLE IF EXISTS 'Suppliers'");
             s.addBatch("DROP TABLE IF EXISTS 'Contacts'");
             s.addBatch("DROP TABLE IF EXISTS 'SupplierAgreement'");
+            s.addBatch("DROP TABLE IF EXISTS 'SupplierItemsDiscounts'");
 
             s.executeBatch();
             conn.commit();
