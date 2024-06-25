@@ -23,6 +23,9 @@ public class CLI {
     private static final String help_login = """
             List of available commands:
 
+            load
+                load the data from the database
+
             login <username> <password>
                 login to the system
             
@@ -155,6 +158,12 @@ public class CLI {
 
             if (input.equals("help"))
                 System.out.println(help_login);
+
+            else if (input.equals("load")) {
+                output = hrService.loadData();
+                Response r = gson.fromJson(output, Response.class);
+                System.out.println(Objects.requireNonNullElse(r.errMsg, "Data loaded"));
+            }
 
             else if (input.startsWith("login")) {
                 String[] parts = input.split("\\s+");

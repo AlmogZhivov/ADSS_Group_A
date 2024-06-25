@@ -63,11 +63,12 @@ public class WorkerService {
         }
     }
 
-    public boolean loadData() {
+    public String loadData() {
         try {
-            return wf.loadData();
-        } catch (Exception ignored) {
-            return false;
+            wf.loadData();
+            return gson.toJson(new Response());
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 

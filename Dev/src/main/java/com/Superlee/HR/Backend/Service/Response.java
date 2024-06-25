@@ -1,6 +1,7 @@
 package com.Superlee.HR.Backend.Service;
 
 public class Response {
+    public static final String emptyResponseString = "{\"errMsg\":null,\"value\":null}";
     public String errMsg;
     public Object value;
 
