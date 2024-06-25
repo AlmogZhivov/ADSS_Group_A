@@ -4,6 +4,8 @@ import com.Superlee.HR.Backend.Business.ShiftFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.function.Function;
+
 public class ShiftService {
     private static ShiftService instance;
     private final ShiftFacade sf;
@@ -89,12 +91,12 @@ public class ShiftService {
         }
     }
 
-    public boolean loadData() {
+    public String loadData() {
         try {
             sf.loadData();
-            return true;
-        } catch (Exception ignored) {
-            return false;
+            return gson.toJson(new Response());
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 

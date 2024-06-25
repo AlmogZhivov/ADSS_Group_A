@@ -64,12 +64,12 @@ public class BranchService {
         }
     }
 
-    public boolean loadData() {
+    public String loadData() {
         try {
             bf.loadData();
-            return true;
-        } catch (Exception ignored) {
-            return false;
+            return gson.toJson(new Response());
+        } catch (Exception ex) {
+            return gson.toJson(new Response(ex.getMessage()));
         }
     }
 }

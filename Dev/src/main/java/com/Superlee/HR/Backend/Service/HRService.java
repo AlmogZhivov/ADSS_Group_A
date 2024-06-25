@@ -2,6 +2,7 @@ package com.Superlee.HR.Backend.Service;
 
 import com.Superlee.HR.Backend.Business.UnpermittedOperationException;
 
+import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.util.NoSuchElementException;
 
@@ -15,9 +16,6 @@ public class HRService {
         ss = ShiftService.getInstance();
         ws = WorkerService.getInstance();
         bs = BranchService.getInstance();
-        ss.loadData();
-        ws.loadData();
-        bs.loadData();
     }
 
     public static HRService getInstance() {
@@ -502,5 +500,22 @@ public class HRService {
      */
     public String addNewRole(String role) {
         return ws.addNewRole(role);
+    }
+
+    /**
+     * Load the data from the database
+     *
+     * @return an empty response if successful
+     * @throws SQLException if the data cannot be loaded
+     */
+    public String loadData() {
+        String response = ss.loadData();
+        if (!response.equals("{}"))
+            return response;
+        response = ws.loadData();
+        if (!response.equals("{}"))
+            return response;
+        response = bs.loadData();
+        return response;
     }
 }
