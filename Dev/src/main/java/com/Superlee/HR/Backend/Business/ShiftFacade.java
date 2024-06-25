@@ -40,7 +40,8 @@ public class ShiftFacade {
     }
 
     public boolean assignWorker(String workerId, int shiftId, String role) {
-        if (shiftId < 0 || Util.isNullOrEmpty(workerId, role))
+        Util.throwIfNullOrEmpty(workerId, role);
+        if (shiftId < 0)
             throw new IllegalArgumentException("Illegal argument");
 
         workerFacade.requireHRManagerOrThrow();
@@ -53,6 +54,12 @@ public class ShiftFacade {
 
         if (roles.getId(role) == null)
             throw new NoSuchElementException("Role not found");
+
+        // If the worker is a driver we must ensure that a storekeeper is also assigned to the shift
+        if (role.equals("Driver") &&
+            shifts.get(shiftId).getAssignedWorkers().stream()
+                    .noneMatch(w -> workerFacade.getWorkerRoles(w).contains("Storekeeper")))
+            throw new IllegalStateException("A storekeeper must be assigned to the shift before a driver can be assigned");
 
         if (!workerFacade.assignWorker(workerId, shiftId, role))
             throw new IllegalStateException("Unexpected error");
@@ -67,7 +74,8 @@ public class ShiftFacade {
     }
 
     public boolean unassignWorker(String workerId, int shiftId) {
-        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
+        Util.throwIfNullOrEmpty(workerId);
+        if (shiftId < 0)
             throw new IllegalArgumentException("Illegal argument");
 
         workerFacade.requireHRManagerOrThrow();
@@ -120,7 +128,8 @@ public class ShiftFacade {
     }
 
     public boolean setShiftRequiredWorkersOfRole(int id, String role, int amount) {
-        if (id < 0 || amount < 0 || Util.isNullOrEmpty(role))
+        Util.throwIfNullOrEmpty(role);
+        if (id < 0 || amount < 0)
             throw new IllegalArgumentException("Illegal argument");
 
         workerFacade.requireHRManagerOrThrow();
@@ -137,8 +146,7 @@ public class ShiftFacade {
 
     public int addNewShift(String start, String end, String branch) {
         // TODO check if shift is on a saturday, check if branch exists
-        if (Util.isNullOrEmpty(start, end, branch))
-            throw new IllegalArgumentException("Illegal argument");
+        Util.throwIfNullOrEmpty(start, end, branch);
 
         workerFacade.requireHRManagerOrThrow();
 
@@ -153,7 +161,8 @@ public class ShiftFacade {
     }
 
     public boolean addAvailability(String workerId, int shiftId) {
-        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
+        Util.throwIfNullOrEmpty(workerId);
+        if (shiftId < 0)
             throw new IllegalArgumentException("Illegal argument");
 
         workerFacade.requireLoginOrThrow(workerId);
@@ -176,8 +185,9 @@ public class ShiftFacade {
         return true;
     }
 
-    public void removeAvailability(String workerId, int shiftId) {
-        if (shiftId < 0 || Util.isNullOrEmpty(workerId))
+    public boolean removeAvailability(String workerId, int shiftId) {
+        Util.throwIfNullOrEmpty(workerId);
+        if (shiftId < 0)
             throw new IllegalArgumentException("Illegal argument");
 
         workerFacade.requireLoginOrThrow(workerId);
@@ -196,6 +206,8 @@ public class ShiftFacade {
 
         if (!workerFacade.removeAvailability(workerId, shiftId) || !shifts.get(shiftId).removeAvailableWorker(workerId))
             throw new IllegalStateException("Unexpected error");
+
+        return true;
     }
 
     public boolean loadData() {

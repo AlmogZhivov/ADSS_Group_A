@@ -113,6 +113,7 @@ public class HRService {
      * @throws IllegalStateException         if the worker is already assigned to the shift,
      *                                       if the worker is not available for the shift or
      *                                       if the worker does not have the required role
+     *                                       if the worker is a driver and there is no storekeeper assigned to the shift
      */
     public String assignWorker(String workerId, int shiftId, String role) {
         return ss.assignWorker(workerId, shiftId, role);
@@ -128,6 +129,8 @@ public class HRService {
      * @throws UnpermittedOperationException if the user is not logged in as the HR manager
      * @throws NoSuchElementException        if the shift or worker is not found
      * @throws IllegalStateException         if the worker is not assigned to the shift
+     * @implNote If the worker is a storekeeper and there is a driver assigned to the shift,
+     * we will not unassign the driver but will unassign the storekeeper
      */
     public String unassignWorker(String workerId, int shiftId) {
         return ss.unassignWorker(workerId, shiftId);
