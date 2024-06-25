@@ -20,6 +20,7 @@ public class RolesDTO {
         roles.put("Cleaner", 3);
         roles.put("Storekeeper", 4);
         roles.put("Security", 5);
+        roles.put("Driver", 6);
         return roles;
     }
 

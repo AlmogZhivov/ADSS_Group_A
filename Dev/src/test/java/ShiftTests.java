@@ -185,6 +185,40 @@ public class ShiftTests {
     }
 
     @Test
+    public void testAssignDriverSuccess() {
+        addWorker();
+        int sid = addShift();
+        login();
+        shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
+        workerFacade.addWorkerRole("0", "Driver");
+        workerFacade.addNewWorker("1", "hello", "world");
+        workerFacade.addWorkerRole("1", "Storekeeper");
+        fakeLogout();
+        workerFacade.login("1", "1");
+        shiftFacade.addAvailability("1", sid);
+        fakeLogout();
+        fakeLogin(true);
+        shiftFacade.assignWorker("1", sid, "Storekeeper");
+        boolean result = shiftFacade.assignWorker("0", sid, "Driver");
+        assertTrue(result);
+    }
+
+    @Test
+    public void testAssignDriverFailureNoStorekeeper() {
+        addWorker();
+        int sid = addShift();
+        login();
+        shiftFacade.addAvailability("0", sid);
+        fakeLogout();
+        fakeLogin(true);
+        workerFacade.addWorkerRole("0", "Driver");
+        fakeLogin(true);
+        assertThrows(IllegalStateException.class, () -> shiftFacade.assignWorker("0", sid, "Driver"));
+    }
+
+    @Test
     public void testUnassignWorkerSuccess() {
         addWorker();
         addRoleManager();
