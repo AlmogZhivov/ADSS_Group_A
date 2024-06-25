@@ -510,10 +510,10 @@ public class HRService {
      */
     public String loadData() {
         String response = ss.loadData();
-        if (!response.equals("{}"))
+        if (!response.equals(Response.emptyResponseString))
             return response;
         response = ws.loadData();
-        if (!response.equals("{}"))
+        if (!response.equals(Response.emptyResponseString))
             return response;
         response = bs.loadData();
         return response;
