@@ -4,6 +4,8 @@ import DataAccess.ContactDTO;
 import DataAccess.SupplierAgreementDTO;
 import DataAccess.SupplierDTO;
 
+import java.util.Map;
+
 public class Supplier {
     public enum PaymentMethod {
         CASH,
@@ -11,6 +13,7 @@ public class Supplier {
         CHECK,
         BANK_TRANSFER
     }
+
 
     private int supplierId;
     private String address;
