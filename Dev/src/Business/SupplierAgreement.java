@@ -1,9 +1,5 @@
 package Business;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,8 +30,9 @@ public class SupplierAgreement {
     }
 
     public void removeProduct(int catalogNumber) {
-        if(checkProductExists(catalogNumber))
+        if(checkProductExists(catalogNumber)) {
             products.remove(catalogNumber);
+        }
     }
 
     public double getProductPrice(int catalogNumber) {

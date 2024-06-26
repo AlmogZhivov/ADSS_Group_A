@@ -29,7 +29,7 @@ public class SupplierService {
             //supplierFacade.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD, "Haifa");
             supplierFacade.loadAllSuppliers();
             supplierFacade.loadAllContacts();
-            //supplierFacade.loadAllSupplierAgreements();
+            supplierFacade.loadAllSupplierAgreements();
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());

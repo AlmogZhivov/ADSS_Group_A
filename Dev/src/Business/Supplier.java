@@ -1,6 +1,7 @@
 package Business;
 
 import DataAccess.ContactDTO;
+import DataAccess.SupplierAgreementDTO;
 import DataAccess.SupplierDTO;
 
 public class Supplier {
@@ -19,9 +20,10 @@ public class Supplier {
     private String bankNumber;
     private PaymentMethod payment;
     public Contact contact;
-    private SupplierAgreement supplierAgreement;
+    public SupplierAgreement supplierAgreement;
     private ContactDTO contactDTO;
     public SupplierDTO supplierDTO;
+    public SupplierAgreementDTO supplierAgreementDTO;
 
     public Supplier(int supplierId, String name, String compNumber, String bankNumber, PaymentMethod payment, Contact contact) {
         this.supplierId = supplierId;
@@ -43,6 +45,7 @@ public class Supplier {
         this.payment = payment;
         this.supplierAgreement = new SupplierAgreement(supplierId);
         this.supplierDTO = new SupplierDTO(supplierId, name, bankNumber, compNumber, payment.toString(), address);
+        this.supplierAgreementDTO = new SupplierAgreementDTO(supplierId, 0, 0, "");
     }
 
     public Supplier(Supplier supplier) {

@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import Business.Supplier.PaymentMethod;
-import DataAccess.ContactDAO;
-import DataAccess.ContactDTO;
-import DataAccess.SupplierDAO;
-import DataAccess.SupplierDTO;
+import DataAccess.*;
 
 public class SupplierFacade {
 
@@ -78,7 +75,7 @@ public class SupplierFacade {
 
     public void loadAllContacts() {
         ContactDAO contactDAO = new ContactDAO();
-        List<ContactDTO> contacts = contactDAO.LoadAllContacts();
+        List<ContactDTO> contacts = contactDAO.loadAllContacts();
         for (ContactDTO contact : contacts) {
             Supplier supplier = suppliers.get(contact.getSupplierId());
             if (supplier != null)
@@ -104,32 +101,74 @@ public class SupplierFacade {
     }
 
     public void updateProductPrice(int supplierId, int catalogNumber, double newPrice) {
-        suppliers.get(supplierId).updateProductPrice(catalogNumber, newPrice);
+        Supplier supplier = suppliers.get(supplierId);
+        supplier.supplierAgreementDTO = new SupplierAgreementDTO(supplierId, catalogNumber, newPrice, "");
+        supplier.supplierAgreementDTO.setPrice(newPrice);
+        supplier.updateProductPrice(catalogNumber, newPrice);
     }
 
     public void addProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int discountPercentage) {
-        suppliers.get(supplierId).addProductDiscountAccordingToAmount(catalogNumber, amount, discountPercentage);
+        Supplier supplier = suppliers.get(supplierId);
+        supplier.supplierAgreementDTO = new SupplierAgreementDTO(supplierId, catalogNumber, amount, discountPercentage);
+        supplier.supplierAgreementDTO.insertSupplierProductAccordingTOAmount();
+        supplier.addProductDiscountAccordingToAmount(catalogNumber, amount, discountPercentage);
     }
 
-    public void updateProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount,
-            int newDiscountPercentage) {
-        suppliers.get(supplierId).updateProductDiscountAccordingToAmount(catalogNumber, amount, newDiscountPercentage);
+    public void updateProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount, int newDiscountPercentage) {
+        Supplier supplier = suppliers.get(supplierId);
+        supplier.supplierAgreementDTO = new SupplierAgreementDTO(supplierId, catalogNumber, amount, newDiscountPercentage);
+        supplier.supplierAgreementDTO.setDiscounts(newDiscountPercentage);
+        supplier.updateProductDiscountAccordingToAmount(catalogNumber, amount, newDiscountPercentage);
     }
 
     public void removeProductDiscountAccordingToAmount(int supplierId, int catalogNumber, int amount) {
+        Supplier supplier = suppliers.get(supplierId);
+        supplier.supplierAgreementDTO = new SupplierAgreementDTO(supplierId, catalogNumber, amount, 0);
+        supplier.supplierAgreementDTO.deleteProductDiscountAccordingToAmount(supplierId, catalogNumber);
         suppliers.get(supplierId).removeProductDiscountAccordingToAmount(catalogNumber, amount);    
     }
 
     public void addProductToSupplier(int supplierId, int catalogNumber, double price, String name) {
         SupplierProduct product = new SupplierProduct(supplierId, catalogNumber, price, name);
-        suppliers.get(supplierId).addProduct(product);
+        Supplier supplier = suppliers.get(supplierId);
+        supplier.supplierAgreementDTO = new SupplierAgreementDTO(supplierId, catalogNumber, price, name);
+        supplier.supplierAgreementDTO.insertSupplierItem();
+        supplier.addProduct(product);
     }
 
     public void removeProduct(int supplierId, int catalogNumber) {
-        suppliers.get(supplierId).removeProduct(catalogNumber);
+        Supplier supplier = suppliers.get(supplierId);
+        supplier.supplierAgreementDTO = new SupplierAgreementDTO(supplierId, catalogNumber, 0, 0);
+        supplier.supplierAgreementDTO.delete();
+        supplier.removeProduct(catalogNumber);
     }
 
     public void updateProductName(int supplierId, int catalogNumber, String newName) {
-        suppliers.get(supplierId).updateProductName(catalogNumber, newName);
+        Supplier supplier = suppliers.get(supplierId);
+        supplier.supplierAgreementDTO = new SupplierAgreementDTO(supplierId, catalogNumber, 0, 0);
+        supplier.supplierAgreementDTO.setName(newName);
+        supplier.updateProductName(catalogNumber, newName);
+    }
+
+    public void loadAllSupplierAgreements() {
+        SupplierAgreementDAO supplierAgreementDAO = new SupplierAgreementDAO();
+        List<SupplierAgreementDTO> supplierAgreements = supplierAgreementDAO.loadAllSupplierAgreements();
+        List<SupplierAgreementDTO> supplierDiscounts = supplierAgreementDAO.loadAllSupplierAgreementsDiscounts();
+        for (SupplierAgreementDTO supplierAgreement : supplierAgreements) {
+            Supplier supplier = suppliers.get(supplierAgreement.getSupplierId());
+            if (supplier != null) {
+                SupplierProduct product = new SupplierProduct(supplierAgreement.getSupplierId(), supplierAgreement.getCatalogNumber(),
+                        supplierAgreement.getPrice(), supplierAgreement.getName());
+                supplier.supplierAgreement = new SupplierAgreement(supplierAgreement.getSupplierId());
+                supplier.addProduct(product);
+            }
+        }
+        for (SupplierAgreementDTO supplierDiscount : supplierDiscounts) {
+            Supplier supplier = suppliers.get(supplierDiscount.getSupplierId());
+            if (supplier != null) {
+                supplier.supplierAgreement.addProductDiscountAccordingToAmount(supplierDiscount.getCatalogNumber(),
+                        supplierDiscount.getAmount(), supplierDiscount.getDiscounts());
+            }
+        }
     }
 }

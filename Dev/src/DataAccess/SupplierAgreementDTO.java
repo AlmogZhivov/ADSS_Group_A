@@ -37,6 +37,10 @@ public class SupplierAgreementDTO {
     public boolean delete() {
         return supplierAgreementDAO.delete(this);
     }
+
+    public boolean deleteProductDiscountAccordingToAmount(int supplierId, int catalogNumber) {
+        return supplierAgreementDAO.deleteProductDiscountAccordingToAmount(supplierId, catalogNumber);
+    }
     public void setPrice(double price) {
         supplierAgreementDAO.updateProductPrice(supplierId, catalogNumber, price);
         this.price = price;

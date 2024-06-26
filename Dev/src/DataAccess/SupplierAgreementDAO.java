@@ -6,10 +6,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SupplierAgreementDAO {
-    private final String tableName = "SupplierAgreements";
+    private final String tableName = "SupplierAgreement";
     private String path;
     private String connectionString;
     public SupplierAgreementDAO()
@@ -38,6 +39,17 @@ public class SupplierAgreementDAO {
         SupplierAgreementDTO result = null;
         try {
             result = new SupplierAgreementDTO(reader.getInt(1), reader.getInt(2), reader.getDouble(3), reader.getString(4));
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return result;
+    }
+
+    protected Object ConvertReaderToObjectDiscount(ResultSet reader) {
+        SupplierAgreementDTO result = null;
+        try {
+            result = new SupplierAgreementDTO(reader.getInt(1), reader.getInt(2), reader.getInt(3), reader.getDouble(4));
         }
         catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -100,7 +112,7 @@ public class SupplierAgreementDAO {
     }
 
     public void updateProductAmount(int supplierId, int catalogNumber, int amount) {
-        String command = "UPDATE " + tableName + " SET Amount = " + amount + " WHERE SupplierId = " + supplierId + " AND CatalogNumber = " + catalogNumber + ";";
+        String command = "UPDATE " + "SupplierItemsDiscounts" + " SET Amount = " + amount + " WHERE SupplierId = " + supplierId + " AND CatalogNumber = " + catalogNumber + ";";
         try (Connection conn = connect(); java.sql.Statement s = conn.createStatement()) {
             s.execute(command);
         }
@@ -110,7 +122,7 @@ public class SupplierAgreementDAO {
     }
 
     public void updateProductDiscounts(int supplierId, int catalogNumber, double discounts) {
-        String command = "UPDATE " + tableName + " SET Discounts = " + discounts + " WHERE SupplierId = " + supplierId + " AND CatalogNumber = " + catalogNumber + ";";
+        String command = "UPDATE " + "SupplierItemsDiscounts" + " SET Discounts = " + discounts + " WHERE SupplierId = " + supplierId + " AND CatalogNumber = " + catalogNumber + ";";
         try (Connection conn = connect(); java.sql.Statement s = conn.createStatement()) {
             s.execute(command);
         }
@@ -120,7 +132,7 @@ public class SupplierAgreementDAO {
     }
 
     public SupplierAgreementDTO getSupplierAgreement(int supplierId) {
-        String command = "SELECT * FROM " + tableName + " WHERE SupplierId = " + supplierId + ";";
+        String command = "SELECT * FROM " + "SupplierItemsDiscounts" + " WHERE SupplierId = " + supplierId + ";";
         try (Connection conn = connect(); java.sql.Statement s = conn.createStatement(); ResultSet reader = s.executeQuery(command)) {
             return (SupplierAgreementDTO) ConvertReaderToObjectProduct(reader);
         }
@@ -152,6 +164,38 @@ public class SupplierAgreementDAO {
             System.out.println(e.getMessage());
         }
         return false;
+    }
+
+    public List<SupplierAgreementDTO> loadAllSupplierAgreements() {
+        List<SupplierAgreementDTO> results = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM " + tableName + ";";
+        try(Connection conn = this.connect();
+            java.sql.Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
+            while (rs.next()) {
+                results.add((SupplierAgreementDTO) ConvertReaderToObjectProduct(rs));
+            }
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return results;
+    }
+
+    public List<SupplierAgreementDTO> loadAllSupplierAgreementsDiscounts() {
+        List<SupplierAgreementDTO> results = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM " + "SupplierItemsDiscounts" + ";";
+        try(Connection conn = this.connect();
+            java.sql.Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
+            while (rs.next()) {
+                results.add((SupplierAgreementDTO) ConvertReaderToObjectDiscount(rs));
+            }
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return results;
     }
     // LoadSupplierProduct
 }

@@ -94,7 +94,7 @@ public class ContactDAO {
         return false;
     }
 
-    public List<ContactDTO> LoadAllContacts() {
+    public List<ContactDTO> loadAllContacts() {
         List<ContactDTO> results = new ArrayList<>();
         String sql = "SELECT * FROM " + tableName + ";";
         try(Connection conn = this.connect();
