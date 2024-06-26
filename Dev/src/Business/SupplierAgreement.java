@@ -71,9 +71,12 @@ public class SupplierAgreement {
     }
 
     public double getProductPriceAccordingToAmount(int catalogNumber, int amount) {
-        double price = getProductPrice(catalogNumber);
-        price -= getDiscountForOrder(catalogNumber, amount) * (price/100.0);
-        return price;
+        if (checkProductExists(catalogNumber)) {
+            double price = getProductPrice(catalogNumber);
+            price -= getDiscountForOrder(catalogNumber, amount) * (price / 100.0);
+            return price;
+        }
+        return PRODUCT_NOT_EXISTS;
     }
 
     public double getDiscountForOrder(int catalogNumber, int amount) {
@@ -113,5 +116,31 @@ public class SupplierAgreement {
     public void updateProductName(int catalogNumber, String newName) {
         if(checkProductExists(catalogNumber))
             products.get(catalogNumber).setName(newName);
+    }
+
+    // HW2
+    public double getProductPriceByName(String name, int amount){
+        SupplierProduct sp;
+
+        for (Map.Entry<Integer,SupplierProduct> product : products.entrySet()){
+            sp = product.getValue();
+            if (sp.getName().equals(name)) {
+                return getProductPriceAccordingToAmount(product.getKey(), amount);
+            }
+        }
+        return PRODUCT_NOT_EXISTS;
+    }
+
+    // HW2
+    public int getProductIdByName(String name){
+        SupplierProduct sp;
+
+        for (Map.Entry<Integer,SupplierProduct> product : products.entrySet()){
+            sp = product.getValue();
+            if (sp.getName().equals(name)) {
+                return product.getKey();
+            }
+        }
+        return -1;
     }
 }

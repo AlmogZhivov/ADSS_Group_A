@@ -51,6 +51,14 @@ public class OrderFacade {
         order.addProduct(catalogNumber, amount);
     }
 
+    // HW2 - might want to switch with the method above
+    public void addProductByName(int orderId, String name, int amount){
+        int catalogNumber = sf.pickCheapestOption(name, amount);
+        System.out.println(catalogNumber);
+        Order order = orders.get(orderId);
+        order.addProduct(catalogNumber, amount);
+    }
+
     public void removeProduct(int orderId, int catalogNumber){
         Order order = orders.get(orderId);
         order.removeProduct(catalogNumber);
@@ -72,4 +80,6 @@ public class OrderFacade {
         Order order = orders.get(orderId);
         return order.getOrderPrice();
     }
+
+
 }

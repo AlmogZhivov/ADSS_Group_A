@@ -70,6 +70,16 @@ public class OrderService {
         }
     }
 
+    // HW2 - might want to switch with the method above
+//    public Response addProductByName(int orderId, String name, int amount){
+//        try {
+//            orderFacade.addProductByName(orderId, name, amount);
+//            return new Response();
+//        } catch (Exception e) {
+//            return new Response(e.getMessage());
+//        }
+//    }
+
     //Removes a product from an existing order
     public Response removeProduct(int orderId, int catalogNumber){
         try {

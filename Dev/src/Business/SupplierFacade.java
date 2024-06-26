@@ -171,4 +171,20 @@ public class SupplierFacade {
             }
         }
     }
+
+    // HW2
+    public int pickCheapestOption(String name, int amount){
+        double bestPrice = Double.MAX_VALUE;
+        int cheapestProductId = -1;
+        for (Map.Entry<Integer,Supplier> entry : suppliers.entrySet()){
+            Supplier supplier = entry.getValue();
+            double price = supplier.getProductPriceAccordingToAmount(name, amount);
+            if (price > 0 && bestPrice > price){
+                bestPrice = price;
+                cheapestProductId = supplier.getProductIdByName(name);
+            }
+        }
+        return cheapestProductId;
+    }
+
 }

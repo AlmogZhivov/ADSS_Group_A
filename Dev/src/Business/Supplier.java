@@ -1,8 +1,7 @@
 package Business;
-
 import DataAccess.ContactDTO;
 import DataAccess.SupplierAgreementDTO;
-import DataAccess.SupplierDTO;
+import DataAccess.SupplierDTO
 import java.util.Map;
 
 public class Supplier {
@@ -143,5 +142,15 @@ public class Supplier {
 
     public void updateProductName(int catalogNumber, String newName) {
         supplierAgreement.updateProductName(catalogNumber, newName);
+    }
+
+    // HW2
+    public double getProductPriceAccordingToAmount(String name, int amount){
+        return supplierAgreement.getProductPriceByName(name, amount) * amount;
+    }
+
+    // HW2
+    public int getProductIdByName(String name){
+        return supplierAgreement.getProductIdByName(name);
     }
 }
