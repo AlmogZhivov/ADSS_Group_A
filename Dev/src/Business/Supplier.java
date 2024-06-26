@@ -1,7 +1,7 @@
 package Business;
 import DataAccess.ContactDTO;
 import DataAccess.SupplierAgreementDTO;
-import DataAccess.SupplierDTO
+import DataAccess.SupplierDTO;
 import java.util.Map;
 
 public class Supplier {
