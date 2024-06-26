@@ -24,9 +24,12 @@ public class SupplierService {
     // Loads data into the system for testing
     public Response loadData(){
         try {
-            supplierFacade.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH);
-            supplierFacade.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER);
-            supplierFacade.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD);
+            //supplierFacade.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH, "Afula");
+            //supplierFacade.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER, "Beer Sheva");
+            //supplierFacade.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD, "Haifa");
+            supplierFacade.loadAllSuppliers();
+            supplierFacade.loadAllContacts();
+            supplierFacade.loadAllSupplierAgreements();
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());
@@ -34,9 +37,9 @@ public class SupplierService {
     }
 
     // Adds a new supplier to the system
-    public Response addSupplier(String name, String compNumber, String bankNumber, PaymentMethod payment) {
+    public Response addSupplier(String name, String compNumber, String bankNumber, PaymentMethod payment, String address) {
         try {
-            supplierFacade.addSupplier(name, compNumber, bankNumber, payment);
+            supplierFacade.addSupplier(name, compNumber, bankNumber, payment, address);
             return new Response();
         } catch (Exception e) {
             return new Response(e.getMessage());

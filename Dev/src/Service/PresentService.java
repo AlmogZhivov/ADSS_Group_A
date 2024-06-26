@@ -145,7 +145,9 @@ public class PresentService {
         String bankNumber = scanner.nextLine();
         System.out.print("Enter payment method (CASH/CHECK/BANK_TRANSFER/CREDIT_CARD): ");
         PaymentMethod paymentMethod = PaymentMethod.valueOf(scanner.nextLine().toUpperCase());
-        return ss.addSupplier(name, companyNumber, bankNumber, paymentMethod);
+        System.out.print("Enter address: ");
+        String address = scanner.nextLine();
+        return ss.addSupplier(name, companyNumber, bankNumber, paymentMethod, address);
     }
 
     private Response removeSupplier() {

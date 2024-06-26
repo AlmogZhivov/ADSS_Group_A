@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 
 import Service.PresentService;
 import Service.Responses.Response;
-
+import DataAccess.DataBaseCreator;
 public class CLI {
 
     private static final Scanner scanner = new Scanner(System.in);
@@ -15,6 +15,12 @@ public class CLI {
     private static final Gson gson = new Gson();
 
     public static void main(String[] args) {
+        DataBaseCreator dataBaseCreator = new DataBaseCreator();
+        try {
+            dataBaseCreator.CreateAllTables();
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
         String input;
         Response output;
         prService.printMenu();

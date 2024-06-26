@@ -1,5 +1,6 @@
 package Business;
 
+
 public class Contact {
 
     private String name;

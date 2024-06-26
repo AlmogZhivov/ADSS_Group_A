@@ -32,7 +32,7 @@ class SupplierTests {
 
     @Test
     public void testAddSupplier(){
-        Response res = supplierService.addSupplier("D", "3", "3333", Supplier.PaymentMethod.CREDIT_CARD);
+        Response res = supplierService.addSupplier("D", "3", "3333", Supplier.PaymentMethod.CREDIT_CARD, "Jerusalem");
         ResponseT<List<Supplier>> l = supplierService.getAllSuppliers();
         assertFalse(res.errorOccurred());
         assertEquals(4, l.getValue().size());
