@@ -97,7 +97,7 @@ public class SupplierFacade {
     }
 
     public SupplierAgreement getSupplierAgreement(int supplierId) {
-        return suppliers.get(supplierId).getSupplierAgreement();
+        return suppliers.get(supplierId).supplierAgreement;
     }
 
     public void updateProductPrice(int supplierId, int catalogNumber, double newPrice) {
@@ -157,10 +157,9 @@ public class SupplierFacade {
         for (SupplierAgreementDTO supplierAgreement : supplierAgreements) {
             Supplier supplier = suppliers.get(supplierAgreement.getSupplierId());
             if (supplier != null) {
-                SupplierProduct product = new SupplierProduct(supplierAgreement.getSupplierId(), supplierAgreement.getCatalogNumber(),
-                        supplierAgreement.getPrice(), supplierAgreement.getName());
-                supplier.supplierAgreement = new SupplierAgreement(supplierAgreement.getSupplierId());
-                supplier.addProduct(product);
+                if (supplier.supplierAgreement.products.isEmpty())
+                    supplier.supplierAgreement = new SupplierAgreement(supplierAgreement.getSupplierId());
+                supplier.supplierAgreement.addProduct(new SupplierProduct(supplierAgreement.getSupplierId(), supplierAgreement.getCatalogNumber(), supplierAgreement.getPrice(), supplierAgreement.getName()));
             }
         }
         for (SupplierAgreementDTO supplierDiscount : supplierDiscounts) {

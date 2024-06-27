@@ -102,6 +102,7 @@ public class SupplierProduct {
     public void addProductDiscountAccordingToAmount(int amount, double discount) {
         if (!isLegalDiscount((int) discount))
             throw new IllegalArgumentException("Invalid discount!");
+        System.out.println("amount: " + amount + " discount: " + discount);
         this.discountAccordingToAmount.put(amount, discount);
     }
 

@@ -132,7 +132,7 @@ public class SupplierService {
     // Returns the supplier agreement of the supplier with the given id
     public ResponseT<SupplierAgreement> getSupplierAgreement(int supplierId) {
         try {
-            return new ResponseT<>(new SupplierAgreement(supplierFacade.getSupplierAgreement(supplierId)));
+            return new ResponseT<>(supplierFacade.getSupplierAgreement(supplierId));
         } catch (Exception e) {
             return new ResponseT<>(e.getMessage());
         }
