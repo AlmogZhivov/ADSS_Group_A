@@ -32,6 +32,11 @@ public class DataBaseCreator {
             s.addBatch(createContactsTableCommand());
             s.addBatch(createSupplierAgreementTableCommand());
             s.addBatch(createSupplierItemsDiscountsTableCommand());
+
+            // Order Tables
+            s.addBatch(createOrderTableCommand());
+            s.addBatch(createOrderItemsTableCommand());
+
             s.executeBatch();
             conn.close();
         }
@@ -90,6 +95,31 @@ public class DataBaseCreator {
         return command;
     }
 
+    // Order tables
+    private String createOrderTableCommand() {
+        String command =  "CREATE TABLE IF NOT EXISTS Orders  ("+
+                "OrderId 	INTEGER NOT NULL UNIQUE,"+
+                "SupplierId 	INTEGER NOT NULL,"+
+                "Day 	INTEGER NOT NULL,"+
+                "ShipmentDate 	Date NOT NULL,"+
+                "PRIMARY KEY(OrderId)," +
+                "FOREIGN KEY(SupplierId) REFERENCES Suppliers(SupplierId);";
+
+        return command;
+    }
+
+    private String createOrderItemsTableCommand() {
+        String command =  "CREATE TABLE IF NOT EXISTS OrderItems  ("+
+                "OrderId 	INTEGER NOT NULL,"+
+                "CatalogNumber 	INTEGER NOT NULL,"+
+                "Amount 	INTEGER NOT NULL,"+
+                "PRIMARY KEY(CatalogNumber, OrderId)," +
+                "FOREIGN KEY(CatalogNumber) REFERENCES SupplierAgreement(CatalogNumber))" +
+                "FOREIGN KEY(OrderId) REFERENCES Orders(OrderId))";
+
+        return command;
+    }
+
     public void deleteAllTables() {
         try(Connection conn = DriverManager.getConnection(connectionString);
             Statement s = conn.createStatement()){
@@ -98,6 +128,10 @@ public class DataBaseCreator {
             s.addBatch("DROP TABLE IF EXISTS 'Contacts'");
             s.addBatch("DROP TABLE IF EXISTS 'SupplierAgreement'");
             s.addBatch("DROP TABLE IF EXISTS 'SupplierItemsDiscounts'");
+
+            //Order Deletes
+            s.addBatch("DROP TABLE IF EXISTS 'Orders'");
+            s.addBatch("DROP TABLE IF EXISTS 'OrderItems'");
 
             s.executeBatch();
             conn.commit();
