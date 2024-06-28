@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-class BranchController extends Controller<BranchDTO> {
+public class BranchController extends Controller<BranchDTO> {
     @Override
     public boolean insert(DTO dto) {
         assert dto instanceof BranchDTO;

@@ -20,7 +20,7 @@ public class WorkerDTO extends DTO {
     private String branch;
 
     public WorkerDTO() {
-        this.controller = new BranchController();
+        this.controller = new WorkerController();
     }
 
     public WorkerDTO(String id, String firstname, String surname, String email, String phone,
