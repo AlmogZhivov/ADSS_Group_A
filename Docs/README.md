@@ -14,7 +14,7 @@
 
 [JUnit 4](https://github.com/junit-team/junit4)
 
-[SQLite](https://github.com/sqlite/sqlite)
+[SQLite](https://github.com/xerial/sqlite-jdbc)
 
 ## Instructions
 
