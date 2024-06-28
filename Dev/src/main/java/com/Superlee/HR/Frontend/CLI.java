@@ -289,13 +289,12 @@ public class CLI {
 
                     // Frontend cases
                     case "details": {
-                        if (parts.length == 2) {
-                            if (Objects.equals(parts[1], "all")) {
+                        if (parts.length == 2)
+                            if (Objects.equals(parts[1], "all"))
                                 System.out.println(worker.fullDetails());
-                            } else {
+                            else
                                 System.out.println("Unknown argument");
-                            }
-                        } else if (parts.length == 1)
+                        else if (parts.length == 1)
                             System.out.println(worker.toString());
                         else
                             System.out.println("Invalid number of args");
@@ -385,9 +384,9 @@ public class CLI {
                                 }
                             }
                         } else if (parts.length == 3) {
-                            if (parts[1].equals("-r")) {
+                            if (parts[1].equals("-r"))
                                 System.out.println("Invalid number of args");
-                            } else if (parts[1].equals("-a")) {
+                            else if (parts[1].equals("-a")) {
                                 if (!tryParseInt(parts[2])) {
                                     System.out.println("Invalid ID");
                                     break;
