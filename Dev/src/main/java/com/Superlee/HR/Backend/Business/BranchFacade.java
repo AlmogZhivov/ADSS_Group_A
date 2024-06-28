@@ -1,6 +1,7 @@
 package com.Superlee.HR.Backend.Business;
 
 import com.Superlee.HR.Backend.DataAccess.BranchDTO;
+import com.Superlee.HR.Backend.DataAccess.DTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 public class BranchFacade {
     private static BranchFacade instance;
 
+    private final DTO dto = new BranchDTO();
     private static final WorkerFacade workerFacade = WorkerFacade.getInstance();
     private static final Roles roles = Roles.getInstance();
     private Map<String, Branch> branches;
@@ -43,7 +45,8 @@ public class BranchFacade {
             throw new IllegalArgumentException("Branch already exists");
 
         branches.put(name, branch);
-        return true;
+        dto.setProperties(name, address, manager);
+        return dto.insert();
     }
 
     public BranchToSend getBranch(String name) {
@@ -55,7 +58,7 @@ public class BranchFacade {
             throw new NoSuchElementException("Branch not found");
 
         Branch branch = branches.get(name);
-        return new BranchToSend(branch.getName(), branch.getAddress(), branch.getManager());
+        return convertToBranchToSend(branch);
     }
 
     public boolean updateManager(String name, String manager) {
@@ -76,8 +79,10 @@ public class BranchFacade {
         if (branches.get(name).getManager().equals(manager))
             throw new IllegalArgumentException("Manager is already the manager of this branch");
 
-        branches.get(name).setManager(manager);
-        return true;
+        Branch b = branches.get(name);
+        b.setManager(manager);
+        dto.setProperties(name, b.getAddress(), manager);
+        return dto.update();
     }
 
     public List<BranchToSend> getAllBranches() {
@@ -95,14 +100,22 @@ public class BranchFacade {
             throw new NoSuchElementException("Branch not found");
 
         return workerFacade.updateWorkerMainBranch(id, branch);
+        // DTO will be updated in WorkerFacade
     }
 
     public boolean loadData() {
-        branches = BranchDTO
-                .getBranches()
+        branches = dto.loadAll()
                 .stream()
-                .map(branch -> new Branch(branch.getName(), branch.getAddress(), branch.getManager()))
+                .map(branch -> new Branch(
+                        (String) dto.getProperties()[0],
+                        (String) dto.getProperties()[1],
+                        (String) dto.getProperties()[2]))
                 .collect(Collectors.toMap(Branch::getName, branch -> branch));
+//        branches = BranchDTO
+//                .getBranches()
+//                .stream()
+//                .map(branch -> new Branch(branch.getName(), branch.getAddress(), branch.getManager()))
+//                .collect(Collectors.toMap(Branch::getName, branch -> branch)); TODO remove
         return true;
     }
 
