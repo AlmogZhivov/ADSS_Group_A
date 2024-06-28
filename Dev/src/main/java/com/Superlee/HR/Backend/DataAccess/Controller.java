@@ -1,13 +1,17 @@
 package com.Superlee.HR.Backend.DataAccess;
 
 import java.util.List;
+import java.sql.Connection;
 
-interface Controller<T> {
-    boolean insert(DTO dto);
+abstract class Controller<T> {
+    protected Connection conn;
+    protected final String path = "jdbc:sqlite:src/main/resources/HR.db";
 
-    boolean update(DTO dto);
+    abstract boolean insert(DTO dto);
 
-    boolean delete(DTO dto);
+    abstract boolean update(DTO dto);
 
-    List<T> loadAll();
+    abstract boolean delete(DTO dto);
+
+    abstract List<T> loadAll();
 }

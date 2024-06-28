@@ -40,7 +40,7 @@ public class RolesDTO extends DTO {
 
     @Override
     public List<RolesDTO> loadAll() {
-        return List.of(); // TODO
+        return (List<RolesDTO>) controller.loadAll();
     }
     //    public static Map<String, Integer> loadRoles() { // TODO remove
 //        Map<String, Integer> roles = new HashMap<>();
