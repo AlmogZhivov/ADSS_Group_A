@@ -1,6 +1,7 @@
 package com.Superlee.HR.Backend.DataAccess;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class RolesController extends Controller<RolesDTO> {
     public boolean insert(DTO dto) {
         assert dto instanceof RolesDTO;
         try {
-            conn = DriverManager.getConnection(path);
+            connect();
             String insertSQL = "INSERT INTO Roles(value, name) VALUES (?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(insertSQL);
             pstmt.setInt(1, ((RolesDTO) dto).getValue());
@@ -20,12 +21,7 @@ public class RolesController extends Controller<RolesDTO> {
         } catch (SQLException e) {
             throw new DataAccessException(e);
         } finally {
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                throw new DataAccessException(e);
-            }
+            closeConnection();
         }
         return true;
     }
@@ -43,7 +39,7 @@ public class RolesController extends Controller<RolesDTO> {
     @Override
     public List<RolesDTO> loadAll() {
         try {
-            conn = DriverManager.getConnection(path);
+            connect();
             String selectSQL = "SELECT * FROM Roles";
             PreparedStatement pstmt = conn.prepareStatement(selectSQL);
             ResultSet rs = pstmt.executeQuery();
@@ -54,12 +50,7 @@ public class RolesController extends Controller<RolesDTO> {
         } catch (SQLException e) {
             throw new DataAccessException(e);
         } finally {
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                throw new DataAccessException(e);
-            }
+            closeConnection();
         }
     }
 }
