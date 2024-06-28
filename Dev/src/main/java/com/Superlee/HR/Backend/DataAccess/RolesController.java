@@ -2,7 +2,7 @@ package com.Superlee.HR.Backend.DataAccess;
 
 import java.util.List;
 
-class BranchController implements Controller<BranchDTO> {
+public class RolesController implements Controller<RolesDTO> {
     @Override
     public boolean insert(DTO dto) {
         return false;
@@ -19,7 +19,7 @@ class BranchController implements Controller<BranchDTO> {
     } // TODO
 
     @Override
-    public List<BranchDTO> loadAll() {
+    public List<RolesDTO> loadAll() {
         return List.of(); // TODO
     }
 }

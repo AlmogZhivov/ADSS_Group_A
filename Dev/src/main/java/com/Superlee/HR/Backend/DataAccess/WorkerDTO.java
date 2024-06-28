@@ -1,10 +1,9 @@
 package com.Superlee.HR.Backend.DataAccess;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-public class WorkerDTO {
+public class WorkerDTO extends DTO {
     private String id;
     private String firstname;
     private String surname;
@@ -14,16 +13,21 @@ public class WorkerDTO {
     private String bankDetails;
     private int salary;
     private List<Integer> roles;
-    private List<Integer> futureShifts;
+    private List<Integer> shifts;
     private List<Integer> availability;
-    private List<Integer> pastShifts;
-    private String startDate;
+    private LocalDateTime startDate;
     private String contract;
     private String branch;
 
-    public WorkerDTO(String id, String firstname, String surname, String email, String phone, String password,
-                     String bankDetails, int salary, List<Integer> roles, List<Integer> futureShifts,
-                     List<Integer> availability, List<Integer> pastShifts, String startDate, String contract, String branch) {
+    public WorkerDTO() {
+        this.controller = new BranchController();
+    }
+
+    public WorkerDTO(String id, String firstname, String surname, String email, String phone,
+                     String password, String bankDetails, int salary,
+                     List<Integer> roles, List<Integer> shifts, List<Integer> availability,
+                     LocalDateTime startDate, String contract, String branch) {
+        this();
         this.id = id;
         this.firstname = firstname;
         this.surname = surname;
@@ -32,17 +36,38 @@ public class WorkerDTO {
         this.password = password;
         this.bankDetails = bankDetails;
         this.salary = salary;
-        this.roles = roles;
-        this.futureShifts = futureShifts;
-        this.availability = availability;
-        this.pastShifts = pastShifts;
+        this.roles = roles != null ? roles : List.of();
+        this.shifts = shifts != null ? shifts : List.of();
+        this.availability = availability != null ? availability : List.of();
         this.startDate = startDate;
         this.contract = contract;
         this.branch = branch;
     }
 
+    public WorkerDTO(WorkerDTO other) {
+        this();
+        this.id = other.id;
+        this.firstname = other.firstname;
+        this.surname = other.surname;
+        this.email = other.email;
+        this.phone = other.phone;
+        this.password = other.password;
+        this.bankDetails = other.bankDetails;
+        this.salary = other.salary;
+        this.roles = other.roles;
+        this.shifts = other.shifts;
+        this.availability = other.availability;
+        this.startDate = other.startDate;
+        this.contract = other.contract;
+        this.branch = other.branch;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFirstname() {
@@ -109,12 +134,12 @@ public class WorkerDTO {
         this.roles = roles;
     }
 
-    public List<Integer> getFutureShifts() {
-        return futureShifts;
+    public List<Integer> getShifts() {
+        return shifts;
     }
 
-    public void setFutureShifts(List<Integer> futureShifts) {
-        this.futureShifts = futureShifts;
+    public void setShifts(List<Integer> shifts) {
+        this.shifts = shifts;
     }
 
     public List<Integer> getAvailability() {
@@ -125,56 +150,49 @@ public class WorkerDTO {
         this.availability = availability;
     }
 
-    public List<Integer> getPastShifts() {
-        return pastShifts;
-    }
-
-    public void setPastShifts(List<Integer> pastShifts) {
-        this.pastShifts = pastShifts;
-    }
-
-    public String getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
     }
 
     public String getContract() {
         return contract;
     }
 
-    public String getBranch() {
-        return branch;
-    }
-
     public void setContract(String contract) {
         this.contract = contract;
     }
 
-    public boolean insertWorker() {
-        return true;
+    public String getBranch() {
+        return branch;
     }
 
-    public boolean updateWorker() {
-        return true;
+    public void setBranch(String branch) {
+        this.branch = branch;
     }
 
-    public boolean deleteWorker() {
-        return true;
+    @Override
+    public List<WorkerDTO> loadAll() {
+        return List.of(); // TODO
     }
 
-    public static List<WorkerDTO> getWorkers() {
-        // THIS WILL BE CHANGED UPON CREATING A REAL DB
-        WorkerDTO w0 = new WorkerDTO("0", "HR MANAGER", "THE ALMIGHTY", "almighty@hr.superlee.com", "666666666", "123", "123456789", 1000000, new ArrayList<>(List.of(0)), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), LocalDateTime.now().toString(), "permanent", "branch");
-        WorkerDTO w1 = new WorkerDTO("1", "John", "Doe", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-        WorkerDTO w2 = new WorkerDTO("2", "Jane", "Doe", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-        WorkerDTO w3 = new WorkerDTO("3", "John", "Smith", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-        WorkerDTO w4 = new WorkerDTO("4", "Jane", "Smith", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-        WorkerDTO w5 = new WorkerDTO("5", "John", "Snow", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-        WorkerDTO w6 = new WorkerDTO("6", "Jane", "Johnson", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-        WorkerDTO w7 = new WorkerDTO("7", "John", "Brown", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-        WorkerDTO w8 = new WorkerDTO("8", "Jane", "Brown", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-        WorkerDTO w9 = new WorkerDTO("9", "John", "White", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-        WorkerDTO w10 = new WorkerDTO("10", "Jane", "White", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-
-        return List.of(w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10);
-    }
+//    public static List<WorkerDTO> getWorkers() {
+//        // THIS WILL BE CHANGED UPON CREATING A REAL DB
+//        WorkerDTO w0 = new WorkerDTO("0", "HR MANAGER", "THE ALMIGHTY", "almighty@hr.superlee.com", "666666666", "123", "123456789", 1000000, new ArrayList<>(List.of(0)), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), LocalDateTime.now().toString(), "permanent", "branch");
+//        WorkerDTO w1 = new WorkerDTO("1", "John", "Doe", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//        WorkerDTO w2 = new WorkerDTO("2", "Jane", "Doe", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//        WorkerDTO w3 = new WorkerDTO("3", "John", "Smith", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//        WorkerDTO w4 = new WorkerDTO("4", "Jane", "Smith", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//        WorkerDTO w5 = new WorkerDTO("5", "John", "Snow", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//        WorkerDTO w6 = new WorkerDTO("6", "Jane", "Johnson", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//        WorkerDTO w7 = new WorkerDTO("7", "John", "Brown", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//        WorkerDTO w8 = new WorkerDTO("8", "Jane", "Brown", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//        WorkerDTO w9 = new WorkerDTO("9", "John", "White", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//        WorkerDTO w10 = new WorkerDTO("10", "Jane", "White", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
+//
+//        return List.of(w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10);
+//    } // TODO remove
 }

@@ -2,20 +2,12 @@ package com.Superlee.HR.Backend.DataAccess;
 
 import java.util.List;
 
-abstract class Controller<T> {
-    boolean insert(DTO dto) {
-        return true;
-    }
+interface Controller<T> {
+    boolean insert(DTO dto);
 
-    boolean update(DTO dto) {
-        String id = dto.getId();
-        return true;
-    }
+    boolean update(DTO dto);
 
-    boolean delete(DTO dto) {
-        String id = dto.getId();
-        return true;
-    }
+    boolean delete(DTO dto);
 
-    abstract List<T> loadAll();
+    List<T> loadAll();
 }

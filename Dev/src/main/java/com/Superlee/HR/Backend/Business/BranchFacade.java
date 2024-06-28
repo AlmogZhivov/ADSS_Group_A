@@ -1,7 +1,6 @@
 package com.Superlee.HR.Backend.Business;
 
 import com.Superlee.HR.Backend.DataAccess.BranchDTO;
-import com.Superlee.HR.Backend.DataAccess.DTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 public class BranchFacade {
     private static BranchFacade instance;
 
-    private final DTO dto = new BranchDTO();
+    private BranchDTO dto = new BranchDTO();
     private static final WorkerFacade workerFacade = WorkerFacade.getInstance();
     private static final Roles roles = Roles.getInstance();
     private Map<String, Branch> branches;
@@ -45,7 +44,7 @@ public class BranchFacade {
             throw new IllegalArgumentException("Branch already exists");
 
         branches.put(name, branch);
-        dto.setProperties(name, address, manager);
+        dto = new BranchDTO(name, address, manager);
         return dto.insert();
     }
 
@@ -81,7 +80,7 @@ public class BranchFacade {
 
         Branch b = branches.get(name);
         b.setManager(manager);
-        dto.setProperties(name, b.getAddress(), manager);
+        dto = new BranchDTO(name, b.getAddress(), manager);
         return dto.update();
     }
 
@@ -106,10 +105,7 @@ public class BranchFacade {
     public boolean loadData() {
         branches = dto.loadAll()
                 .stream()
-                .map(branch -> new Branch(
-                        (String) dto.getProperties()[0],
-                        (String) dto.getProperties()[1],
-                        (String) dto.getProperties()[2]))
+                .map(branch -> new Branch(branch.getName(), branch.getAddress(), branch.getManager()))
                 .collect(Collectors.toMap(Branch::getName, branch -> branch));
 //        branches = BranchDTO
 //                .getBranches()
