@@ -15,6 +15,7 @@ public class WorkerFacade {
 
     private Map<String, Worker> workers;
     private final Roles roles = Roles.getInstance();
+    private WorkerDTO dto = new WorkerDTO();
 
     private static Worker loggedInWorker;
 
@@ -88,7 +89,12 @@ public class WorkerFacade {
         if (!worker.isAvailable(shiftId))
             throw new IllegalStateException("Worker is not available for this shift");
 
-        return worker.assign(shiftId);
+        worker.assign(shiftId);
+        dto = new WorkerDTO(worker.getId(), worker.getFirstName(), worker.getSurname(), worker.getEmail(),
+                worker.getPhone(), worker.getPassword(), worker.getBankDetails(), worker.getSalary(),
+                worker.getRoles(), worker.getShifts(), worker.getAvailability(), worker.getStartDate(),
+                worker.getContract(), worker.getBranch());
+        return dto.update();
     }
 
     public boolean unassignWorker(String workerId, int shiftId) {
@@ -105,7 +111,12 @@ public class WorkerFacade {
         if (!worker.isAssigned(shiftId))
             throw new IllegalStateException("Worker is not assigned to this shift");
 
-        return worker.unassign(shiftId);
+        worker.unassign(shiftId);
+        dto = new WorkerDTO(worker.getId(), worker.getFirstName(), worker.getSurname(), worker.getEmail(),
+                worker.getPhone(), worker.getPassword(), worker.getBankDetails(), worker.getSalary(),
+                worker.getRoles(), worker.getShifts(), worker.getAvailability(), worker.getStartDate(),
+                worker.getContract(), worker.getBranch());
+        return dto.update();
     }
 
     public boolean addNewWorker(String id, String firstname, String surname) {
@@ -124,7 +135,11 @@ public class WorkerFacade {
 
         Worker worker = new Worker(id, firstname, surname);
         workers.put(worker.getId(), worker);
-        return true;
+        dto = new WorkerDTO(worker.getId(), worker.getFirstName(), worker.getSurname(), worker.getEmail(),
+                worker.getPhone(), worker.getPassword(), worker.getBankDetails(), worker.getSalary(),
+                worker.getRoles(), worker.getShifts(), worker.getAvailability(), worker.getStartDate(),
+                worker.getContract(), worker.getBranch());
+        return dto.insert();
     }
 
     public boolean addWorkerRole(String id, String role) {
@@ -143,7 +158,11 @@ public class WorkerFacade {
             throw new IllegalStateException("Worker already has this role");
 
         w.addRole(roles.getId(role));
-        return true;
+        dto = new WorkerDTO(w.getId(), w.getFirstName(), w.getSurname(), w.getEmail(),
+                w.getPhone(), w.getPassword(), w.getBankDetails(), w.getSalary(),
+                w.getRoles(), w.getShifts(), w.getAvailability(), w.getStartDate(),
+                w.getContract(), w.getBranch());
+        return dto.update();
     }
 
     public boolean addAvailability(String workerId, int shiftId) {
@@ -154,10 +173,19 @@ public class WorkerFacade {
         requireLoginOrThrow(workerId);
 
         Worker worker = workers.get(workerId);
-        if (worker != null && !worker.isAvailable(shiftId))
-            return worker.addAvailability(shiftId);
 
-        throw new IllegalStateException("Unexpected error");
+        if (worker == null)
+            throw new NoSuchElementException("Worker not found");
+
+        if (worker.isAvailable(shiftId))
+            throw new IllegalStateException("Worker is already available for this shift");
+
+        worker.addAvailability(shiftId);
+        dto = new WorkerDTO(worker.getId(), worker.getFirstName(), worker.getSurname(), worker.getEmail(),
+                worker.getPhone(), worker.getPassword(), worker.getBankDetails(), worker.getSalary(),
+                worker.getRoles(), worker.getShifts(), worker.getAvailability(), worker.getStartDate(),
+                worker.getContract(), worker.getBranch());
+        return dto.update();
     }
 
     public boolean removeAvailability(String workerId, int shiftId) {
@@ -168,10 +196,18 @@ public class WorkerFacade {
         requireLoginOrThrow(workerId);
 
         Worker worker = workers.get(workerId);
-        if (worker != null && worker.isAvailable(shiftId))
-            return worker.removeAvailability(shiftId);
+        if (worker == null)
+            throw new NoSuchElementException("Worker not found");
 
-        throw new IllegalStateException("Unexpected error");
+        if (!worker.isAvailable(shiftId))
+            throw new IllegalStateException("Worker is not available for this shift");
+
+        worker.removeAvailability(shiftId);
+        dto = new WorkerDTO(worker.getId(), worker.getFirstName(), worker.getSurname(), worker.getEmail(),
+                worker.getPhone(), worker.getPassword(), worker.getBankDetails(), worker.getSalary(),
+                worker.getRoles(), worker.getShifts(), worker.getAvailability(), worker.getStartDate(),
+                worker.getContract(), worker.getBranch());
+        return dto.update();
     }
 
     public boolean updateWorkerEmail(String id, String email) {
@@ -187,7 +223,11 @@ public class WorkerFacade {
             throw new NoSuchElementException("Worker not found");
 
         w.setEmail(email);
-        return true;
+        dto = new WorkerDTO(w.getId(), w.getFirstName(), w.getSurname(), w.getEmail(),
+                w.getPhone(), w.getPassword(), w.getBankDetails(), w.getSalary(),
+                w.getRoles(), w.getShifts(), w.getAvailability(), w.getStartDate(),
+                w.getContract(), w.getBranch());
+        return dto.update();
     }
 
     public boolean updateWorkerPhone(String id, String phone) {
@@ -198,8 +238,13 @@ public class WorkerFacade {
         Worker w = workers.get(id);
         if (w == null)
             throw new NoSuchElementException("Worker not found");
+
         w.setPhone(phone);
-        return true;
+        dto = new WorkerDTO(w.getId(), w.getFirstName(), w.getSurname(), w.getEmail(),
+                w.getPhone(), w.getPassword(), w.getBankDetails(), w.getSalary(),
+                w.getRoles(), w.getShifts(), w.getAvailability(), w.getStartDate(),
+                w.getContract(), w.getBranch());
+        return dto.update();
     }
 
     public boolean updateWorkerSalary(String id, int salary) {
@@ -212,8 +257,13 @@ public class WorkerFacade {
         Worker w = workers.get(id);
         if (w == null)
             throw new NoSuchElementException("Worker not found");
+
         w.setSalary(salary);
-        return true;
+        dto = new WorkerDTO(w.getId(), w.getFirstName(), w.getSurname(), w.getEmail(),
+                w.getPhone(), w.getPassword(), w.getBankDetails(), w.getSalary(),
+                w.getRoles(), w.getShifts(), w.getAvailability(), w.getStartDate(),
+                w.getContract(), w.getBranch());
+        return dto.update();
     }
 
     public boolean updateWorkerContractDetails(String id, String contractDetails) {
@@ -225,8 +275,13 @@ public class WorkerFacade {
         Worker w = workers.get(id);
         if (w == null)
             throw new NoSuchElementException("Worker not found");
+
         w.setContract(contractDetails);
-        return true;
+        dto = new WorkerDTO(w.getId(), w.getFirstName(), w.getSurname(), w.getEmail(),
+                w.getPhone(), w.getPassword(), w.getBankDetails(), w.getSalary(),
+                w.getRoles(), w.getShifts(), w.getAvailability(), w.getStartDate(),
+                w.getContract(), w.getBranch());
+        return dto.update();
     }
 
     public boolean updateWorkerBankDetails(String id, String bankDetails) {
@@ -238,8 +293,13 @@ public class WorkerFacade {
         Worker w = workers.get(id);
         if (w == null)
             throw new NoSuchElementException("Worker not found");
+
         w.setBankDetails(bankDetails);
-        return true;
+        dto = new WorkerDTO(w.getId(), w.getFirstName(), w.getSurname(), w.getEmail(),
+                w.getPhone(), w.getPassword(), w.getBankDetails(), w.getSalary(),
+                w.getRoles(), w.getShifts(), w.getAvailability(), w.getStartDate(),
+                w.getContract(), w.getBranch());
+        return dto.update();
     }
 
     public boolean updateWorkerPassword(String id, String password) {
@@ -250,8 +310,13 @@ public class WorkerFacade {
         Worker w = workers.get(id);
         if (w == null)
             throw new NoSuchElementException("Worker not found");
+
         w.setPassword(password);
-        return true;
+        dto = new WorkerDTO(w.getId(), w.getFirstName(), w.getSurname(), w.getEmail(),
+                w.getPhone(), w.getPassword(), w.getBankDetails(), w.getSalary(),
+                w.getRoles(), w.getShifts(), w.getAvailability(), w.getStartDate(),
+                w.getContract(), w.getBranch());
+        return dto.update();
     }
 
     public boolean updateWorkerMainBranch(String id, String branch) {
@@ -268,7 +333,11 @@ public class WorkerFacade {
             throw new IllegalStateException("Worker is already assigned to this branch");
 
         w.setBranch(branch);
-        return true;
+        dto = new WorkerDTO(w.getId(), w.getFirstName(), w.getSurname(), w.getEmail(),
+                w.getPhone(), w.getPassword(), w.getBankDetails(), w.getSalary(),
+                w.getRoles(), w.getShifts(), w.getAvailability(), w.getStartDate(),
+                w.getContract(), w.getBranch());
+        return dto.update();
     }
 
     public WorkerToSend login(String id, String password) {
@@ -322,11 +391,15 @@ public class WorkerFacade {
     }
 
     public boolean loadData() {
-        workers = WorkerDTO
-                .getWorkers()
+        workers = dto.loadAll()
                 .stream()
                 .map(WorkerFacade::WorkerDTOtoWorker)
                 .collect(Collectors.toMap(Worker::getId, w -> w));
+//        workers = WorkerDTO
+//                .getWorkers()
+//                .stream()
+//                .map(WorkerFacade::WorkerDTOtoWorker)
+//                .collect(Collectors.toMap(Worker::getId, w -> w));
         return true;
     }
 
@@ -341,7 +414,7 @@ public class WorkerFacade {
                 wDTO.getBankDetails(),
                 wDTO.getSalary(),
                 wDTO.getRoles(),
-                LocalDateTime.parse(wDTO.getStartDate()),
+                wDTO.getStartDate(),
                 wDTO.getContract(),
                 wDTO.getBranch()
         );

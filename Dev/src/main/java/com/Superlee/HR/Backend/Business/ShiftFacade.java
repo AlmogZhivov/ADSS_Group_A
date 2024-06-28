@@ -11,6 +11,7 @@ public class ShiftFacade {
     private static ShiftFacade instance;
     private static final WorkerFacade workerFacade = WorkerFacade.getInstance();
     private final Roles roles = Roles.getInstance();
+    private ShiftDTO dto = new ShiftDTO();
 
     private int nextId = 0;
 
@@ -55,22 +56,27 @@ public class ShiftFacade {
         if (roles.getId(role) == null)
             throw new NoSuchElementException("Role not found");
 
+        Shift shift = shifts.get(shiftId);
         // If the worker is a driver we must ensure that a storekeeper is also assigned to the shift
         if (role.equals("Driver") &&
-            shifts.get(shiftId).getAssignedWorkers().stream()
+            shift.getAssignedWorkers().stream()
                     .noneMatch(w -> workerFacade.getWorkerRoles(w).contains("Storekeeper")))
             throw new IllegalStateException("A storekeeper must be assigned to the shift before a driver can be assigned");
 
         if (!workerFacade.assignWorker(workerId, shiftId, role))
             throw new IllegalStateException("Unexpected error");
 
-        if (!shifts.get(shiftId).assignWorker(workerId, roles.getId(role)))
+        if (!shift.assignWorker(workerId, roles.getId(role)))
             if (!workerFacade.unassignWorker(workerId, shiftId))
                 throw new IllegalStateException("Unexpected error, reverting changes failed");
             else
                 throw new IllegalStateException("Unexpected error");
 
-        return true;
+        dto = new ShiftDTO(shift.getId(), shift.getBranch(),
+                shift.getStartTime(), shift.getEndTime(),
+                shift.getRequiredRoles(), shift.getAvailableWorkers(),
+                shift.getAssignedWorkers(), shift.getWorkerRoles());
+        return dto.update();
     }
 
     public boolean unassignWorker(String workerId, int shiftId) {
@@ -86,19 +92,24 @@ public class ShiftFacade {
         if (workerFacade.getWorkerById(workerId) == null)
             throw new NoSuchElementException("Worker not found");
 
-        if (!shifts.get(shiftId).getAssignedWorkers().contains(workerId))
+        Shift shift = shifts.get(shiftId);
+        if (!shift.getAssignedWorkers().contains(workerId))
             throw new IllegalStateException("Worker is not assigned to this shift");
 
-        if (!shifts.get(shiftId).removeAssignedWorker(workerId))
+        if (!shift.removeAssignedWorker(workerId))
             throw new IllegalStateException("Unexpected error");
 
         if (!workerFacade.unassignWorker(workerId, shiftId))
-            if (!shifts.get(shiftId).removeAssignedWorker(workerId))
+            if (!shift.removeAssignedWorker(workerId))
                 throw new IllegalStateException("Unexpected error, reverting changes failed");
             else
                 throw new IllegalStateException("Unexpected error");
 
-        return true;
+        dto = new ShiftDTO(shift.getId(), shift.getBranch(),
+                shift.getStartTime(), shift.getEndTime(),
+                shift.getRequiredRoles(), shift.getAvailableWorkers(),
+                shift.getAssignedWorkers(), shift.getWorkerRoles());
+        return dto.update();
     }
 
     public List<WorkerToSend> getAssignableWorkersForShift(int id) {
@@ -140,8 +151,13 @@ public class ShiftFacade {
         if (roles.getId(role) == null)
             throw new NoSuchElementException("Role not found");
 
-        shifts.get(id).getRequiredRoles().put(role, amount);
-        return true;
+        Shift shift = shifts.get(id);
+        shift.getRequiredRoles().put(role, amount);
+        dto = new ShiftDTO(shift.getId(), shift.getBranch(),
+                shift.getStartTime(), shift.getEndTime(),
+                shift.getRequiredRoles(), shift.getAvailableWorkers(),
+                shift.getAssignedWorkers(), shift.getWorkerRoles());
+        return dto.update();
     }
 
     public int addNewShift(String start, String end, String branch) {
@@ -157,6 +173,9 @@ public class ShiftFacade {
 
         Shift s = new Shift(nextId++, startTime, endTime, branch);
         shifts.put(s.getId(), s);
+        dto = new ShiftDTO(s.getId(), s.getBranch(), s.getStartTime(), s.getEndTime(),
+                s.getRequiredRoles(), s.getAvailableWorkers(), s.getAssignedWorkers(), s.getWorkerRoles());
+        dto.insert();
         return s.getId();
     }
 
@@ -173,16 +192,21 @@ public class ShiftFacade {
         if (workerFacade.getWorkerById(workerId) == null)
             throw new NoSuchElementException("Worker not found");
 
-        if (!shifts.get(shiftId).addAvailableWorker(workerId))
+        Shift shift = shifts.get(shiftId);
+        if (!shift.addAvailableWorker(workerId))
             throw new IllegalStateException("Worker is already available for this shift");
 
         if (!workerFacade.addAvailability(workerId, shiftId))
-            if (!shifts.get(shiftId).removeAvailableWorker(workerId))
+            if (!shift.removeAvailableWorker(workerId))
                 throw new IllegalStateException("Unexpected error, reverting changes failed");
             else
                 throw new IllegalStateException("Unexpected error");
 
-        return true;
+        dto = new ShiftDTO(shift.getId(), shift.getBranch(),
+                shift.getStartTime(), shift.getEndTime(),
+                shift.getRequiredRoles(), shift.getAvailableWorkers(),
+                shift.getAssignedWorkers(), shift.getWorkerRoles());
+        return dto.update();
     }
 
     public boolean removeAvailability(String workerId, int shiftId) {
@@ -198,24 +222,33 @@ public class ShiftFacade {
         if (workerFacade.getWorkerById(workerId) == null)
             throw new NoSuchElementException("Worker not found");
 
-        if (!shifts.get(shiftId).getAvailableWorkers().contains(workerId))
+        Shift shift = shifts.get(shiftId);
+        if (!shift.getAvailableWorkers().contains(workerId))
             throw new IllegalStateException("You are not available for this shift");
 
-        if (shifts.get(shiftId).getAssignedWorkers().contains(workerId))
+        if (shift.getAssignedWorkers().contains(workerId))
             throw new IllegalStateException("You are already assigned to this shift, contact your manager to unassign you");
 
-        if (!workerFacade.removeAvailability(workerId, shiftId) || !shifts.get(shiftId).removeAvailableWorker(workerId))
+        if (!workerFacade.removeAvailability(workerId, shiftId) || !shift.removeAvailableWorker(workerId))
             throw new IllegalStateException("Unexpected error");
 
-        return true;
+        dto = new ShiftDTO(shift.getId(), shift.getBranch(),
+                shift.getStartTime(), shift.getEndTime(),
+                shift.getRequiredRoles(), shift.getAvailableWorkers(),
+                shift.getAssignedWorkers(), shift.getWorkerRoles());
+        return dto.update();
     }
 
     public boolean loadData() {
-        shifts = ShiftDTO
-                .getShifts()
+        shifts = dto.loadAll()
                 .stream()
                 .map(ShiftFacade::ShiftDTOtoShift)
                 .collect(Collectors.toMap(Shift::getId, w -> w));
+//        shifts = ShiftDTO
+//                .getShifts()
+//                .stream()
+//                .map(ShiftFacade::ShiftDTOtoShift)
+//                .collect(Collectors.toMap(Shift::getId, w -> w));
         nextId = shifts.values().stream().mapToInt(Shift::getId).max().orElse(0) + 1;
         return true;
     }
@@ -256,8 +289,7 @@ public class ShiftFacade {
 
         // Maybe check if the worker is logged in?
 
-        return shifts
-                .values()
+        return shifts.values()
                 .stream()
                 .filter(s -> s.getAssignedWorkers().contains(id))
                 .map(ShiftFacade::convertToShiftToSend)

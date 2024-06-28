@@ -1,5 +1,6 @@
 package com.Superlee.HR.Backend.Business;
 
+import com.Superlee.HR.Backend.DataAccess.DTO;
 import com.Superlee.HR.Backend.DataAccess.RolesDTO;
 
 import java.util.HashMap;
@@ -12,6 +13,7 @@ class Roles {
     }};
 
     private static Roles instance;
+    private RolesDTO dto = new RolesDTO();
     private Map<String, Integer> roles = new HashMap<>();
 
     private Roles() {
@@ -36,14 +38,18 @@ class Roles {
     }
 
     void loadRoles() {
-        roles = RolesDTO.loadRoles();
+        roles = dto.loadAll().stream()
+                .collect(HashMap::new, (map, role) -> map.put(role.getName(), role.getValue()), HashMap::putAll);
     }
 
     void addNewRole(String name) {
         if (roles.containsKey(name))
             throw new IllegalArgumentException("Role already exists");
 
-        roles.put(name, roles.size() + 1);
+        int size = roles.size();
+        roles.put(name, size + 1);
+        dto = new RolesDTO(size + 1, name);
+        dto.insert();
     }
 
     Set<String> getAllRoleNames() {
