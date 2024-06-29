@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SupplierAgreement {
 
     // <catalogNumber, SupplierProduct>
-    private final Map<Integer, SupplierProduct> products;
+    public final Map<Integer, SupplierProduct> products;
     private int supplierId;
     private static final int PRODUCT_NOT_EXISTS = 0;
 
