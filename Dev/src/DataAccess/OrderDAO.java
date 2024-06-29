@@ -1,9 +1,10 @@
 package DataAccess;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class OrderDAO {
 
@@ -32,6 +33,18 @@ public class OrderDAO {
         return tableName;
     }
 
+    protected Object ConvertReaderToObject(ResultSet reader)
+    {
+        OrderDTO result = null;
+        try {
+            result = new OrderDTO(reader.getInt(1), reader.getInt(2), reader.getInt(3), reader.getDate(4), new HashMap<>());
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return result;
+    }
+
     public boolean insert(OrderDTO orderDTO) {
         String command = "INSERT INTO " + tableName + " (OrderId, SupplierId, Day, ShipmentDate) VALUES (" + orderDTO.getOrderId() + ", '" + orderDTO.getSupplierId() + "', '" + orderDTO.getDay() + "', '" + orderDTO.getShipmentDate() + "');";
         try (Connection conn = connect(); java.sql.Statement s = conn.createStatement()) {
@@ -56,7 +69,22 @@ public class OrderDAO {
         return false;
     }
 
-
+    public List<OrderDTO> loadAllOrders() {
+        List<OrderDTO> results = new ArrayList<>();
+        String sql = "SELECT * FROM " + tableName + ";";
+        try(Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
+            while (rs.next()) {
+                results.add((OrderDTO) ConvertReaderToObject(rs));
+            }
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return results;
+    }
 
 
 }

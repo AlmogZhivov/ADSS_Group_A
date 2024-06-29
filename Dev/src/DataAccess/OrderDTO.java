@@ -48,11 +48,15 @@ public class OrderDTO {
 
     // Order
     public boolean insert(){
-        return orderDAO.insert(this);
-    }
 
-    public boolean delete(){
-        return orderDAO.delete(orderId);
+        boolean flag = orderDAO.insert(this);
+        if (flag){
+            for (Map.Entry<Integer,Integer> product : products.entrySet()){
+                insertItem(product.getKey(), product.getValue());
+            }
+        }
+
+        return true;
     }
 
     public int getOrderId() {

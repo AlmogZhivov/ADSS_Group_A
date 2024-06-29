@@ -1,5 +1,7 @@
 package Business;
 
+import DataAccess.*;
+
 import java.util.*;
 
 public class OrderFacade {
@@ -18,6 +20,8 @@ public class OrderFacade {
         SupplierAgreement sa = sf.getSupplierAgreement(supplierId);
         Order order = new Order(this.id, products, shipmentDate, supplierId, sa, -1);
         orders.put(id, order);
+        OrderDTO orderDTO = new OrderDTO(order.getOrderId(), order.getSupplierId(), order.getDay(), order.getShipmentDate(), order.getProducts());
+        orderDTO.insert();
         id++;
     }
 
@@ -25,6 +29,8 @@ public class OrderFacade {
         SupplierAgreement sa = sf.getSupplierAgreement(supplierId);
         Order order = new Order(this.id, products, shipmentDate, supplierId, sa, day);
         orders.put(id, order);
+        OrderDTO orderDTO = new OrderDTO(order.getOrderId(), order.getSupplierId(), order.getDay(), order.getShipmentDate(), order.getProducts());
+        orderDTO.insert();
         id++;
     }
 
@@ -39,6 +45,8 @@ public class OrderFacade {
 
     public void removeOrder(int orderId){
         orders.remove(orderId);
+        OrderDAO orderDAO = new OrderDAO();
+        orderDAO.delete(orderId);
     }
 
     public void updateShipmentDate(int orderId, Date shipmentDate){
@@ -49,6 +57,8 @@ public class OrderFacade {
     public void addProduct(int orderId, int catalogNumber, int amount){
         Order order = orders.get(orderId);
         order.addProduct(catalogNumber, amount);
+        OrderDTO orderDTO = new OrderDTO(order.getOrderId(), order.getSupplierId(), order.getDay(), order.getShipmentDate(), order.getProducts());
+        orderDTO.insertItem(catalogNumber, amount);
     }
 
     // HW2 - might want to switch with the method above
@@ -62,6 +72,8 @@ public class OrderFacade {
     public void removeProduct(int orderId, int catalogNumber){
         Order order = orders.get(orderId);
         order.removeProduct(catalogNumber);
+        OrderDTO orderDTO = new OrderDTO(order.getOrderId(), order.getSupplierId(), order.getDay(), order.getShipmentDate(), order.getProducts());
+        orderDTO.deleteItem(catalogNumber);
     }
 
     public Order getOrder(int orderId){
@@ -79,6 +91,20 @@ public class OrderFacade {
     public double getOrderPrice(int orderId){
         Order order = orders.get(orderId);
         return order.getOrderPrice();
+    }
+
+    public void loadAllOrders(){
+        OrderDAO orderDAO = new OrderDAO();
+        List<OrderDTO> orderDTOS = orderDAO.loadAllOrders();
+        for (OrderDTO orderDTO : orderDTOS){
+            orderDTO.loadAllItems();
+            Map<Integer, Integer> products = orderDTO.getProducts();
+            int sid = orderDTO.getSupplierId();
+            SupplierAgreement supplierAgreement = sf.getSupplierAgreement(sid);
+            Order order = new Order(orderDTO.getOrderId(), products, orderDTO.getShipmentDate(), sid, supplierAgreement,orderDTO.getDay());
+            this.orders.put(orderDTO.getOrderId(), order);
+        }
+
     }
 
 
