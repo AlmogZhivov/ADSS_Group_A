@@ -149,19 +149,17 @@ public class OrderTests {
 
     }
 
-//    @Test
-//    public void testAddProductByName(){
-//        supplierService.addProductToSupplier(0, 0, 5, "Milk");
-//        supplierService.addProductToSupplier(1, 1, 4, "Milk");
-//        supplierService.addProductToSupplier(2, 2, 5, "Milk");
-//        Date shipmentDate1 = new Date();
-//        Map<Integer, Integer> products = new HashMap<>();
-//        orderService.addGeneralOrder(products, shipmentDate1, 0);
-//        Response res1 = orderService.addProductByName(0, "Milk", 3);
-//        assertFalse(res1.errorOccurred());
-//        ResponseT<Double> res2 = orderService.getOrderPrice(0);
-//        assertEquals(12, res2.getValue());
-//    }
+    @Test
+    public void testAddProductByName(){
+        supplierService.addProductToSupplier(0, 0, 5, "Milk");
+        supplierService.addProductToSupplier(1, 1, 4, "Milk");
+        supplierService.addProductToSupplier(2, 2, 5, "Milk");
+        Date shipmentDate1 = new Date();
+        Response res1 = orderService.orderCheapestOption("Milk", 3, shipmentDate1);
+        assertFalse(res1.errorOccurred());
+        ResponseT<Double> res2 = orderService.getOrderPrice(0);
+        assertEquals(12, res2.getValue());
+    }
 
 
 

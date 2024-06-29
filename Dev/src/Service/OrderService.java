@@ -20,6 +20,17 @@ public class OrderService {
         this.orderFacade = orderFacade;
     }
 
+
+    public Response loadData(){
+        try {
+            orderFacade.loadAllOrders();
+            return new Response();
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
+
+
     // Adds a single order to the system
     public Response addGeneralOrder(Map<Integer, Integer> products, Date shipmentDate, int supplierId){
         try {
@@ -70,15 +81,15 @@ public class OrderService {
         }
     }
 
-    // HW2 - might want to switch with the method above
-//    public Response addProductByName(int orderId, String name, int amount){
-//        try {
-//            orderFacade.addProductByName(orderId, name, amount);
-//            return new Response();
-//        } catch (Exception e) {
-//            return new Response(e.getMessage());
-//        }
-//    }
+    // HW2 - picks the cheapest option for a given product, and creates an order with it
+    public Response orderCheapestOption(String name, int amount, Date shipmentDate){
+        try {
+            orderFacade.addProductByName(name, amount, shipmentDate);
+            return new Response();
+        } catch (Exception e) {
+            return new Response(e.getMessage());
+        }
+    }
 
     //Removes a product from an existing order
     public Response removeProduct(int orderId, int catalogNumber){

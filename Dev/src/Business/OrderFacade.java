@@ -38,7 +38,7 @@ public class OrderFacade {
         Map<Integer, Order> copyOrders = new HashMap<>(orders);
         for (Order order : copyOrders.values()){
             if (order.getDay() == -1 && order.getShipmentDate().before(new Date())){
-                removeOrder(order.getOrderId());
+                removeOrder(order.getOrderId());//Updates in the database as well
             }
         }
     }
@@ -61,12 +61,16 @@ public class OrderFacade {
         orderDTO.insertItem(catalogNumber, amount);
     }
 
-    // HW2 - might want to switch with the method above
-    public void addProductByName(int orderId, String name, int amount){
-        int catalogNumber = sf.pickCheapestOption(name, amount);
-        System.out.println(catalogNumber);
-        Order order = orders.get(orderId);
-        order.addProduct(catalogNumber, amount);
+    // HW2
+    public void addProductByName(String name, int amount, Date shipmentDate){
+        int[] bestOption = sf.pickCheapestOption(name, amount);
+        int catalogNumber = bestOption[0];
+        int supplierId = bestOption[1];
+        //System.out.println(catalogNumber);
+        int orderId = this.id;
+        Map<Integer, Integer> orderProducts = new HashMap<>();
+        orderProducts.put(catalogNumber, amount);
+        addGeneralOrder(orderProducts, shipmentDate, supplierId);
     }
 
     public void removeProduct(int orderId, int catalogNumber){
