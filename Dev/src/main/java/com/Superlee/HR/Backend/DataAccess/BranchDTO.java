@@ -1,6 +1,5 @@
 package com.Superlee.HR.Backend.DataAccess;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BranchDTO extends DTO {
@@ -9,7 +8,7 @@ public class BranchDTO extends DTO {
     private String manager;
 
     public BranchDTO() {
-        this.controller = new BranchController();
+        this.controller = new BranchController(this);
     }
 
     public BranchDTO(String name, String address, String manager) {
@@ -40,7 +39,7 @@ public class BranchDTO extends DTO {
 
     @Override
     public List<BranchDTO> loadAll() {
-        return (List<BranchDTO>) controller.loadAll();
+        return ((BranchController) controller).loadAll();
     }
 
 //    public static List<BranchDTO> getBranches() { // TODO remove

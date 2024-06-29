@@ -15,7 +15,7 @@ public class ShiftDTO extends DTO {
     private Map<String, Integer> workerRoles;
 
     public ShiftDTO() {
-        this.controller = new ShiftController();
+        this.controller = new ShiftController(this);
     }
 
     public ShiftDTO(int id, String branch,
@@ -47,7 +47,7 @@ public class ShiftDTO extends DTO {
 
     @Override
     public List<ShiftDTO> loadAll() {
-        return List.of(); // TODO
+        return ((ShiftController) controller).loadAll();
     }
 
     public int getId() {

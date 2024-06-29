@@ -8,31 +8,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorkerController extends Controller<WorkerDTO> {
+    WorkerController(WorkerDTO dto) {
+        super(dto);
+    }
+
     @Override
-    boolean insert(DTO dto) {
-        assert dto instanceof WorkerDTO;
+    boolean insert() {
         try {
             connect();
             String insertSQL =
                     "INSERT INTO Workers(id, firstname, surname, email, phone, password, bankDetails, salary, startDate, contract, branch)"
                     + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(insertSQL);
-            pstmt.setString(1, ((WorkerDTO) dto).getId());
-            pstmt.setString(2, ((WorkerDTO) dto).getFirstname());
-            pstmt.setString(3, ((WorkerDTO) dto).getSurname());
-            pstmt.setString(4, ((WorkerDTO) dto).getEmail());
-            pstmt.setString(5, ((WorkerDTO) dto).getPhone());
-            pstmt.setString(6, ((WorkerDTO) dto).getPassword());
-            pstmt.setString(7, ((WorkerDTO) dto).getBankDetails());
-            pstmt.setInt(8, ((WorkerDTO) dto).getSalary());
-            pstmt.setObject(9, ((WorkerDTO) dto).getStartDate());
-            pstmt.setString(10, ((WorkerDTO) dto).getContract());
-            pstmt.setString(11, ((WorkerDTO) dto).getBranch());
+            pstmt.setString(1, dto.getId());
+            pstmt.setString(2, dto.getFirstname());
+            pstmt.setString(3, dto.getSurname());
+            pstmt.setString(4, dto.getEmail());
+            pstmt.setString(5, dto.getPhone());
+            pstmt.setString(6, dto.getPassword());
+            pstmt.setString(7, dto.getBankDetails());
+            pstmt.setInt(8, dto.getSalary());
+            pstmt.setObject(9, dto.getStartDate());
+            pstmt.setString(10, dto.getContract());
+            pstmt.setString(11, dto.getBranch());
             pstmt.executeUpdate();
 
-            insertRoles((WorkerDTO) dto);
-            insertShifts((WorkerDTO) dto);
-            insertAvailability((WorkerDTO) dto);
+            insertRoles();
+            insertShifts();
+            insertAvailability();
         } catch (Exception e) {
             throw new DataAccessException(e);
         } finally {
@@ -42,33 +45,33 @@ public class WorkerController extends Controller<WorkerDTO> {
     }
 
     @Override
-    boolean update(DTO dto) {
+    boolean update() {
         try {
             connect();
             String updateSQL =
                     "UPDATE Workers SET firstname = ?, surname = ?, email = ?, phone = ?, password = ?, bankDetails = ?, salary = ?, startDate = ?, contract = ?, branch = ?"
                     + " WHERE id = ?";
             PreparedStatement pstmt = conn.prepareStatement(updateSQL);
-            pstmt.setString(1, ((WorkerDTO) dto).getFirstname());
-            pstmt.setString(2, ((WorkerDTO) dto).getSurname());
-            pstmt.setString(3, ((WorkerDTO) dto).getEmail());
-            pstmt.setString(4, ((WorkerDTO) dto).getPhone());
-            pstmt.setString(5, ((WorkerDTO) dto).getPassword());
-            pstmt.setString(6, ((WorkerDTO) dto).getBankDetails());
-            pstmt.setInt(7, ((WorkerDTO) dto).getSalary());
-            pstmt.setObject(8, ((WorkerDTO) dto).getStartDate());
-            pstmt.setString(9, ((WorkerDTO) dto).getContract());
-            pstmt.setString(10, ((WorkerDTO) dto).getBranch());
-            pstmt.setString(11, ((WorkerDTO) dto).getId());
+            pstmt.setString(1, dto.getFirstname());
+            pstmt.setString(2, dto.getSurname());
+            pstmt.setString(3, dto.getEmail());
+            pstmt.setString(4, dto.getPhone());
+            pstmt.setString(5, dto.getPassword());
+            pstmt.setString(6, dto.getBankDetails());
+            pstmt.setInt(7, dto.getSalary());
+            pstmt.setObject(8, dto.getStartDate());
+            pstmt.setString(9, dto.getContract());
+            pstmt.setString(10, dto.getBranch());
+            pstmt.setString(11, dto.getId());
             pstmt.executeUpdate();
 
-            deleteRoles((WorkerDTO) dto);
-            deleteShifts((WorkerDTO) dto);
-            deleteAvailability((WorkerDTO) dto);
+            deleteRoles();
+            deleteShifts();
+            deleteAvailability();
 
-            insertRoles((WorkerDTO) dto);
-            insertShifts((WorkerDTO) dto);
-            insertAvailability((WorkerDTO) dto);
+            insertRoles();
+            insertShifts();
+            insertAvailability();
         } catch (Exception e) {
             throw new DataAccessException(e);
         } finally {
@@ -78,7 +81,7 @@ public class WorkerController extends Controller<WorkerDTO> {
     }
 
     @Override
-    boolean delete(DTO dto) {
+    boolean delete() {
         throw new UnsupportedOperationException("Deleting workers is not supported.");
     }
 
@@ -142,7 +145,7 @@ public class WorkerController extends Controller<WorkerDTO> {
         }
     }
 
-    private void insertRoles(WorkerDTO dto) throws SQLException {
+    private void insertRoles() throws SQLException {
         List<Integer> roles = dto.getRoles();
         String insertRoleSQL;
         PreparedStatement pstmtRole;
@@ -155,7 +158,7 @@ public class WorkerController extends Controller<WorkerDTO> {
         }
     }
 
-    private void insertShifts(WorkerDTO dto) throws SQLException {
+    private void insertShifts() throws SQLException {
         List<Integer> shifts = dto.getShifts();
         String insertShiftSQL;
         PreparedStatement pstmtShift;
@@ -168,7 +171,7 @@ public class WorkerController extends Controller<WorkerDTO> {
         }
     }
 
-    private void insertAvailability(WorkerDTO dto) throws SQLException {
+    private void insertAvailability() throws SQLException {
         List<Integer> availability = dto.getAvailability();
         String insertAvailabilitySQL;
         PreparedStatement pstmtAvailability;
@@ -181,21 +184,21 @@ public class WorkerController extends Controller<WorkerDTO> {
         }
     }
 
-    private void deleteRoles(WorkerDTO dto) throws SQLException {
+    private void deleteRoles() throws SQLException {
         String deleteRolesSQL = "DELETE FROM WorkerRoles WHERE workerId = ?";
         PreparedStatement pstmtDeleteRoles = conn.prepareStatement(deleteRolesSQL);
         pstmtDeleteRoles.setString(1, dto.getId());
         pstmtDeleteRoles.executeUpdate();
     }
 
-    private void deleteShifts(WorkerDTO dto) throws SQLException {
+    private void deleteShifts() throws SQLException {
         String deleteShiftsSQL = "DELETE FROM WorkerShifts WHERE workerId = ?";
         PreparedStatement pstmtDeleteShifts = conn.prepareStatement(deleteShiftsSQL);
         pstmtDeleteShifts.setString(1, dto.getId());
         pstmtDeleteShifts.executeUpdate();
     }
 
-    private void deleteAvailability(WorkerDTO dto) throws SQLException {
+    private void deleteAvailability() throws SQLException {
         String deleteAvailabilitySQL = "DELETE FROM WorkerAvailability WHERE workerId = ?";
         PreparedStatement pstmtDeleteAvailability = conn.prepareStatement(deleteAvailabilitySQL);
         pstmtDeleteAvailability.setString(1, dto.getId());

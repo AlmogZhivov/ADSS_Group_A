@@ -4,16 +4,23 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.sql.Connection;
+import java.util.Objects;
 
-abstract class Controller<T> {
+abstract class Controller<T extends DTO> {
     protected final String path = "jdbc:sqlite:src/main/resources/HR.db";
     protected Connection conn;
+    protected T dto;
 
-    abstract boolean insert(DTO dto);
+    Controller(T dto) {
+        Objects.requireNonNull(dto);
+        this.dto = dto;
+    }
 
-    abstract boolean update(DTO dto);
+    abstract boolean insert();
 
-    abstract boolean delete(DTO dto);
+    abstract boolean update();
+
+    abstract boolean delete();
 
     abstract List<T> loadAll();
 

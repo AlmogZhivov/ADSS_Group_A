@@ -8,15 +8,18 @@ import java.util.List;
 import java.sql.PreparedStatement;
 
 public class RolesController extends Controller<RolesDTO> {
+    public RolesController(RolesDTO dto) {
+        super(dto);
+    }
+
     @Override
-    public boolean insert(DTO dto) {
-        assert dto instanceof RolesDTO;
+    public boolean insert() {
         try {
             connect();
             String insertSQL = "INSERT INTO Roles(value, name) VALUES (?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(insertSQL);
-            pstmt.setInt(1, ((RolesDTO) dto).getValue());
-            pstmt.setString(2, ((RolesDTO) dto).getName());
+            pstmt.setInt(1, dto.getValue());
+            pstmt.setString(2, dto.getName());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e);
@@ -27,12 +30,12 @@ public class RolesController extends Controller<RolesDTO> {
     }
 
     @Override
-    public boolean update(DTO dto) {
+    public boolean update() {
         throw new UnsupportedOperationException("Updating roles is not supported.");
     }
 
     @Override
-    public boolean delete(DTO dto) {
+    public boolean delete() {
         throw new UnsupportedOperationException("Deleting roles is not supported.");
     }
 
