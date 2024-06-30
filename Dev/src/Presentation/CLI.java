@@ -26,7 +26,7 @@ public class CLI {
         prService.printMenu();
         while (true) {
             input = scanner.nextLine();
-            if (input.equalsIgnoreCase("29")) {
+            if (input.equalsIgnoreCase("31")) {
                 System.out.println("Goodbye!");
                 break;
             }

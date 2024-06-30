@@ -36,10 +36,14 @@ public class PresentService {
         Response errResponse = new Response("Invalid number of args");
         switch (parts[0]) {
             case "28":
+                return ss.loadData();
+            case "29":
+                return os.loadData();
+            case "27":
+                return orderCheapestOption();
+            case "30":
                 printMenu();
                 return new Response();
-            case "27":
-                return ss.loadData();
             case "1":
                 return addSupplier();
             case "2":
@@ -129,11 +133,13 @@ public class PresentService {
                         24. getOrder
                         25. getAllOrders
                         26. getOrderPrice
+                        27. orderCheapestOption
 
                         General Commands:
-                        27. loadData
-                        28. help
-                        29. exit
+                        28. loadSupplierData
+                        29. loadOrderData
+                        30. help
+                        31. exit
                         """);
     }
     private Response addSupplier() {
@@ -341,5 +347,13 @@ public class PresentService {
             itemIdAndAmount.put(itemId, amount);
         }
         return itemIdAndAmount;
+    }
+
+    private Response orderCheapestOption(){
+        System.out.print("Enter product name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter amount: ");
+        int amount = Integer.parseInt(scanner.nextLine());
+        return os.orderCheapestOption(name, amount, new Date(Calendar.getInstance().getTime().getTime()));
     }
 }
