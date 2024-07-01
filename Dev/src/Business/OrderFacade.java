@@ -107,8 +107,14 @@ public class OrderFacade {
             SupplierAgreement supplierAgreement = sf.getSupplierAgreement(sid);
             Order order = new Order(orderDTO.getOrderId(), products, orderDTO.getShipmentDate(), sid, supplierAgreement,orderDTO.getDay());
             this.orders.put(orderDTO.getOrderId(), order);
+            this.id++;
         }
 
+    }
+
+    public String toString(int orderId){
+        Order order = orders.get(orderId);
+        return order.toString();
     }
 
 

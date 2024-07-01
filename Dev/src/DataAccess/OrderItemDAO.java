@@ -45,7 +45,7 @@ public class OrderItemDAO {
     }
 
     public boolean insert(OrderItemDTO orderItemDTO) {
-        String command = "INSERT INTO " + tableName + " (OrderId, CatalogNumber, Amount) VALUES (" + orderItemDTO.getOrderId() + ", " + orderItemDTO.getCatalogNumber() + orderItemDTO.getAmount() + ");";
+        String command = "INSERT INTO " + tableName + " (OrderId, CatalogNumber, Amount) VALUES (" + orderItemDTO.getOrderId() + ", " + orderItemDTO.getCatalogNumber() + ", " + orderItemDTO.getAmount() + ");";
         try (Connection conn = connect(); java.sql.Statement s = conn.createStatement()) {
             s.execute(command);
             return true;
@@ -70,7 +70,7 @@ public class OrderItemDAO {
 
     public List<OrderItemDTO> getOrderItems(int orderId) {
         List<OrderItemDTO> results = new ArrayList<>();
-        String sql = "SELECT * FROM " + tableName + "WHERE OrderId = " + orderId + ";";
+        String sql = "SELECT * FROM " + tableName + " WHERE OrderId = " + orderId + ";";
         try(Connection conn = this.connect();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)){

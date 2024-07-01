@@ -101,9 +101,9 @@ public class DataBaseCreator {
                 "OrderId 	INTEGER NOT NULL UNIQUE,"+
                 "SupplierId 	INTEGER NOT NULL,"+
                 "Day 	INTEGER NOT NULL,"+
-                "ShipmentDate 	Date NOT NULL,"+
+                "ShipmentDate 	DATE NOT NULL,"+
                 "PRIMARY KEY(OrderId)," +
-                "FOREIGN KEY(SupplierId) REFERENCES Suppliers(SupplierId);";
+                "FOREIGN KEY(SupplierId) REFERENCES Suppliers(SupplierId));";
 
         return command;
     }
@@ -114,8 +114,8 @@ public class DataBaseCreator {
                 "CatalogNumber 	INTEGER NOT NULL,"+
                 "Amount 	INTEGER NOT NULL,"+
                 "PRIMARY KEY(CatalogNumber, OrderId)," +
-                "FOREIGN KEY(CatalogNumber) REFERENCES SupplierAgreement(CatalogNumber))" +
-                "FOREIGN KEY(OrderId) REFERENCES Orders(OrderId))";
+                "FOREIGN KEY(CatalogNumber) REFERENCES SupplierAgreement(CatalogNumber)" +
+                "FOREIGN KEY(OrderId) REFERENCES Orders(OrderId));";
 
         return command;
     }

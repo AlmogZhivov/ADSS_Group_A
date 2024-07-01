@@ -2,6 +2,8 @@ package DataAccess;
 
 import java.io.File;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,12 +37,15 @@ public class OrderDAO {
 
     protected Object ConvertReaderToObject(ResultSet reader)
     {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         OrderDTO result = null;
         try {
-            result = new OrderDTO(reader.getInt(1), reader.getInt(2), reader.getInt(3), reader.getDate(4), new HashMap<>());
+            result = new OrderDTO(reader.getInt(1), reader.getInt(2), reader.getInt(3), formatter.parse(reader.getString(4)), new HashMap<>());
         }
         catch (SQLException throwables) {
             throwables.printStackTrace();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
         return result;
     }

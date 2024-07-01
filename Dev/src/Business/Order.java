@@ -14,6 +14,7 @@ public class Order {
     private final int supplierId;
     private SupplierAgreement supplierAgreement;
     private int day;
+    private String[] convertDay = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 
     public Order(int orderId, Map<Integer, Integer> products, Date shipmentDate, int supplierId, SupplierAgreement supplierAgreement, int day) {
@@ -65,5 +66,19 @@ public class Order {
 
     public int getDay() {
         return day;
+    }
+
+    public String toString(){
+        String str = "Order id: " + this.orderId + "\n";
+        str += "Shipment date: " + this.shipmentDate + "\n";
+        str += "Supplier id: " + this.supplierId + "\n";
+        if (day >= 0)
+            str += "Day: " + convertDay[this.day] + "\n";
+        str+= "Products:" + "\n";
+        for (Map.Entry<Integer,Integer> product : products.entrySet()){
+            str += "Catalog Number: " + product.getKey() + ", Amount: " + product.getValue() + "\n";
+        }
+
+        return str;
     }
 }

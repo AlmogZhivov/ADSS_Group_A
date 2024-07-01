@@ -131,6 +131,10 @@ public class OrderService {
         }
     }
 
+    public String toString(int orderId){
+        return orderFacade.toString(orderId);
+    }
+
     public static OrderService getInstance(OrderFacade orderFacade) {
         if (instance == null)
             instance = new OrderService(orderFacade);
