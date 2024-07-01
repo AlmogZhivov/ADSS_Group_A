@@ -57,7 +57,7 @@ public class OrderItemDAO {
     }
 
     public boolean delete(int orderId, int catalogNumber) {
-        String command = "DELETE FROM " + tableName + " WHERE CatalogNumber = " + catalogNumber + "AND OrderId = " + orderId + ";";
+        String command = "DELETE FROM " + tableName + " WHERE CatalogNumber = " + catalogNumber + " AND OrderId = " + orderId + ";";
         try (Connection conn = connect(); java.sql.Statement s = conn.createStatement()) {
             s.execute(command);
             return true;

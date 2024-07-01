@@ -4,6 +4,7 @@ import Business.Order;
 import Business.OrderFacade;
 import Business.Supplier;
 import Business.SupplierFacade;
+import DataAccess.DataBaseCreator;
 import Service.OrderService;
 import Service.Responses.Response;
 import Service.Responses.ResponseT;
@@ -30,7 +31,17 @@ public class OrderTests {
 
     @BeforeEach
     public void setUp(){
-        supplierService.loadData();
+        DataBaseCreator dataBaseCreator = new DataBaseCreator();
+        dataBaseCreator.deleteAllTables();
+        try {
+            dataBaseCreator.CreateAllTables();
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        supplierService.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH, "Afula");
+        supplierService.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER, "Beer Sheva");
+        supplierService.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD, "Haifa");
+
     }
 
     @Test

@@ -4,6 +4,7 @@ import Business.Contact;
 import Business.Supplier;
 import Business.SupplierAgreement;
 import Business.SupplierFacade;
+import DataAccess.DataBaseCreator;
 import Service.Responses.Response;
 import Service.Responses.ResponseT;
 import Service.SupplierService;
@@ -27,12 +28,20 @@ class SupplierTests {
     private final SupplierService supplierService = new SupplierService(new SupplierFacade());
 
     public SupplierTests(){
-
     }
 
     @BeforeEach
     public void setUp(){
-        supplierService.loadData();
+        DataBaseCreator dataBaseCreator = new DataBaseCreator();
+        dataBaseCreator.deleteAllTables();
+        try {
+            dataBaseCreator.CreateAllTables();
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        supplierService.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH, "Afula");
+        supplierService.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER, "Beer Sheva");
+        supplierService.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD, "Haifa");
     }
 
     @Test
@@ -40,7 +49,6 @@ class SupplierTests {
     public void testAddSupplier(){
         Response res = supplierService.addSupplier("D", "3", "3333", Supplier.PaymentMethod.CREDIT_CARD, "Jerusalem");
         ResponseT<List<Supplier>> l = supplierService.getAllSuppliers();
-        System.out.println(l.getValue().size());
         assertFalse(res.errorOccurred());
         assertEquals(4, l.getValue().size());
     }
@@ -51,7 +59,7 @@ class SupplierTests {
         Response res = supplierService.removeSupplier(2);
         ResponseT<List<Supplier>> l = supplierService.getAllSuppliers();
         assertFalse(res.errorOccurred());
-        assertEquals(3, l.getValue().size());
+        assertEquals(2, l.getValue().size());
     }
 
     @Test
