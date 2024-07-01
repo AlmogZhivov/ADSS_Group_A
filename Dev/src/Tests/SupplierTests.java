@@ -15,6 +15,11 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+
+@TestMethodOrder(OrderAnnotation.class)
 
 
 class SupplierTests {
@@ -31,19 +36,22 @@ class SupplierTests {
     }
 
     @Test
+    @Order(1)
     public void testAddSupplier(){
         Response res = supplierService.addSupplier("D", "3", "3333", Supplier.PaymentMethod.CREDIT_CARD, "Jerusalem");
         ResponseT<List<Supplier>> l = supplierService.getAllSuppliers();
+        System.out.println(l.getValue().size());
         assertFalse(res.errorOccurred());
         assertEquals(4, l.getValue().size());
     }
 
     @Test
+    @Order(2)
     public void testRemoveSupplier(){
         Response res = supplierService.removeSupplier(2);
         ResponseT<List<Supplier>> l = supplierService.getAllSuppliers();
         assertFalse(res.errorOccurred());
-        assertEquals(2, l.getValue().size());
+        assertEquals(3, l.getValue().size());
     }
 
     @Test
