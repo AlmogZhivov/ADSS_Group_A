@@ -22,11 +22,6 @@ class SupplierTests {
     private final SupplierService supplierService = new SupplierService(new SupplierFacade());
 
     public SupplierTests(){
-
-    }
-
-    @BeforeEach
-    public void setUp(){
         supplierService.loadData();
     }
 
