@@ -20,7 +20,7 @@ public class WorkerDTO extends DTO {
     private String branch;
 
     public WorkerDTO() {
-        this.controller = new BranchController();
+        this.controller = new WorkerController(this);
     }
 
     public WorkerDTO(String id, String firstname, String surname, String email, String phone,
@@ -176,7 +176,7 @@ public class WorkerDTO extends DTO {
 
     @Override
     public List<WorkerDTO> loadAll() {
-        return List.of(); // TODO
+        return ((WorkerController) controller).loadAll();
     }
 
 //    public static List<WorkerDTO> getWorkers() {

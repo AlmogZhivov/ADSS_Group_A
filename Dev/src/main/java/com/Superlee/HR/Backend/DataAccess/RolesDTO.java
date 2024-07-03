@@ -7,7 +7,7 @@ public class RolesDTO extends DTO {
     private String name;
 
     public RolesDTO() {
-        this.controller = new RolesController();
+        this.controller = new RolesController(this);
     }
 
     public RolesDTO(int value, String name) {
@@ -40,7 +40,7 @@ public class RolesDTO extends DTO {
 
     @Override
     public List<RolesDTO> loadAll() {
-        return (List<RolesDTO>) controller.loadAll();
+        return ((RolesController) controller).loadAll();
     }
     //    public static Map<String, Integer> loadRoles() { // TODO remove
 //        Map<String, Integer> roles = new HashMap<>();

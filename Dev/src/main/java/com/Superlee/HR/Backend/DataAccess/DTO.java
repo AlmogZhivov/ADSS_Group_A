@@ -6,15 +6,16 @@ public abstract class DTO {
     Controller<? extends DTO> controller;
 
     public boolean insert() {
-        return controller.insert(this);
+        return controller.insert();
     }
 
     public boolean update() {
-        return controller.update(this);
+        return controller.update();
     }
 
+    @Deprecated // Not a requirement
     public boolean delete() {
-        return controller.delete(this);
+        return controller.delete();
     }
 
     public abstract List<? extends DTO> loadAll();

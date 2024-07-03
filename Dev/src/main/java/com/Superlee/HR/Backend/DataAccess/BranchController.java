@@ -5,17 +5,20 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-class BranchController extends Controller<BranchDTO> {
+public class BranchController extends Controller<BranchDTO> {
+    BranchController(BranchDTO dto) {
+        super(dto);
+    }
+
     @Override
-    public boolean insert(DTO dto) {
-        assert dto instanceof BranchDTO;
+    public boolean insert() {
         try {
             connect();
             String insertSQL = "INSERT INTO Branch(name, address, manager) VALUES (?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(insertSQL);
-            pstmt.setString(1, ((BranchDTO) dto).getName());
-            pstmt.setString(2, ((BranchDTO) dto).getAddress());
-            pstmt.setString(3, ((BranchDTO) dto).getManager());
+            pstmt.setString(1, dto.getName());
+            pstmt.setString(2, dto.getAddress());
+            pstmt.setString(3, dto.getManager());
             pstmt.executeUpdate();
         } catch (Exception e) {
             throw new DataAccessException(e);
@@ -26,15 +29,14 @@ class BranchController extends Controller<BranchDTO> {
     }
 
     @Override
-    public boolean update(DTO dto) {
-        assert dto instanceof BranchDTO;
+    public boolean update() {
         try {
             connect();
             String updateSQL = "UPDATE Branch SET address = ?, manager = ? WHERE name = ?";
             PreparedStatement pstmt = conn.prepareStatement(updateSQL);
-            pstmt.setString(1, ((BranchDTO) dto).getAddress());
-            pstmt.setString(2, ((BranchDTO) dto).getManager());
-            pstmt.setString(3, ((BranchDTO) dto).getName());
+            pstmt.setString(1, dto.getAddress());
+            pstmt.setString(2, dto.getManager());
+            pstmt.setString(3, dto.getName());
             pstmt.executeUpdate();
         } catch (Exception e) {
             throw new DataAccessException(e);
@@ -45,7 +47,7 @@ class BranchController extends Controller<BranchDTO> {
     }
 
     @Override
-    public boolean delete(DTO dto) {
+    public boolean delete() {
         throw new UnsupportedOperationException("Deleting branches is not supported.");
     }
 
