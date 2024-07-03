@@ -82,7 +82,19 @@ public class WorkerController extends Controller<WorkerDTO> {
 
     @Override
     boolean delete() {
-        throw new UnsupportedOperationException("Deleting workers is not supported.");
+        //throw new UnsupportedOperationException("Deleting workers is not supported.");
+        try {
+            connect();
+            String deleteSQL = "DELETE FROM Workers WHERE id = ?";
+            PreparedStatement pstmt = conn.prepareStatement(deleteSQL);
+            pstmt.setString(1, dto.getId());
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DataAccessException(e);
+        } finally {
+            closeConnection();
+        }
+        return true;
     }
 
     @Override

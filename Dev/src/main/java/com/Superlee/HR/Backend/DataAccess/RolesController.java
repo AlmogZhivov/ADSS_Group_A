@@ -36,7 +36,19 @@ public class RolesController extends Controller<RolesDTO> {
 
     @Override
     public boolean delete() {
-        throw new UnsupportedOperationException("Deleting roles is not supported.");
+        //throw new UnsupportedOperationException("Deleting roles is not supported.");
+        try {
+            connect();
+            String deleteSQL = "DELETE FROM Roles WHERE value = ?";
+            PreparedStatement pstmt = conn.prepareStatement(deleteSQL);
+            pstmt.setInt(1, dto.getValue());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        } finally {
+            closeConnection();
+        }
+        return true;
     }
 
     @Override

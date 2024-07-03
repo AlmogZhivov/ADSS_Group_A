@@ -16,7 +16,6 @@ public class WorkerFacade {
     private Map<String, Worker> workers;
     private final Roles roles = Roles.getInstance();
     private WorkerDTO dto = new WorkerDTO();
-
     private static Worker loggedInWorker;
 
     private WorkerFacade() {
@@ -489,5 +488,15 @@ public class WorkerFacade {
 
         roles.addNewRole(role);
         return true;
+    }
+
+    public WorkerFacade setTestMode(boolean testMode) {
+        dto.setTestMode(testMode);
+        return this;
+    }
+
+    public void clearData() {
+        dto.deleteAll();
+        workers.clear();
     }
 }

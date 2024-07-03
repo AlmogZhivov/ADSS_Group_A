@@ -324,4 +324,14 @@ public class ShiftFacade {
                 .map(ShiftFacade::convertToShiftToSend)
                 .collect(Collectors.toList());
     }
+
+    public ShiftFacade setTestMode(boolean testMode) {
+        dto.setTestMode(testMode);
+        return this;
+    }
+
+    public void clearData() {
+        dto.deleteAll();
+        shifts.clear();
+    }
 }

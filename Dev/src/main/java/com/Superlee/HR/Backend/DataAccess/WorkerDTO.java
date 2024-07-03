@@ -20,7 +20,7 @@ public class WorkerDTO extends DTO {
     private String branch;
 
     public WorkerDTO() {
-        this.controller = new WorkerController(this);
+        this.controller = new WorkerController(this).setTestMode(testMode);
     }
 
     public WorkerDTO(String id, String firstname, String surname, String email, String phone,
@@ -192,7 +192,7 @@ public class WorkerDTO extends DTO {
 //        WorkerDTO w8 = new WorkerDTO("8", "Jane", "Brown", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
 //        WorkerDTO w9 = new WorkerDTO("9", "John", "White", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
 //        WorkerDTO w10 = new WorkerDTO("10", "Jane", "White", "a@b.c", "123456789", "password", "123456789", 1000, null, null, null, null, LocalDateTime.now().toString(), "contract", "branch");
-//
+
 //        return List.of(w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10);
 //    } // TODO remove
 }

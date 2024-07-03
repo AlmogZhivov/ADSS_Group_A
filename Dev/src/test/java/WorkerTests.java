@@ -1,6 +1,7 @@
 import com.Superlee.HR.Backend.Business.WorkerFacade;
 import com.Superlee.HR.Backend.Business.ShiftFacade;
 import com.Superlee.HR.Backend.Business.WorkerToSend;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,13 +10,18 @@ import java.util.NoSuchElementException;
 import static org.junit.Assert.*;
 
 public class WorkerTests {
-    private final WorkerFacade workerFacade = WorkerFacade.getInstance();
-    private final ShiftFacade shiftFacade = ShiftFacade.getInstance();
+    private final WorkerFacade workerFacade = WorkerFacade.getInstance().setTestMode(true);
+    private final ShiftFacade shiftFacade = ShiftFacade.getInstance().setTestMode(true);
 
     @Before
     public void setUp() {
         workerFacade.reset(0xC0FFEE);
         shiftFacade.reset(0xC0FFEE);
+    }
+
+    @After
+    public void cleanUp() {
+        workerFacade.clearData();
     }
 
     private int addShift() {
@@ -270,6 +276,7 @@ public class WorkerTests {
 
     @Test
     public void testAssignWorkerSuccess() {
+        workerFacade.clearData();
         addWorker();
         addRoleManager();
         int sid = addShift();

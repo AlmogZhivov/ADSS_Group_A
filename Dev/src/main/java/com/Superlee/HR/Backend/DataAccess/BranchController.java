@@ -14,7 +14,7 @@ public class BranchController extends Controller<BranchDTO> {
     public boolean insert() {
         try {
             connect();
-            String insertSQL = "INSERT INTO Branch(name, address, manager) VALUES (?, ?, ?)";
+            String insertSQL = "INSERT INTO Branches(name, address, manager) VALUES (?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(insertSQL);
             pstmt.setString(1, dto.getName());
             pstmt.setString(2, dto.getAddress());
@@ -32,7 +32,7 @@ public class BranchController extends Controller<BranchDTO> {
     public boolean update() {
         try {
             connect();
-            String updateSQL = "UPDATE Branch SET address = ?, manager = ? WHERE name = ?";
+            String updateSQL = "UPDATE Branches SET address = ?, manager = ? WHERE name = ?";
             PreparedStatement pstmt = conn.prepareStatement(updateSQL);
             pstmt.setString(1, dto.getAddress());
             pstmt.setString(2, dto.getManager());
@@ -48,14 +48,26 @@ public class BranchController extends Controller<BranchDTO> {
 
     @Override
     public boolean delete() {
-        throw new UnsupportedOperationException("Deleting branches is not supported.");
+        //throw new UnsupportedOperationException("Deleting branches is not supported.");
+        try {
+            connect();
+            String deleteSQL = "DELETE FROM Branches WHERE name = ?";
+            PreparedStatement pstmt = conn.prepareStatement(deleteSQL);
+            pstmt.setString(1, dto.getName());
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DataAccessException(e);
+        } finally {
+            closeConnection();
+        }
+        return true;
     }
 
     @Override
     public List<BranchDTO> loadAll() {
         try {
             connect();
-            String selectSQL = "SELECT * FROM Branch";
+            String selectSQL = "SELECT * FROM Branches";
             PreparedStatement pstmt = conn.prepareStatement(selectSQL);
             ResultSet rs = pstmt.executeQuery();
             List<BranchDTO> branches = new ArrayList<>();

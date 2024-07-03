@@ -119,9 +119,19 @@ public class BranchFacade {
         return new BranchToSend(branch.getName(), branch.getAddress(), branch.getManager());
     }
 
+
+
+    /**
+     * ============================================================================================
+     * Testing methods
+     * DO NOT USE IN PRODUCTION!
+     * ============================================================================================
+     */
+
+
     /**
      * Reset the branches map.
-     * DEBUGGING PURPOSES ONLY
+     * TESTING PURPOSES ONLY
      * DO NOT USE IN PRODUCTION
      */
     public void reset(int safetyCode) {
@@ -129,4 +139,34 @@ public class BranchFacade {
             System.exit(-1);
         branches.clear();
     }
+
+    /**
+     * Set the test mode of the DTO.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public BranchFacade setTestMode(boolean testMode) {
+        dto.setTestMode(testMode);
+        return this;
+    }
+
+    /**
+     * Clear the data in the DTO and the branches map.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public void clearData() {
+        dto.deleteAll();
+        branches.clear();
+    }
+
+    /**
+     * Get the DTO.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public BranchDTO getDTO() {
+        return dto;
+    }
+
 }
