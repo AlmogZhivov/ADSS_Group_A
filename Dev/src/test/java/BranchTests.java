@@ -1,5 +1,6 @@
 import com.Superlee.HR.Backend.Business.BranchFacade;
 import com.Superlee.HR.Backend.Business.WorkerFacade;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,13 +9,18 @@ import java.util.NoSuchElementException;
 import static org.junit.Assert.*;
 
 public class BranchTests {
-    private final BranchFacade branchFacade = BranchFacade.getInstance();
-    private final WorkerFacade workerFacade = WorkerFacade.getInstance();
+    private final BranchFacade branchFacade = BranchFacade.getInstance().setTestMode(true);
+    private final WorkerFacade workerFacade = WorkerFacade.getInstance().setTestMode(true);
 
     @Before
     public void setUp() {
         branchFacade.reset(0xC0FFEE);
         workerFacade.reset(0xC0FFEE);
+    }
+
+    @After
+    public void cleanUp() {
+        workerFacade.clearData();
     }
 
     private boolean addWorker() {

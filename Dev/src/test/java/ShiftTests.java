@@ -1,6 +1,7 @@
 import com.Superlee.HR.Backend.Business.ShiftFacade;
 import com.Superlee.HR.Backend.Business.ShiftToSend;
 import com.Superlee.HR.Backend.Business.WorkerFacade;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,14 +11,19 @@ import java.util.NoSuchElementException;
 import static org.junit.Assert.*;
 
 public class ShiftTests {
-    private final WorkerFacade workerFacade = WorkerFacade.getInstance();
-    private final ShiftFacade shiftFacade = ShiftFacade.getInstance();
+    private final WorkerFacade workerFacade = WorkerFacade.getInstance().setTestMode(true);
+    private final ShiftFacade shiftFacade = ShiftFacade.getInstance().setTestMode(true);
     private final String branch = "Hakol BeHinam";
 
     @Before
     public void setUp() {
         workerFacade.reset(0xC0FFEE);
         shiftFacade.reset(0xC0FFEE);
+    }
+
+    @After
+    public void cleanUp() {
+        workerFacade.clearData();
     }
 
     private int addShift() {

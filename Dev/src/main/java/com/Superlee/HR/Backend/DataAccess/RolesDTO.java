@@ -7,7 +7,7 @@ public class RolesDTO extends DTO {
     private String name;
 
     public RolesDTO() {
-        this.controller = new RolesController(this);
+        this.controller = new RolesController(this).setTestMode(testMode);
     }
 
     public RolesDTO(int value, String name) {

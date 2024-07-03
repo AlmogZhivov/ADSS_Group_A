@@ -1,6 +1,8 @@
 package com.Superlee.HR.Backend.DataAccess;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +17,11 @@ public class ShiftDTO extends DTO {
     private Map<String, Integer> workerRoles;
 
     public ShiftDTO() {
-        this.controller = new ShiftController(this);
+        this.controller = new ShiftController(this).setTestMode(testMode);
+        requiredRoles = new HashMap<>();
+        availableWorkers = new ArrayList<>();
+        assignedWorkers = new ArrayList<>();
+        workerRoles = new HashMap<>();
     }
 
     public ShiftDTO(int id, String branch,

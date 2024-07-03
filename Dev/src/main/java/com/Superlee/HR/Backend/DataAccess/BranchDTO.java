@@ -8,7 +8,7 @@ public class BranchDTO extends DTO {
     private String manager;
 
     public BranchDTO() {
-        this.controller = new BranchController(this);
+        this.controller = new BranchController(this).setTestMode(testMode);
     }
 
     public BranchDTO(String name, String address, String manager) {

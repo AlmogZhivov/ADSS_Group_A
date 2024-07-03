@@ -68,7 +68,19 @@ public class ShiftController extends Controller<ShiftDTO> {
 
     @Override
     public boolean delete() {
-        throw new UnsupportedOperationException("Deleting shifts is not supported.");
+        //throw new UnsupportedOperationException("Deleting shifts is not supported.");
+        try {
+            connect();
+            String deleteSQL = "DELETE FROM Shifts WHERE id = ?";
+            PreparedStatement pstmt = conn.prepareStatement(deleteSQL);
+            pstmt.setInt(1, dto.getId());
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DataAccessException(e);
+        } finally {
+            closeConnection();
+        }
+        return true;
     }
 
     @Override
