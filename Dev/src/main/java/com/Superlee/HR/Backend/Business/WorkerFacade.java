@@ -339,6 +339,16 @@ public class WorkerFacade {
         return dto.update();
     }
 
+    // TODO: add to UML
+    public String getRoleName(int value) {
+        return roles.getName(value);
+    }
+
+    // TODO: add to UML
+    public int getRoleId(String name) {
+        return roles.getId(name);
+    }
+
     public WorkerToSend login(String id, String password) {
         Util.throwIfNullOrEmpty(id, password);
 
@@ -419,43 +429,7 @@ public class WorkerFacade {
         );
     }
 
-    /**
-     * Reset the workers map.
-     * DEBUGGING PURPOSES ONLY
-     * DO NOT USE IN PRODUCTION
-     */
-    public void reset(int safetyCode) {
-        if (safetyCode != 0xC0FFEE)
-            System.exit(-1);
-        workers.clear();
-    }
 
-    /**
-     * Fake login for testing purposes only.
-     * DO NOT USE IN PRODUCTION
-     */
-    public void fakeLogin(boolean isHRManager, String id) {
-        loggedInWorker = fakeCreateWorker(isHRManager, id);
-    }
-
-    /**
-     * Fake create worker for testing purposes only.
-     * DO NOT USE IN PRODUCTION
-     */
-    public Worker fakeCreateWorker(boolean isHRManager, String id) {
-        Worker w = new Worker(id, "Super", "Man");
-        w.addRole(roles.getId(isHRManager ? "HRManager" : "Cashier"));
-        workers.put(w.getId(), w);
-        return w;
-    }
-
-    /**
-     * Fake logout for testing purposes only.
-     * DO NOT USE IN PRODUCTION
-     */
-    public void fakeLogout() {
-        loggedInWorker = null;
-    }
 
     public boolean removeWorkerRole(String id, String role) {
         throw new UnsupportedOperationException("Not implemented yet");
@@ -490,13 +464,91 @@ public class WorkerFacade {
         return true;
     }
 
+
+
+    /**
+     * ============================================================================================
+     * Testing methods
+     * DO NOT USE IN PRODUCTION!
+     * ============================================================================================
+     */
+
+    /**
+     * Reset the workers map.
+     * DEBUGGING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public void reset(int safetyCode) {
+        if (safetyCode != 0xC0FFEE)
+            System.exit(-1);
+
+        dto = new WorkerDTO();
+        loggedInWorker = null;
+
+        workers.clear();
+    }
+
+    /**
+     * Fake login for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
+    public void fakeLogin(boolean isHRManager, String id) {
+        loggedInWorker = fakeCreateWorker(isHRManager, id);
+    }
+
+    /**
+     * Fake create worker for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
+    public Worker fakeCreateWorker(boolean isHRManager, String id) {
+        Worker w = new Worker(id, "Super", "Man");
+        w.addRole(roles.getId(isHRManager ? "HRManager" : "Cashier"));
+        workers.put(w.getId(), w);
+        return w;
+    }
+
+    /**
+     * Fake logout for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
+    public void fakeLogout() {
+        loggedInWorker = null;
+    }
+
+    /**
+     * Fake add worker for testing purposes only.
+     * DO NOT USE IN PRODUCTION
+     */
     public WorkerFacade setTestMode(boolean testMode) {
         dto.setTestMode(testMode);
         return this;
     }
 
+    /**
+     * Clear the data in the DTO and the workers map.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
     public void clearData() {
         dto.deleteAll();
         workers.clear();
+    }
+
+    /**
+     * Get the DTO.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public WorkerDTO getDTO() {
+        return dto;
+    }
+
+    /**
+     * Set the DTO.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public void setDTO(WorkerDTO dto) {
+        this.dto = dto;
     }
 }

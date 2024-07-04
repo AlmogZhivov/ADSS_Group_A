@@ -137,6 +137,9 @@ public class BranchFacade {
     public void reset(int safetyCode) {
         if (safetyCode != 0xC0FFEE)
             System.exit(-1);
+
+        dto = new BranchDTO();
+        workerFacade.reset(safetyCode);
         branches.clear();
     }
 
@@ -169,4 +172,12 @@ public class BranchFacade {
         return dto;
     }
 
+    /**
+     * Set the DTO.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public void setDTO(BranchDTO dto) {
+        this.dto = dto;
+    }
 }

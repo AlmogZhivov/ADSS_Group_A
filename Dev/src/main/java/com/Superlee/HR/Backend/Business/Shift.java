@@ -29,6 +29,17 @@ class Shift {
         this.branch = branch;
     }
 
+    public Shift(int id, LocalDateTime startTime, LocalDateTime endTime, Map<String, Integer> requiredRoles, List<String> availableWorkers, List<String> assignedWorkers, Map<String, Integer> workerRoles, String branch) {
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.requiredRoles = requiredRoles;
+        this.availableWorkers = availableWorkers;
+        this.assignedWorkers = assignedWorkers;
+        this.workerRoles = workerRoles;
+        this.branch = branch;
+    }
+
     public boolean addAvailableWorker(String worker) {
         if (!availableWorkers.contains(worker))
             return availableWorkers.add(worker);
@@ -58,7 +69,6 @@ class Shift {
 
 
     // Getters and setters
-
     public int getId() {
         return id;
     }

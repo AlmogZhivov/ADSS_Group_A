@@ -123,10 +123,13 @@ public class ShiftController extends Controller<ShiftDTO> {
                 pstmt = conn.prepareStatement(selectSQL);
                 pstmt.setInt(1, shift.getId());
                 rs = pstmt.executeQuery();
-                List<String> assignedWorkers = shift.getAssignedWorkers();
+                //List<String> assignedWorkers = shift.getAssignedWorkers();
+                Map<String, Integer> assignedWorkersRoles = shift.getWorkerRoles();
                 while (rs.next())
-                    assignedWorkers.add(rs.getString("workerId"));
-                shift.setAssignedWorkers(assignedWorkers);
+                    assignedWorkersRoles.put(rs.getString("workerId"), rs.getInt("role"));
+                shift.setWorkerRoles(assignedWorkersRoles);
+                shift.setAssignedWorkers(assignedWorkersRoles.keySet().stream().toList());
+
             }
             return shifts;
         } catch (Exception e) {
@@ -161,15 +164,28 @@ public class ShiftController extends Controller<ShiftDTO> {
         }
     }
 
+//    private void insertAssignedWorkers() throws SQLException {
+//        String insertSQL;
+//        PreparedStatement pstmt;
+//        for (String worker : dto.getAssignedWorkers()) {
+//            insertSQL = "INSERT INTO ShiftAssignedWorkers(shiftId, workerId, role) VALUES (?, ?, ?)";
+//            pstmt = conn.prepareStatement(insertSQL);
+//            pstmt.setInt(1, dto.getId());
+//            pstmt.setString(2, worker);
+//            pstmt.setString(3, "assigned");
+//            pstmt.executeUpdate();
+//        }
+//    }
+
     private void insertAssignedWorkers() throws SQLException {
         String insertSQL;
         PreparedStatement pstmt;
-        for (String worker : dto.getAssignedWorkers()) {
+        for (String worker : dto.getWorkerRoles().keySet()) {
             insertSQL = "INSERT INTO ShiftAssignedWorkers(shiftId, workerId, role) VALUES (?, ?, ?)";
             pstmt = conn.prepareStatement(insertSQL);
             pstmt.setInt(1, dto.getId());
             pstmt.setString(2, worker);
-            pstmt.setString(3, "assigned");
+            pstmt.setString(3, dto.getWorkerRoles().get(worker).toString());
             pstmt.executeUpdate();
         }
     }

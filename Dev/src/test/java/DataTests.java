@@ -1,6 +1,7 @@
 import com.Superlee.HR.Backend.Business.BranchFacade;
 import com.Superlee.HR.Backend.Business.ShiftFacade;
 import com.Superlee.HR.Backend.Business.WorkerFacade;
+import com.Superlee.HR.Backend.Business.WorkerToSend;
 import com.Superlee.HR.Backend.DataAccess.BranchDTO;
 
 import java.time.LocalDateTime;
@@ -90,6 +91,91 @@ public class DataTests {
         fakeLogout();
     }
 
+    @Test
+    public void TestLoadMockBranchesSuccess() {
+        createMockData();
+        insertMockData();
+        bf.reset(0xC0FFEE);
+        bf.loadData();
+        fakeLogin(true);
+        mockBranches.forEach(b -> assertNotNull(bf.getBranch(b.getName())));
+        fakeLogout();
+    }
+
+    @Test
+    public void TestLoadMockWorkersSuccess() {
+        createMockData();
+        insertMockData();
+        wf.reset(0xC0FFEE);
+        wf.loadData();
+        fakeLogin(true);
+
+        mockWorkers.forEach(w -> {
+            assertNotNull(wf.getWorkerById(w.getId()));
+            assertTrue(wf.getWorkerById(w.getId()).roles().containsAll(w.getRoles()));
+        });
+        fakeLogout();
+    }
+
+    @Test
+    public void TestLoadMockShiftsSuccess() {
+        createMockData();
+        insertMockData();
+        sf.reset(0xC0FFEE);
+        sf.loadData();
+        fakeLogin(true);
+        mockShifts.forEach(s -> {
+            int id = s.getId();
+            assertNotNull(sf.getShift(id));
+            assertTrue(LocalDateTime.parse(sf.getShift(id).startTime()).equals(s.getStartTime()));
+            assertTrue(LocalDateTime.parse(sf.getShift(id).endTime()).equals(s.getEndTime()));
+            assertTrue(sf.getShiftRequiredWorkersOfRole(id).equals(s.getRequiredRoles()));
+
+            assertTrue(sf.getAssignableWorkersForShift(id).stream().map(WorkerToSend::id).toList().containsAll(s.getAvailableWorkers()));
+            assertTrue(s.getAvailableWorkers().containsAll(sf.getAssignableWorkersForShift(id).stream().map(WorkerToSend::id).toList()));
+
+            assertTrue(sf.getWorkersByShift(id).stream().map(WorkerToSend::id).toList().containsAll(s.getAssignedWorkers()));
+            assertTrue(s.getAssignedWorkers().containsAll(sf.getWorkersByShift(id).stream().map(WorkerToSend::id).toList()));
+
+//            Map <String, Integer> ActualWorkerRoles = sf.getWorkerRolesByShift(id);
+//            Map <String, Integer> ExpectedWorkerRoles = s.getWorkerRoles();
+//
+//            for (int key : ExpectedWorkerRoles.values()) {
+//
+//                System.out.println("key:" + wf.getRoleName(key));
+//                System.out.println("Actual val: " +ActualWorkerRoles.get(wf.getRoleName(key)));
+//                System.out.println("should be: " + ExpectedWorkerRoles.get(""+key));
+//                System.out.println("====================================");
+//
+//                assertTrue(ActualWorkerRoles.get(wf.getRoleName(key)).equals(ExpectedWorkerRoles.get(""+key)));
+//            }
+
+//            System.out.println("Actual: " + sf.getWorkerRolesByShift(id));
+//            System.out.println("Expected: " + s.getWorkerRoles());
+//            System.out.println("====================================");
+            assertTrue(sf.getWorkerRolesByShift(id).equals(s.getWorkerRoles()));
+        });
+        fakeLogout();
+    }
+
+//    @Test
+//    public void TestLoadShiftsAssignedWorkers() {
+//        createMockData();
+//        mockShifts.forEach(sf::addNewShift);
+//        mockWorkers.forEach(wf::addWorker);
+//        mockRoles.forEach(wf::addNewRole);
+//        mockWorkers.forEach(w -> w.roles().forEach(r -> wf.addWorkerRole(w.id(), r)));
+//        mockShifts.forEach(s -> s.assignedWorkers().forEach(w -> sf.assignWorker(s.id(), w)));
+//        sf.reset(0xC0FFEE);
+//        sf.loadData();
+//        mockShifts.forEach(s -> {
+//            ShiftDTO shift = sf.getShift(s.id());
+//            assertNotNull(shift);
+//            assertTrue(shift.assignedWorkers().containsAll(s.assignedWorkers()));
+//        });
+//    }
+
+
 
     // =================================================================================
     // Helper methods
@@ -158,7 +244,6 @@ public class DataTests {
                 "Driver", 6
         );
 
-
         mockWorkers = Arrays.asList(
                 new WorkerDTO("0", "Mr", "Poopybutthole", "mr.poopybutthole@company.com", "555-1234", "password", "123456789", 100000, Arrays.asList(0), new ArrayList<>(), Arrays.asList(1, 2, 3), LocalDateTime.now(), "permanent", "Head Office"),
                 new WorkerDTO("1", "Homer", "Simpson", "homer.simpson@company.com", "555-2345", "password", "234567890", 50000, Arrays.asList(1, 2), Arrays.asList(1), Arrays.asList(1, 2), LocalDateTime.now(), "contract", "Branch1"),
@@ -182,10 +267,32 @@ public class DataTests {
 
         mockShifts = Arrays.asList(
                 new ShiftDTO(1, "Branch1", LocalDateTime.of(2024, 7, 1, 8, 0, 0), LocalDateTime.of(2024, 7, 1, 12, 0, 0), Map.of("Manager", 1, "Cashier", 2), Arrays.asList("1", "2", "7"), Arrays.asList("1", "2"), Map.of("1", 1, "2", 2)),
-                new ShiftDTO(2, "Branch2", LocalDateTime.of(2024, 7, 1, 12, 0, 0), LocalDateTime.of(2024, 7, 1, 16, 0, 0), Map.of("Manager", 1, "Cashier", 1, "Cleaner", 1), Arrays.asList("3", "4", "8"), Arrays.asList("3", "4", "8"), Map.of("3", 1, "4", 2, "8", 3)),
+                new ShiftDTO(2, "Branch2", LocalDateTime.of(2024, 7, 1, 12, 0, 0), LocalDateTime.of(2024, 7, 1, 16, 0, 0), Map.of("Manager", 1, "Cashier", 1, "Cleaner", 3), Arrays.asList("3", "4", "8"), Arrays.asList("3", "4", "8"), Map.of("3", 1, "4", 2, "8", 3)),
                 new ShiftDTO(3, "Branch1", LocalDateTime.of(2024, 7, 1, 16, 0, 0), LocalDateTime.of(2024, 7, 1, 20, 0, 0), Map.of("Manager", 1, "Storekeeper", 1), Arrays.asList("5", "6", "9"), Arrays.asList("5", "6"), Map.of("5", 1, "6", 4)),
                 new ShiftDTO(4, "Branch3", LocalDateTime.of(2024, 7, 2, 8, 0, 0), LocalDateTime.of(2024, 7, 2, 12, 0, 0), Map.of("Manager", 1, "Cashier", 1), Arrays.asList("10", "1", "2"), Arrays.asList("10", "1"), Map.of("10", 1, "1", 2))
         );
+
+                                                                                                                                                                                                                            // Map<String, Integer> requiredRoles,
+                                                                                                                                                                                                                                                                                    //    List<String> availableWorkers,
+                                                                                                                                                                                                                                                                                                                       //    List<String> assignedWorkers,
+                                                                                                                                                                                                                                                                                                                                        //    Map<String, Integer> workerRoles
+    }
+
+    public void  insertMockData() {
+        mockBranches.forEach(branchDTO -> {
+            bf.setDTO(branchDTO);
+            bf.getDTO().insert();
+        });
+        //mockRoles.forEach(wf::addNewRole);
+        mockWorkers.forEach(workerDTO -> {
+            wf.setDTO(workerDTO);
+            wf.getDTO().insert();
+        });
+        //mockWorkers.forEach(w -> w. roles().forEach(r -> wf.addWorkerRole(w.id(), r)));
+        mockShifts.forEach(shiftDTO -> {
+            sf.setDTO(shiftDTO);
+            sf.getDTO().insert();
+        });
     }
 
 }
