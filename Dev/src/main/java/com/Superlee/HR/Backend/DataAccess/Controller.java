@@ -16,6 +16,7 @@ abstract class Controller<T extends DTO> {
         Objects.requireNonNull(dto);
         this.dto = dto;
         path = PATH_DEFAULT;
+        createDB();
     }
 
     abstract boolean insert();
