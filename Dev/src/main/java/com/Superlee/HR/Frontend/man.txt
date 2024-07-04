@@ -1,4 +1,4 @@
-List of available commands before login:
+List o available commands before login:
 
 load
     load the data from the database

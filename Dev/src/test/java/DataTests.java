@@ -43,7 +43,7 @@ public class DataTests {
     }
 
     @Test
-    public void TestLoadWorkerSuccess() {
+    public void TestInsertNLoadWorkerSuccess() {
         addWorker();
         wf.reset(0xC0FFEE);
         wf.loadData();
@@ -51,7 +51,7 @@ public class DataTests {
     }
 
     @Test
-    public void TestLoadShiftSuccess() {
+    public void TestInsertNLoadShiftSuccess() {
         addShift();
         sf.reset(0xC0FFEE);
         sf.loadData();
@@ -59,7 +59,7 @@ public class DataTests {
     }
 
     @Test
-    public void TestLoadBranchSuccess() {
+    public void TestInsertNLoadBranchSuccess() {
         addWorker();
         fakeLogin(true);
         wf.addWorkerRole("0","Manager");
@@ -73,7 +73,7 @@ public class DataTests {
     }
 
     @Test
-    public void TestLoadRoleSuccess() {
+    public void TestInsertNLoadRoleSuccess() {
         fakeLogin(true);
         wf.addNewRole("automation");
         fakeLogout();
@@ -92,7 +92,7 @@ public class DataTests {
     }
 
     @Test
-    public void TestLoadMockBranchesSuccess() {
+    public void TestInsertNLoadMockBranchesSuccess() {
         createMockData();
         insertMockData();
         bf.reset(0xC0FFEE);
@@ -103,7 +103,7 @@ public class DataTests {
     }
 
     @Test
-    public void TestLoadMockWorkersSuccess() {
+    public void TestInsertNLoadMockWorkersSuccess() {
         createMockData();
         insertMockData();
         wf.reset(0xC0FFEE);
@@ -113,12 +113,15 @@ public class DataTests {
         mockWorkers.forEach(w -> {
             assertNotNull(wf.getWorkerById(w.getId()));
             assertTrue(wf.getWorkerById(w.getId()).roles().containsAll(w.getRoles()));
+            assertTrue(w.getRoles().containsAll(wf.getWorkerById(w.getId()).roles()));
+            assertTrue(w.getShifts().equals(wf.getWorkerShifts(w.getId())));
+            assertTrue(wf.getWorkerAvailability(w.getId()).containsAll(w.getAvailability()));
         });
         fakeLogout();
     }
 
     @Test
-    public void TestLoadMockShiftsSuccess() {
+    public void TestInsertNLoadMockShiftsSuccess() {
         createMockData();
         insertMockData();
         sf.reset(0xC0FFEE);
@@ -136,44 +139,118 @@ public class DataTests {
 
             assertTrue(sf.getWorkersByShift(id).stream().map(WorkerToSend::id).toList().containsAll(s.getAssignedWorkers()));
             assertTrue(s.getAssignedWorkers().containsAll(sf.getWorkersByShift(id).stream().map(WorkerToSend::id).toList()));
-
-//            Map <String, Integer> ActualWorkerRoles = sf.getWorkerRolesByShift(id);
-//            Map <String, Integer> ExpectedWorkerRoles = s.getWorkerRoles();
-//
-//            for (int key : ExpectedWorkerRoles.values()) {
-//
-//                System.out.println("key:" + wf.getRoleName(key));
-//                System.out.println("Actual val: " +ActualWorkerRoles.get(wf.getRoleName(key)));
-//                System.out.println("should be: " + ExpectedWorkerRoles.get(""+key));
-//                System.out.println("====================================");
-//
-//                assertTrue(ActualWorkerRoles.get(wf.getRoleName(key)).equals(ExpectedWorkerRoles.get(""+key)));
-//            }
-
-//            System.out.println("Actual: " + sf.getWorkerRolesByShift(id));
-//            System.out.println("Expected: " + s.getWorkerRoles());
-//            System.out.println("====================================");
             assertTrue(sf.getWorkerRolesByShift(id).equals(s.getWorkerRoles()));
         });
         fakeLogout();
     }
 
-//    @Test
-//    public void TestLoadShiftsAssignedWorkers() {
-//        createMockData();
-//        mockShifts.forEach(sf::addNewShift);
-//        mockWorkers.forEach(wf::addWorker);
-//        mockRoles.forEach(wf::addNewRole);
-//        mockWorkers.forEach(w -> w.roles().forEach(r -> wf.addWorkerRole(w.id(), r)));
-//        mockShifts.forEach(s -> s.assignedWorkers().forEach(w -> sf.assignWorker(s.id(), w)));
-//        sf.reset(0xC0FFEE);
-//        sf.loadData();
-//        mockShifts.forEach(s -> {
-//            ShiftDTO shift = sf.getShift(s.id());
-//            assertNotNull(shift);
-//            assertTrue(shift.assignedWorkers().containsAll(s.assignedWorkers()));
-//        });
-//    }
+    @Test
+    public void TestUpdateWorkerSuccess() {
+        addWorker();
+        wf.reset(0xC0FFEE);
+        wf.loadData();
+        wf.login("0", "0");
+
+        wf.updateWorkerEmail("0", "mr.poopybutthole@company.com");
+        wf.updateWorkerPhone("0", "555-1234");
+        wf.updateWorkerPassword("0", "password1");
+        wf.updateWorkerBankDetails("0", "123456789");
+        wf.updateWorkerContractDetails("0", "permanent");
+        wf.logout("0");
+
+        fakeLogin(true);
+        assertTrue(wf.updateWorkerSalary("0", 100000));
+        fakeLogout();
+        wf.reset(0xC0FFEE);
+        wf.loadData();
+        fakeLogin(true);
+        assertTrue(wf.getWorkerById("0").email().equals("mr.poopybutthole@company.com"));
+        assertTrue(wf.getWorkerById("0").phone().equals("555-1234"));
+        assertNotNull(wf.login("0", "password1"));
+
+        assertTrue(wf.getWorkerBankDetails("0").equals("123456789"));
+        assertTrue(wf.getWorkerById("0").contract().equals("permanent"));
+        assertTrue(wf.getWorkerById("0").salary() == 100000);
+        fakeLogout();
+    }
+
+    @Test
+    public void TestUpdateAssignSuccess() {
+        addWorker();
+        addRoleManager();
+        addSecondWorker();
+        addShift();
+        fakeLogin(true);
+        wf.addWorkerRole("1", "Cashier");
+        fakeLogout();
+
+        wf.login("0", "0");
+        sf.addAvailability("0", 0);
+        wf.login("1", "1");
+        sf.addAvailability("1", 0);
+        fakeLogin(true);
+        sf.assignWorker("0", 0, "Manager");
+        sf.assignWorker("1", 0, "Cashier");
+        fakeLogout();
+        sf.reset(0xC0FFEE);
+        sf.loadData();
+        fakeLogin(true);
+        assertTrue(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("0"));
+        assertTrue(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("1"));
+        assertTrue(sf.getWorkerRolesByShift(0).get("0") == 1);
+        assertTrue(sf.getWorkerRolesByShift(0).get("1") == 2);
+        fakeLogout();
+    }
+
+    @Test
+    public void TestUpdateUnassignSuccess(){
+        addWorker();
+        addRoleManager();
+        addSecondWorker();
+        addShift();
+        fakeLogin(true);
+        wf.addWorkerRole("1", "Cashier");
+        fakeLogout();
+
+        wf.login("0", "0");
+        sf.addAvailability("0", 0);
+        wf.login("1", "1");
+        sf.addAvailability("1", 0);
+        fakeLogin(true);
+        sf.assignWorker("0", 0, "Manager");
+        sf.assignWorker("1", 0, "Cashier");
+        fakeLogout();
+        sf.reset(0xC0FFEE);
+        sf.loadData();
+        fakeLogin(true);
+        assertTrue(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("0"));
+        assertTrue(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("1"));
+        assertTrue(sf.getWorkerRolesByShift(0).get("0") == 1);
+        assertTrue(sf.getWorkerRolesByShift(0).get("1") == 2);
+
+        sf.unassignWorker("0", 0);
+        sf.unassignWorker("1", 0);
+        fakeLogout();
+        sf.reset(0xC0FFEE);
+        sf.loadData();
+
+        fakeLogin(true);
+        assertTrue(!sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("0"));
+        assertTrue(!sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("1"));
+        assertTrue(sf.getWorkerRolesByShift(0).get("0") == null);
+        assertTrue(sf.getWorkerRolesByShift(0).get("1") == null);
+        fakeLogout();
+    }
+
+    @Test
+    public void dfgh(){
+        createMockData();
+        insertMockData();
+        System.exit(0);
+        assertTrue(false);
+    }
+
+
 
 
 
@@ -245,7 +322,7 @@ public class DataTests {
         );
 
         mockWorkers = Arrays.asList(
-                new WorkerDTO("0", "Mr", "Poopybutthole", "mr.poopybutthole@company.com", "555-1234", "password", "123456789", 100000, Arrays.asList(0), new ArrayList<>(), Arrays.asList(1, 2, 3), LocalDateTime.now(), "permanent", "Head Office"),
+                new WorkerDTO("0", "Mr", "Poopybutthole", "mr.poopybutthole@company.com", "555-1234", "123", "123456789", 100000, Arrays.asList(0), new ArrayList<>(), Arrays.asList(1, 2, 3), LocalDateTime.now(), "permanent", "Head Office"),
                 new WorkerDTO("1", "Homer", "Simpson", "homer.simpson@company.com", "555-2345", "password", "234567890", 50000, Arrays.asList(1, 2), Arrays.asList(1), Arrays.asList(1, 2), LocalDateTime.now(), "contract", "Branch1"),
                 new WorkerDTO("2", "Peter", "Griffin", "peter.griffin@company.com", "555-3456", "password", "345678901", 48000, Arrays.asList(2, 3), Arrays.asList(1, 2), Arrays.asList(1, 2, 3), LocalDateTime.now(), "contract", "Branch1"),
                 new WorkerDTO("3", "SpongeBob", "SquarePants", "spongebob.squarepants@company.com", "555-4567", "password", "456789012", 52000, Arrays.asList(3, 4), Arrays.asList(2), Arrays.asList(1, 2, 3), LocalDateTime.now(), "contract", "Branch2"),
@@ -271,11 +348,6 @@ public class DataTests {
                 new ShiftDTO(3, "Branch1", LocalDateTime.of(2024, 7, 1, 16, 0, 0), LocalDateTime.of(2024, 7, 1, 20, 0, 0), Map.of("Manager", 1, "Storekeeper", 1), Arrays.asList("5", "6", "9"), Arrays.asList("5", "6"), Map.of("5", 1, "6", 4)),
                 new ShiftDTO(4, "Branch3", LocalDateTime.of(2024, 7, 2, 8, 0, 0), LocalDateTime.of(2024, 7, 2, 12, 0, 0), Map.of("Manager", 1, "Cashier", 1), Arrays.asList("10", "1", "2"), Arrays.asList("10", "1"), Map.of("10", 1, "1", 2))
         );
-
-                                                                                                                                                                                                                            // Map<String, Integer> requiredRoles,
-                                                                                                                                                                                                                                                                                    //    List<String> availableWorkers,
-                                                                                                                                                                                                                                                                                                                       //    List<String> assignedWorkers,
-                                                                                                                                                                                                                                                                                                                                        //    Map<String, Integer> workerRoles
     }
 
     public void  insertMockData() {

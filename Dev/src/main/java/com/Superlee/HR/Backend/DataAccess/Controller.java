@@ -1,5 +1,6 @@
 package com.Superlee.HR.Backend.DataAccess;
 
+import java.io.*;
 import java.sql.*;
 import java.util.List;
 import java.util.Objects;
@@ -78,5 +79,36 @@ abstract class Controller<T extends DTO> {
     public Controller<T> setTestMode(boolean test) {
         path = test ? PATH_TEST_DEFAULT : PATH_DEFAULT;
         return this;
+    }
+
+    /**
+     * Copy the database file from within the jar to the current directory in src/main/resources
+     */
+    private static void createDB() {
+        // if directory does not exist, create it
+        File directory = new File("src/");
+        if (!directory.exists())
+            directory.mkdir();
+        directory = new File("src/main/");
+        if (!directory.exists())
+            directory.mkdir();
+        directory = new File("src/main/resources/");
+        if (!directory.exists())
+            directory.mkdir();
+
+        String dbPath = "src/main/resources/HR.db";
+        File dbFile = new File(dbPath);
+        if (!dbFile.exists()) {
+            try (InputStream in = Controller.class.getResourceAsStream("/HR.db");
+                 OutputStream out = new FileOutputStream(dbPath)) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

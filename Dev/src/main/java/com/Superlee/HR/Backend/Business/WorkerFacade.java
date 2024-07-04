@@ -118,6 +118,33 @@ public class WorkerFacade {
         return dto.update();
     }
 
+    //TODO: add to UML
+    public List<Integer> getWorkerShifts(String id) {
+        Util.throwIfNullOrEmpty(id);
+        if (workers.get(id) == null)
+            throw new IllegalArgumentException("Worker dose not exists");
+
+        return workers.get(id).getShifts();
+    }
+
+    // TODO: add to UML
+    public List<Integer> getWorkerAvailability(String id) {
+        Util.throwIfNullOrEmpty(id);
+        if (workers.get(id) == null)
+            throw new IllegalArgumentException("Worker dose not exists");
+
+        return workers.get(id).getAvailability();
+    }
+
+    // TODO: add to UML
+    public String getWorkerBankDetails(String id) {
+        Util.throwIfNullOrEmpty(id);
+        if (workers.get(id) == null)
+            throw new IllegalArgumentException("Worker dose not exists");
+
+        return workers.get(id).getBankDetails();
+    }
+
     public boolean addNewWorker(String id, String firstname, String surname) {
         Util.throwIfNullOrEmpty(id, firstname, surname);
 
@@ -135,11 +162,12 @@ public class WorkerFacade {
         Worker worker = new Worker(id, firstname, surname);
         workers.put(worker.getId(), worker);
         dto = new WorkerDTO(worker.getId(), worker.getFirstName(), worker.getSurname(), worker.getEmail(),
-                worker.getPhone(), worker.getPassword(), worker.getBankDetails(), worker.getSalary(),
+                worker.getPhone(), worker.getId(), worker.getBankDetails(), worker.getSalary(),
                 worker.getRoles(), worker.getShifts(), worker.getAvailability(), worker.getStartDate(),
                 worker.getContract(), worker.getBranch());
         return dto.insert();
     }
+
 
     public boolean addWorkerRole(String id, String role) {
         Util.throwIfNullOrEmpty(id, role);
@@ -423,6 +451,8 @@ public class WorkerFacade {
                 wDTO.getBankDetails(),
                 wDTO.getSalary(),
                 wDTO.getRoles(),
+                wDTO.getShifts(),
+                wDTO.getAvailability(),
                 wDTO.getStartDate(),
                 wDTO.getContract(),
                 wDTO.getBranch()
