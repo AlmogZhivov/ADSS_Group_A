@@ -62,7 +62,7 @@ public class DataTests {
     public void TestInsertNLoadBranchSuccess() {
         addWorker();
         fakeLogin(true);
-        wf.addWorkerRole("0","Manager");
+        wf.addWorkerRole("0", "Manager");
         bf.addBranch("Branch1", "123 Elm Street", "0");
         fakeLogout();
         bf.reset(0xC0FFEE);
@@ -203,7 +203,7 @@ public class DataTests {
     }
 
     @Test
-    public void TestUpdateUnassignSuccess(){
+    public void TestUpdateUnassignSuccess() {
         addWorker();
         addRoleManager();
         addSecondWorker();
@@ -241,18 +241,6 @@ public class DataTests {
         assertTrue(sf.getWorkerRolesByShift(0).get("1") == null);
         fakeLogout();
     }
-
-    @Test
-    public void dfgh(){
-        createMockData();
-        insertMockData();
-        System.exit(0);
-        assertTrue(false);
-    }
-
-
-
-
 
     // =================================================================================
     // Helper methods
@@ -350,7 +338,7 @@ public class DataTests {
         );
     }
 
-    public void  insertMockData() {
+    public void insertMockData() {
         mockBranches.forEach(branchDTO -> {
             bf.setDTO(branchDTO);
             bf.getDTO().insert();
