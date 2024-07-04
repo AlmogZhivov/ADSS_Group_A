@@ -43,6 +43,26 @@ class Worker {
         this.branch = branch;
     }
 
+    Worker(String id, String firstname, String surname, String email, String phone,
+           String password, String bankDetails, int salary,
+           List<Integer> roles, List<Integer> shifts, List<Integer> availability,  LocalDateTime startDate, String contract, String branch) {
+        this.id = id;
+        this.firstname = firstname;
+        this.surname = surname;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.bankDetails = bankDetails;
+        this.salary = salary;
+        this.roles = roles != null ? roles : new ArrayList<>();
+        this.shifts = shifts != null ? shifts : new ArrayList<>();
+        this.availability = availability != null ? availability : new ArrayList<>();
+        this.startDate = startDate;
+        this.contract = contract;
+        this.branch = branch;
+    }
+
+
     boolean assign(Integer shiftId) {
         if (shiftId != null && !shifts.contains(shiftId))
             return shifts.add(shiftId);
