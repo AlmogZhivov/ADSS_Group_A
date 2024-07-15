@@ -1,7 +1,6 @@
 package com.Superlee.Supply.DataAccess;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,6 +13,7 @@ public class DataBaseCreator {
     public DataBaseCreator() {
         path = "src/main/resources/SUPPLY.db";
         connectionString = "jdbc:sqlite:src/main/resources/SUPPLY.db";
+        createDB();
     }
 
     public void CreateAllTables() throws SQLException, IOException {
@@ -138,6 +138,37 @@ public class DataBaseCreator {
         }
         catch (SQLException e){
 
+        }
+    }
+
+    /**
+     * Copy the database file from within the jar to the current directory in src/main/resources
+     */
+    private static void createDB() {
+        // if directory does not exist, create it
+        File directory = new File("src/");
+        if (!directory.exists())
+            directory.mkdir();
+        directory = new File("src/main/");
+        if (!directory.exists())
+            directory.mkdir();
+        directory = new File("src/main/resources/");
+        if (!directory.exists())
+            directory.mkdir();
+
+        String dbPath = "src/main/resources/SUPPLY.db";
+        File dbFile = new File(dbPath);
+        if (!dbFile.exists()) {
+            try (InputStream in = DataBaseCreator.class.getResourceAsStream("/SUPPLY.db");
+                 OutputStream out = new FileOutputStream(dbPath)) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
