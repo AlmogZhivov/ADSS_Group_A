@@ -178,6 +178,10 @@ public class CLI {
                         System.out.println("Welcome, " + worker.firstname() + " " + worker.surname());
                         if (worker.roles().contains(0))
                             hrManagerMenu(worker);
+                        if (worker.roles().contains(7)) {
+                            com.Superlee.Supply.Presentation.CLI.start(args);
+                            System.out.println("Logged out");
+                        }
                         else
                             workerMenu(worker);
                     }
