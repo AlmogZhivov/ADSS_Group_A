@@ -15,7 +15,7 @@ class Shift {
     private Map<String, Integer> requiredRoles;
     private List<String> availableWorkers;
     private List<String> assignedWorkers;
-    private final Map<String, Integer> workerRoles;
+    private Map<String, Integer> workerRoles;
     private String branch;
 
     public Shift(int id, LocalDateTime startTime, LocalDateTime endTime, String branch) {
@@ -26,6 +26,17 @@ class Shift {
         this.availableWorkers = new ArrayList<>();
         this.assignedWorkers = new ArrayList<>();
         this.workerRoles = new HashMap<>();
+        this.branch = branch;
+    }
+
+    public Shift(int id, LocalDateTime startTime, LocalDateTime endTime, Map<String, Integer> requiredRoles, List<String> availableWorkers, List<String> assignedWorkers, Map<String, Integer> workerRoles, String branch) {
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.requiredRoles = requiredRoles!=null ? requiredRoles : new HashMap<>(roles.DEFAULT_SHIFT_ROLES);
+        this.availableWorkers = availableWorkers != null ? availableWorkers : new ArrayList<>();
+        this.assignedWorkers = assignedWorkers != null ? assignedWorkers : new ArrayList<>();
+        this.workerRoles = workerRoles != null ? workerRoles : new HashMap<>();
         this.branch = branch;
     }
 
@@ -48,7 +59,12 @@ class Shift {
     }
 
     public boolean removeAssignedWorker(String worker) {
-        return assignedWorkers.remove(worker) && workerRoles.remove(worker) != null;
+
+        if(workerRoles.remove(worker) != null){
+            assignedWorkers=workerRoles.keySet().stream().toList();
+            return true;
+        }
+        return false;
     }
 
     // TODO check if this is correct and if it is needed
@@ -58,7 +74,6 @@ class Shift {
 
 
     // Getters and setters
-
     public int getId() {
         return id;
     }

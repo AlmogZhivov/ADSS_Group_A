@@ -12,4 +12,5 @@ public record WorkerToSend(String id,
                            String startDate,
                            String contract,
                            String branch) {
+
 }

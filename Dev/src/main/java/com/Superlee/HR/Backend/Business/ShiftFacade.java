@@ -1,5 +1,6 @@
 package com.Superlee.HR.Backend.Business;
 
+import com.Superlee.HR.Backend.DataAccess.DTO;
 import com.Superlee.HR.Backend.DataAccess.ShiftDTO;
 
 import java.time.DateTimeException;
@@ -12,9 +13,7 @@ public class ShiftFacade {
     private static final WorkerFacade workerFacade = WorkerFacade.getInstance();
     private final Roles roles = Roles.getInstance();
     private ShiftDTO dto = new ShiftDTO();
-
     private int nextId = 0;
-
     private Map<Integer, Shift> shifts;
 
     private ShiftFacade() {
@@ -121,11 +120,15 @@ public class ShiftFacade {
         if (!shifts.containsKey(id))
             throw new NoSuchElementException("Shift not found");
 
-        return workerFacade
-                .getAllWorkers()
-                .stream()
-                .filter((worker) -> shifts.get(id).getAvailableWorkers().contains(worker.id()))
-                .collect(Collectors.toList());
+
+        return shifts.get(id).getAvailableWorkers().stream().map(workerFacade::getWorkerById).collect(Collectors.toList());
+
+        //TODO: This is the original code, but it is not working. We need to check y.
+//        return workerFacade
+//                .getAllWorkers()
+//                .stream()
+//                .filter((worker) -> shifts.get(id).getAvailableWorkers().contains(worker.id()))
+//                .collect(Collectors.toList());
     }
 
     public ShiftToSend getShift(int id) {
@@ -136,6 +139,30 @@ public class ShiftFacade {
             throw new NoSuchElementException("Shift not found");
 
         return convertToShiftToSend(shifts.get(id));
+    }
+
+    // TODO: this is a new method, add to the UML and where ever else needed.
+    // TODO: Note that we must no make any changes in the UML until we get graded.
+    public Map<String, Integer> getShiftRequiredWorkersOfRole(int id) {
+        if (id < 0)
+            throw new IllegalArgumentException("Illegal argument");
+
+        if (!shifts.containsKey(id))
+            throw new NoSuchElementException("Shift not found");
+
+        return shifts.get(id).getRequiredRoles();
+    }
+
+    // TODO: this is a new method, add to the UML and where ever else needed.
+    // TODO: Note that we must no make any changes in the UML until we get graded.
+    public Map<String, Integer> getWorkerRolesByShift(int id) {
+        if (id < 0)
+            throw new IllegalArgumentException("Illegal argument");
+
+        if (!shifts.containsKey(id))
+            throw new NoSuchElementException("Shift not found");
+
+        return shifts.get(id).getWorkerRoles();
     }
 
     public boolean setShiftRequiredWorkersOfRole(int id, String role, int amount) {
@@ -240,6 +267,7 @@ public class ShiftFacade {
     }
 
     public boolean loadData() {
+        workerFacade.loadData();
         shifts = dto.loadAll()
                 .stream()
                 .map(ShiftFacade::ShiftDTOtoShift)
@@ -258,31 +286,20 @@ public class ShiftFacade {
                 sDTO.getId(),
                 LocalDateTime.parse(sDTO.getStartTime().toString()),
                 LocalDateTime.parse(sDTO.getEndTime().toString()),
+                sDTO.getRequiredRoles(),
+                sDTO.getAvailableWorkers(),
+                sDTO.getAssignedWorkers(),
+                sDTO.getWorkerRoles(),
                 sDTO.getBranch()
         );
     }
 
-    /**
-     * Used for testing purposes only, no need to have a service for this for now
-     */
-    public List<ShiftToSend> getAllShifts() {
-        return shifts.values().stream().map(ShiftFacade::convertToShiftToSend).collect(Collectors.toList());
-    }
 
     private static ShiftToSend convertToShiftToSend(Shift shift) {
         return new ShiftToSend(shift.getId(), shift.getStartTime().toString(), shift.getEndTime().toString(), shift.getBranch());
     }
 
-    /**
-     * Reset the shifts map.
-     * DEBUGGING PURPOSES ONLY
-     * DO NOT USE IN PRODUCTION
-     */
-    public void reset(int safetyCode) {
-        if (safetyCode != 0xC0FFEE)
-            System.exit(-1);
-        shifts.clear();
-    }
+
 
     public List<ShiftToSend> getWorkerHistory(String id) {
         Util.throwIfNullOrEmpty(id);
@@ -325,13 +342,75 @@ public class ShiftFacade {
                 .collect(Collectors.toList());
     }
 
+
+
+
+    /**
+     * ============================================================================================
+     * Testing methods
+     * DO NOT USE IN PRODUCTION!
+     * ============================================================================================
+     */
+
+
+    /**
+     * Load test data into the DTO
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public List<ShiftToSend> getAllShifts() {
+        return shifts.values().stream().map(ShiftFacade::convertToShiftToSend).collect(Collectors.toList());
+    }
+
+    /**
+     * Reset the shifts map.
+     * DEBUGGING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public void reset(int safetyCode) {
+        if (safetyCode != 0xC0FFEE)
+            System.exit(-1);
+        dto = new ShiftDTO();
+        nextId = 0;
+        shifts.clear();
+        workerFacade.reset(safetyCode);
+    }
+
+    /**
+     * Load test data into the DTO
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
     public ShiftFacade setTestMode(boolean testMode) {
         dto.setTestMode(testMode);
         return this;
     }
 
+    /**
+     * Clear the data in the DTO and the shifts map.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
     public void clearData() {
         dto.deleteAll();
         shifts.clear();
+    }
+
+    /**
+     * Get the DTO.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public DTO getDTO() {
+        return dto;
+    }
+
+    /**
+     * Set the DTO.
+     * TESTING PURPOSES ONLY
+     * DO NOT USE IN PRODUCTION
+     */
+    public void setDTO(ShiftDTO shiftDTO) {
+        this.dto = shiftDTO;
     }
 }
