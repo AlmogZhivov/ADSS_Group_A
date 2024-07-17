@@ -1,14 +1,13 @@
 package com.Superlee.HR.Frontend;
 
 import com.Superlee.HR.Backend.Service.HRService;
+import com.Superlee.HR.Backend.Service.Response;
+import com.google.gson.Gson;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-
-import com.Superlee.HR.Backend.Service.Response;
-import com.google.gson.Gson;
 
 /**
  * Command Line Interface for interacting with the HR system
@@ -163,9 +162,7 @@ public class CLI {
                 output = hrService.loadData();
                 Response r = gson.fromJson(output, Response.class);
                 System.out.println(Objects.requireNonNullElse(r.errMsg, "Data loaded"));
-            }
-
-            else if (input.startsWith("login")) {
+            } else if (input.startsWith("login")) {
                 String[] parts = input.split("\\s+");
                 if (parts.length == 3) {
                     output = hrService.login(parts[1], parts[2]);
@@ -181,8 +178,7 @@ public class CLI {
                         else if (worker.roles().contains(7)) {
                             com.Superlee.Supply.Presentation.CLI.start(args);
                             System.out.println("Logged out");
-                        }
-                        else
+                        } else
                             workerMenu(worker);
                     }
                 } else

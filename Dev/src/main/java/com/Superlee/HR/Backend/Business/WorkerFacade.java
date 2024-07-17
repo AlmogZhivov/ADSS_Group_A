@@ -2,13 +2,8 @@ package com.Superlee.HR.Backend.Business;
 
 import com.Superlee.HR.Backend.DataAccess.WorkerDTO;
 
-import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 public class WorkerFacade {
     private static WorkerFacade instance;
@@ -118,7 +113,6 @@ public class WorkerFacade {
         return dto.update();
     }
 
-    //TODO: add to UML
     public List<Integer> getWorkerShifts(String id) {
         Util.throwIfNullOrEmpty(id);
         if (workers.get(id) == null)
@@ -127,7 +121,6 @@ public class WorkerFacade {
         return workers.get(id).getShifts();
     }
 
-    // TODO: add to UML
     public List<Integer> getWorkerAvailability(String id) {
         Util.throwIfNullOrEmpty(id);
         if (workers.get(id) == null)
@@ -136,7 +129,6 @@ public class WorkerFacade {
         return workers.get(id).getAvailability();
     }
 
-    // TODO: add to UML
     public String getWorkerBankDetails(String id) {
         Util.throwIfNullOrEmpty(id);
         if (workers.get(id) == null)
@@ -167,7 +159,6 @@ public class WorkerFacade {
                 worker.getContract(), worker.getBranch());
         return dto.insert();
     }
-
 
     public boolean addWorkerRole(String id, String role) {
         Util.throwIfNullOrEmpty(id, role);
@@ -367,12 +358,10 @@ public class WorkerFacade {
         return dto.update();
     }
 
-    // TODO: add to UML
     public String getRoleName(int value) {
         return roles.getName(value);
     }
 
-    // TODO: add to UML
     public int getRoleId(String name) {
         return roles.getId(name);
     }
@@ -432,11 +421,6 @@ public class WorkerFacade {
                 .stream()
                 .map(WorkerFacade::WorkerDTOtoWorker)
                 .collect(Collectors.toMap(Worker::getId, w -> w));
-//        workers = WorkerDTO
-//                .getWorkers()
-//                .stream()
-//                .map(WorkerFacade::WorkerDTOtoWorker)
-//                .collect(Collectors.toMap(Worker::getId, w -> w));
         return true;
     }
 
@@ -458,8 +442,6 @@ public class WorkerFacade {
                 wDTO.getBranch()
         );
     }
-
-
 
     public boolean removeWorkerRole(String id, String role) {
         throw new UnsupportedOperationException("Not implemented yet");
@@ -494,9 +476,7 @@ public class WorkerFacade {
         return true;
     }
 
-
-
-    /**
+    /*
      * ============================================================================================
      * Testing methods
      * DO NOT USE IN PRODUCTION!

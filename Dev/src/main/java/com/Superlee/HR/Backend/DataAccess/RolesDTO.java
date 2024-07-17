@@ -42,15 +42,4 @@ public class RolesDTO extends DTO {
     public List<RolesDTO> loadAll() {
         return ((RolesController) controller).loadAll();
     }
-    //    public static Map<String, Integer> loadRoles() { // TODO remove
-//        Map<String, Integer> roles = new HashMap<>();
-//        roles.put("HRManager", 0);
-//        roles.put("Manager", 1);
-//        roles.put("Cashier", 2);
-//        roles.put("Cleaner", 3);
-//        roles.put("Storekeeper", 4);
-//        roles.put("Security", 5);
-//        roles.put("Driver", 6);
-//        return roles;
-//    }
 }

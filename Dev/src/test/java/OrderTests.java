@@ -7,7 +7,6 @@ import com.Superlee.Supply.Service.OrderService;
 import com.Superlee.Supply.Service.Responses.Response;
 import com.Superlee.Supply.Service.Responses.ResponseT;
 import com.Superlee.Supply.Service.SupplierService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,30 +19,29 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderTests {
 
-    private static SupplierFacade supplierFacade = new SupplierFacade();
-    private static SupplierService supplierService = new SupplierService(supplierFacade);
-    private OrderService orderService = new OrderService(new OrderFacade(supplierFacade));
+    private static final SupplierFacade supplierFacade = new SupplierFacade();
+    private static final SupplierService supplierService = new SupplierService(supplierFacade);
+    private final OrderService orderService = new OrderService(new OrderFacade(supplierFacade));
 
-    public OrderTests(){
+    public OrderTests() {
     }
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         DataBaseCreator dataBaseCreator = new DataBaseCreator();
         dataBaseCreator.deleteAllTables();
         try {
             dataBaseCreator.CreateAllTables();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         supplierService.addSupplier("A", "0", "0000", Supplier.PaymentMethod.CASH, "Afula");
         supplierService.addSupplier("B", "1", "1111", Supplier.PaymentMethod.BANK_TRANSFER, "Beer Sheva");
         supplierService.addSupplier("C", "2", "2222", Supplier.PaymentMethod.CREDIT_CARD, "Haifa");
-
     }
 
     @Test
-    public void testAddGeneralOrder(){
+    public void testAddGeneralOrder() {
         Date shipmentDate = new Date();
         Map<Integer, Integer> products = new HashMap<>();
         Response res1 = orderService.addGeneralOrder(products, shipmentDate, 0);
@@ -53,7 +51,7 @@ public class OrderTests {
     }
 
     @Test
-    public void testAddRepOrder(){
+    public void testAddRepOrder() {
         Date shipmentDate = new Date();
         Map<Integer, Integer> products = new HashMap<>();
         Response res1 = orderService.addRepOrder(products, shipmentDate, 0, 1);
@@ -63,7 +61,7 @@ public class OrderTests {
     }
 
     @Test
-    public void testRemoveOrder(){
+    public void testRemoveOrder() {
         Date shipmentDate = new Date();
         Map<Integer, Integer> products = new HashMap<>();
         orderService.addRepOrder(products, shipmentDate, 0, 1);
@@ -72,7 +70,7 @@ public class OrderTests {
     }
 
     @Test
-    public void testGetAllOrders(){
+    public void testGetAllOrders() {
         Map<Integer, Integer> products = new HashMap<>();
         orderService.addGeneralOrder(products, new Date(), 0);
         ResponseT<List<Order>> res1 = orderService.getAllOrders();
@@ -81,7 +79,7 @@ public class OrderTests {
     }
 
     @Test
-    public void testUpdateOrders(){
+    public void testUpdateOrders() {
         Date shipmentDate0 = new Date("2025/12/12");
         Date shipmentDate1 = new Date("2023/12/12");
         Map<Integer, Integer> products = new HashMap<>();
@@ -92,11 +90,10 @@ public class OrderTests {
         assertFalse(res1.errorOccurred());
         ResponseT<List<Order>> res2 = orderService.getAllOrders();
         assertEquals(1, res2.getValue().size());
-
     }
 
     @Test
-    public void testAddProduct(){
+    public void testAddProduct() {
         Date shipmentDate1 = new Date();
         Map<Integer, Integer> products = new HashMap<>();
         orderService.addGeneralOrder(products, shipmentDate1, 0);
@@ -110,7 +107,7 @@ public class OrderTests {
     }
 
     @Test
-    public void testRemoveProduct(){
+    public void testRemoveProduct() {
         Date shipmentDate1 = new Date();
         Map<Integer, Integer> products = new HashMap<>();
         orderService.addGeneralOrder(products, shipmentDate1, 0);
@@ -125,7 +122,7 @@ public class OrderTests {
     }
 
     @Test
-    public void testGetPrice(){
+    public void testGetPrice() {
         Date shipmentDate1 = new Date();
         Map<Integer, Integer> products = new HashMap<>();
         orderService.addGeneralOrder(products, shipmentDate1, 0);
@@ -139,7 +136,7 @@ public class OrderTests {
     }
 
     @Test
-    public void testUpdateProductDiscountAccordingToAmount(){
+    public void testUpdateProductDiscountAccordingToAmount() {
         supplierService.addProductToSupplier(0, 0, 5, "Milk");
         Response res1 = supplierService.updateProductDiscountAccordingToAmount(0, 0, 3, 20);
         assertFalse(res1.errorOccurred());
@@ -155,11 +152,10 @@ public class OrderTests {
         assertFalse(res4.errorOccurred());
         ResponseT<Double> res5 = orderService.getOrderPrice(0);
         assertEquals(15, res5.getValue());
-
     }
 
     @Test
-    public void testAddProductByName(){
+    public void testAddProductByName() {
         supplierService.addProductToSupplier(0, 0, 5, "Milk");
         supplierService.addProductToSupplier(1, 1, 4, "Milk");
         supplierService.addProductToSupplier(2, 2, 5, "Milk");
@@ -169,9 +165,4 @@ public class OrderTests {
         ResponseT<Double> res2 = orderService.getOrderPrice(0);
         assertEquals(12, res2.getValue());
     }
-
-
-
-
-
 }

@@ -4,8 +4,6 @@ import com.Superlee.HR.Backend.Business.ShiftFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.function.Function;
-
 public class ShiftService {
     private static ShiftService instance;
     private final ShiftFacade sf;

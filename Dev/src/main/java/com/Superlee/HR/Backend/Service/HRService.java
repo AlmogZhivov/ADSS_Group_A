@@ -1,8 +1,8 @@
 package com.Superlee.HR.Backend.Service;
 
 import com.Superlee.HR.Backend.Business.UnpermittedOperationException;
+import com.Superlee.HR.Backend.DataAccess.DataAccessException;
 
-import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.util.NoSuchElementException;
 
@@ -506,7 +506,7 @@ public class HRService {
      * Load the data from the database
      *
      * @return an empty response if successful
-     * @throws SQLException if the data cannot be loaded
+     * @throws DataAccessException if the data cannot be loaded
      */
     public String loadData() {
         String response = ss.loadData();

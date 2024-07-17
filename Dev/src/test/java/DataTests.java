@@ -3,6 +3,11 @@ import com.Superlee.HR.Backend.Business.ShiftFacade;
 import com.Superlee.HR.Backend.Business.WorkerFacade;
 import com.Superlee.HR.Backend.Business.WorkerToSend;
 import com.Superlee.HR.Backend.DataAccess.BranchDTO;
+import com.Superlee.HR.Backend.DataAccess.ShiftDTO;
+import com.Superlee.HR.Backend.DataAccess.WorkerDTO;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,15 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.Superlee.HR.Backend.DataAccess.ShiftDTO;
-import com.Superlee.HR.Backend.DataAccess.WorkerDTO;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.*;
 
 public class DataTests {
     private final BranchFacade bf = BranchFacade.getInstance().setTestMode(true);
@@ -28,7 +25,6 @@ public class DataTests {
     private Map<String, Integer> mockRoles;
     private List<ShiftDTO> mockShifts;
     private List<WorkerDTO> mockWorkers;
-
 
     @Before
     public void setUp() {
@@ -114,7 +110,7 @@ public class DataTests {
             assertNotNull(wf.getWorkerById(w.getId()));
             assertTrue(wf.getWorkerById(w.getId()).roles().containsAll(w.getRoles()));
             assertTrue(w.getRoles().containsAll(wf.getWorkerById(w.getId()).roles()));
-            assertTrue(w.getShifts().equals(wf.getWorkerShifts(w.getId())));
+            assertEquals(w.getShifts(), wf.getWorkerShifts(w.getId()));
             assertTrue(wf.getWorkerAvailability(w.getId()).containsAll(w.getAvailability()));
         });
         fakeLogout();
@@ -130,16 +126,16 @@ public class DataTests {
         mockShifts.forEach(s -> {
             int id = s.getId();
             assertNotNull(sf.getShift(id));
-            assertTrue(LocalDateTime.parse(sf.getShift(id).startTime()).equals(s.getStartTime()));
-            assertTrue(LocalDateTime.parse(sf.getShift(id).endTime()).equals(s.getEndTime()));
-            assertTrue(sf.getShiftRequiredWorkersOfRole(id).equals(s.getRequiredRoles()));
+            assertEquals(LocalDateTime.parse(sf.getShift(id).startTime()), s.getStartTime());
+            assertEquals(LocalDateTime.parse(sf.getShift(id).endTime()), s.getEndTime());
+            assertEquals(sf.getShiftRequiredWorkersOfRole(id), s.getRequiredRoles());
 
             assertTrue(sf.getAssignableWorkersForShift(id).stream().map(WorkerToSend::id).toList().containsAll(s.getAvailableWorkers()));
             assertTrue(s.getAvailableWorkers().containsAll(sf.getAssignableWorkersForShift(id).stream().map(WorkerToSend::id).toList()));
 
             assertTrue(sf.getWorkersByShift(id).stream().map(WorkerToSend::id).toList().containsAll(s.getAssignedWorkers()));
             assertTrue(s.getAssignedWorkers().containsAll(sf.getWorkersByShift(id).stream().map(WorkerToSend::id).toList()));
-            assertTrue(sf.getWorkerRolesByShift(id).equals(s.getWorkerRoles()));
+            assertEquals(sf.getWorkerRolesByShift(id), s.getWorkerRoles());
         });
         fakeLogout();
     }
@@ -164,13 +160,13 @@ public class DataTests {
         wf.reset(0xC0FFEE);
         wf.loadData();
         fakeLogin(true);
-        assertTrue(wf.getWorkerById("0").email().equals("mr.poopybutthole@company.com"));
-        assertTrue(wf.getWorkerById("0").phone().equals("555-1234"));
+        assertEquals("mr.poopybutthole@company.com", wf.getWorkerById("0").email());
+        assertEquals("555-1234", wf.getWorkerById("0").phone());
         assertNotNull(wf.login("0", "password1"));
 
-        assertTrue(wf.getWorkerBankDetails("0").equals("123456789"));
-        assertTrue(wf.getWorkerById("0").contract().equals("permanent"));
-        assertTrue(wf.getWorkerById("0").salary() == 100000);
+        assertEquals("123456789", wf.getWorkerBankDetails("0"));
+        assertEquals("permanent", wf.getWorkerById("0").contract());
+        assertEquals(100000, wf.getWorkerById("0").salary());
         fakeLogout();
     }
 
@@ -197,8 +193,8 @@ public class DataTests {
         fakeLogin(true);
         assertTrue(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("0"));
         assertTrue(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("1"));
-        assertTrue(sf.getWorkerRolesByShift(0).get("0") == 1);
-        assertTrue(sf.getWorkerRolesByShift(0).get("1") == 2);
+        assertEquals(1, (int) sf.getWorkerRolesByShift(0).get("0"));
+        assertEquals(2, (int) sf.getWorkerRolesByShift(0).get("1"));
         fakeLogout();
     }
 
@@ -225,8 +221,8 @@ public class DataTests {
         fakeLogin(true);
         assertTrue(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("0"));
         assertTrue(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("1"));
-        assertTrue(sf.getWorkerRolesByShift(0).get("0") == 1);
-        assertTrue(sf.getWorkerRolesByShift(0).get("1") == 2);
+        assertEquals(1, (int) sf.getWorkerRolesByShift(0).get("0"));
+        assertEquals(2, (int) sf.getWorkerRolesByShift(0).get("1"));
 
         sf.unassignWorker("0", 0);
         sf.unassignWorker("1", 0);
@@ -235,10 +231,10 @@ public class DataTests {
         sf.loadData();
 
         fakeLogin(true);
-        assertTrue(!sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("0"));
-        assertTrue(!sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("1"));
-        assertTrue(sf.getWorkerRolesByShift(0).get("0") == null);
-        assertTrue(sf.getWorkerRolesByShift(0).get("1") == null);
+        assertFalse(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("0"));
+        assertFalse(sf.getWorkersByShift(0).stream().map(WorkerToSend::id).toList().contains("1"));
+        assertNull(sf.getWorkerRolesByShift(0).get("0"));
+        assertNull(sf.getWorkerRolesByShift(0).get("1"));
         fakeLogout();
     }
 
@@ -310,17 +306,17 @@ public class DataTests {
         );
 
         mockWorkers = Arrays.asList(
-                new WorkerDTO("0", "Mr", "Poopybutthole", "mr.poopybutthole@company.com", "555-1234", "123", "123456789", 100000, Arrays.asList(0), new ArrayList<>(), Arrays.asList(1, 2, 3), LocalDateTime.now(), "permanent", "Head Office"),
-                new WorkerDTO("1", "Homer", "Simpson", "homer.simpson@company.com", "555-2345", "password", "234567890", 50000, Arrays.asList(1, 2), Arrays.asList(1), Arrays.asList(1, 2), LocalDateTime.now(), "contract", "Branch1"),
+                new WorkerDTO("0", "Mr", "Poopybutthole", "mr.poopybutthole@company.com", "555-1234", "123", "123456789", 100000, List.of(0), new ArrayList<>(), Arrays.asList(1, 2, 3), LocalDateTime.now(), "permanent", "Head Office"),
+                new WorkerDTO("1", "Homer", "Simpson", "homer.simpson@company.com", "555-2345", "password", "234567890", 50000, Arrays.asList(1, 2), List.of(1), Arrays.asList(1, 2), LocalDateTime.now(), "contract", "Branch1"),
                 new WorkerDTO("2", "Peter", "Griffin", "peter.griffin@company.com", "555-3456", "password", "345678901", 48000, Arrays.asList(2, 3), Arrays.asList(1, 2), Arrays.asList(1, 2, 3), LocalDateTime.now(), "contract", "Branch1"),
-                new WorkerDTO("3", "SpongeBob", "SquarePants", "spongebob.squarepants@company.com", "555-4567", "password", "456789012", 52000, Arrays.asList(3, 4), Arrays.asList(2), Arrays.asList(1, 2, 3), LocalDateTime.now(), "contract", "Branch2"),
-                new WorkerDTO("4", "Daffy", "Duck", "daffy.duck@company.com", "555-5678", "password", "567890123", 49000, Arrays.asList(4, 5), Arrays.asList(2), Arrays.asList(1, 2), LocalDateTime.now(), "contract", "Branch2"),
-                new WorkerDTO("5", "Bugs", "Bunny", "bugs.bunny@company.com", "555-6789", "password", "678901234", 51000, Arrays.asList(5, 6), Arrays.asList(3), Arrays.asList(2, 3), LocalDateTime.now(), "contract", "Branch3"),
-                new WorkerDTO("6", "Shrek", "3D", "shrek@company.com", "555-7890", "password", "789012345", 47000, Arrays.asList(0, 1), Arrays.asList(3), Arrays.asList(2, 3), LocalDateTime.now(), "contract", "Branch3"),
-                new WorkerDTO("7", "Charlie", "Brown", "charlie.brown@company.com", "555-8901", "password", "890123456", 53000, Arrays.asList(2, 3), Arrays.asList(1), Arrays.asList(1, 2), LocalDateTime.now(), "contract", "Branch1"),
-                new WorkerDTO("8", "Scooby", "Doo", "scooby.doo@company.com", "555-9012", "password", "901234567", 48000, Arrays.asList(3, 4), Arrays.asList(2), Arrays.asList(2, 3), LocalDateTime.now(), "contract", "Branch2"),
-                new WorkerDTO("9", "Unity", "Noob", "unity@company.com", "555-0123", "password", "012345678", 49000, Arrays.asList(4, 5), Arrays.asList(3), Arrays.asList(2, 3), LocalDateTime.now(), "contract", "Branch3"),
-                new WorkerDTO("10", "Noob", "Noob", "noob.noob@company.com", "555-1230", "password", "123456789", 50000, Arrays.asList(5, 6), Arrays.asList(4), Arrays.asList(1, 3), LocalDateTime.now(), "contract", "Branch3")
+                new WorkerDTO("3", "SpongeBob", "SquarePants", "spongebob.squarepants@company.com", "555-4567", "password", "456789012", 52000, Arrays.asList(3, 4), List.of(2), Arrays.asList(1, 2, 3), LocalDateTime.now(), "contract", "Branch2"),
+                new WorkerDTO("4", "Daffy", "Duck", "daffy.duck@company.com", "555-5678", "password", "567890123", 49000, Arrays.asList(4, 5), List.of(2), Arrays.asList(1, 2), LocalDateTime.now(), "contract", "Branch2"),
+                new WorkerDTO("5", "Bugs", "Bunny", "bugs.bunny@company.com", "555-6789", "password", "678901234", 51000, Arrays.asList(5, 6), List.of(3), Arrays.asList(2, 3), LocalDateTime.now(), "contract", "Branch3"),
+                new WorkerDTO("6", "Shrek", "3D", "shrek@company.com", "555-7890", "password", "789012345", 47000, Arrays.asList(0, 1), List.of(3), Arrays.asList(2, 3), LocalDateTime.now(), "contract", "Branch3"),
+                new WorkerDTO("7", "Charlie", "Brown", "charlie.brown@company.com", "555-8901", "password", "890123456", 53000, Arrays.asList(2, 3), List.of(1), Arrays.asList(1, 2), LocalDateTime.now(), "contract", "Branch1"),
+                new WorkerDTO("8", "Scooby", "Doo", "scooby.doo@company.com", "555-9012", "password", "901234567", 48000, Arrays.asList(3, 4), List.of(2), Arrays.asList(2, 3), LocalDateTime.now(), "contract", "Branch2"),
+                new WorkerDTO("9", "Unity", "Noob", "unity@company.com", "555-0123", "password", "012345678", 49000, Arrays.asList(4, 5), List.of(3), Arrays.asList(2, 3), LocalDateTime.now(), "contract", "Branch3"),
+                new WorkerDTO("10", "Noob", "Noob", "noob.noob@company.com", "555-1230", "password", "123456789", 50000, Arrays.asList(5, 6), List.of(4), Arrays.asList(1, 3), LocalDateTime.now(), "contract", "Branch3")
         );
 
 
@@ -354,5 +350,4 @@ public class DataTests {
             sf.getDTO().insert();
         });
     }
-
 }

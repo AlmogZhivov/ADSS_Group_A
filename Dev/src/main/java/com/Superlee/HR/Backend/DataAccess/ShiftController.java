@@ -164,19 +164,6 @@ public class ShiftController extends Controller<ShiftDTO> {
         }
     }
 
-//    private void insertAssignedWorkers() throws SQLException {
-//        String insertSQL;
-//        PreparedStatement pstmt;
-//        for (String worker : dto.getAssignedWorkers()) {
-//            insertSQL = "INSERT INTO ShiftAssignedWorkers(shiftId, workerId, role) VALUES (?, ?, ?)";
-//            pstmt = conn.prepareStatement(insertSQL);
-//            pstmt.setInt(1, dto.getId());
-//            pstmt.setString(2, worker);
-//            pstmt.setString(3, "assigned");
-//            pstmt.executeUpdate();
-//        }
-//    }
-
     private void insertAssignedWorkers() throws SQLException {
         String insertSQL;
         PreparedStatement pstmt;

@@ -41,12 +41,4 @@ public class BranchDTO extends DTO {
     public List<BranchDTO> loadAll() {
         return ((BranchController) controller).loadAll();
     }
-
-//    public static List<BranchDTO> getBranches() { // TODO remove
-//        List<BranchDTO> branches = new ArrayList<>();
-//        branches.add(new BranchDTO("Branch1", "Address1", "Manager1"));
-//        branches.add(new BranchDTO("Branch2", "Address2", "Manager2"));
-//        branches.add(new BranchDTO("Branch3", "Address3", "Manager3"));
-//        return branches;
-//    }
 }

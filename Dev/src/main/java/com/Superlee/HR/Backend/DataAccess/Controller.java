@@ -1,7 +1,10 @@
 package com.Superlee.HR.Backend.DataAccess;
 
 import java.io.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
 

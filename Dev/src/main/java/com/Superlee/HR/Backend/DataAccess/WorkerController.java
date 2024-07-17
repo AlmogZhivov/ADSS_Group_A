@@ -121,7 +121,7 @@ public class WorkerController extends Controller<WorkerDTO> {
                 workers.add(worker);
             }
 
-             for (WorkerDTO worker : workers) {
+            for (WorkerDTO worker : workers) {
                 String selectRolesSQL = "SELECT role FROM WorkerRoles WHERE workerId = ?";
                 PreparedStatement pstmtRoles = conn.prepareStatement(selectRolesSQL);
                 pstmtRoles.setString(1, worker.getId());

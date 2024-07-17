@@ -5,7 +5,10 @@ import com.Superlee.HR.Backend.DataAccess.ShiftDTO;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 public class ShiftFacade {
@@ -122,13 +125,6 @@ public class ShiftFacade {
 
 
         return shifts.get(id).getAvailableWorkers().stream().map(workerFacade::getWorkerById).collect(Collectors.toList());
-
-        //TODO: This is the original code, but it is not working. We need to check y.
-//        return workerFacade
-//                .getAllWorkers()
-//                .stream()
-//                .filter((worker) -> shifts.get(id).getAvailableWorkers().contains(worker.id()))
-//                .collect(Collectors.toList());
     }
 
     public ShiftToSend getShift(int id) {
@@ -141,8 +137,6 @@ public class ShiftFacade {
         return convertToShiftToSend(shifts.get(id));
     }
 
-    // TODO: this is a new method, add to the UML and where ever else needed.
-    // TODO: Note that we must no make any changes in the UML until we get graded.
     public Map<String, Integer> getShiftRequiredWorkersOfRole(int id) {
         if (id < 0)
             throw new IllegalArgumentException("Illegal argument");
@@ -153,8 +147,6 @@ public class ShiftFacade {
         return shifts.get(id).getRequiredRoles();
     }
 
-    // TODO: this is a new method, add to the UML and where ever else needed.
-    // TODO: Note that we must no make any changes in the UML until we get graded.
     public Map<String, Integer> getWorkerRolesByShift(int id) {
         if (id < 0)
             throw new IllegalArgumentException("Illegal argument");
@@ -188,7 +180,6 @@ public class ShiftFacade {
     }
 
     public int addNewShift(String start, String end, String branch) {
-        // TODO check if shift is on a saturday, check if branch exists
         Util.throwIfNullOrEmpty(start, end, branch);
 
         workerFacade.requireHRManagerOrThrow();
@@ -272,11 +263,6 @@ public class ShiftFacade {
                 .stream()
                 .map(ShiftFacade::ShiftDTOtoShift)
                 .collect(Collectors.toMap(Shift::getId, w -> w));
-//        shifts = ShiftDTO
-//                .getShifts()
-//                .stream()
-//                .map(ShiftFacade::ShiftDTOtoShift)
-//                .collect(Collectors.toMap(Shift::getId, w -> w));
         nextId = shifts.values().stream().mapToInt(Shift::getId).max().orElse(0) + 1;
         return true;
     }
@@ -294,12 +280,9 @@ public class ShiftFacade {
         );
     }
 
-
     private static ShiftToSend convertToShiftToSend(Shift shift) {
         return new ShiftToSend(shift.getId(), shift.getStartTime().toString(), shift.getEndTime().toString(), shift.getBranch());
     }
-
-
 
     public List<ShiftToSend> getWorkerHistory(String id) {
         Util.throwIfNullOrEmpty(id);
@@ -343,9 +326,7 @@ public class ShiftFacade {
     }
 
 
-
-
-    /**
+    /*
      * ============================================================================================
      * Testing methods
      * DO NOT USE IN PRODUCTION!

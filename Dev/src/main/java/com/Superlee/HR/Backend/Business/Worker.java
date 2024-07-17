@@ -45,7 +45,7 @@ class Worker {
 
     Worker(String id, String firstname, String surname, String email, String phone,
            String password, String bankDetails, int salary,
-           List<Integer> roles, List<Integer> shifts, List<Integer> availability,  LocalDateTime startDate, String contract, String branch) {
+           List<Integer> roles, List<Integer> shifts, List<Integer> availability, LocalDateTime startDate, String contract, String branch) {
         this.id = id;
         this.firstname = firstname;
         this.surname = surname;

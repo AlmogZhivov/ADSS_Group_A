@@ -1,11 +1,10 @@
 package com.Superlee.HR.Backend.DataAccess;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.sql.PreparedStatement;
 
 public class RolesController extends Controller<RolesDTO> {
     public RolesController(RolesDTO dto) {

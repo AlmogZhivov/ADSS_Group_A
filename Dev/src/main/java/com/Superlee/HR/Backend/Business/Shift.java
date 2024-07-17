@@ -1,10 +1,10 @@
 package com.Superlee.HR.Backend.Business;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 class Shift {
     private final static Roles roles = Roles.getInstance();
@@ -15,7 +15,7 @@ class Shift {
     private Map<String, Integer> requiredRoles;
     private List<String> availableWorkers;
     private List<String> assignedWorkers;
-    private Map<String, Integer> workerRoles;
+    private final Map<String, Integer> workerRoles;
     private String branch;
 
     public Shift(int id, LocalDateTime startTime, LocalDateTime endTime, String branch) {
@@ -33,7 +33,7 @@ class Shift {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.requiredRoles = requiredRoles!=null ? requiredRoles : new HashMap<>(roles.DEFAULT_SHIFT_ROLES);
+        this.requiredRoles = requiredRoles != null ? requiredRoles : new HashMap<>(roles.DEFAULT_SHIFT_ROLES);
         this.availableWorkers = availableWorkers != null ? availableWorkers : new ArrayList<>();
         this.assignedWorkers = assignedWorkers != null ? assignedWorkers : new ArrayList<>();
         this.workerRoles = workerRoles != null ? workerRoles : new HashMap<>();
@@ -59,9 +59,8 @@ class Shift {
     }
 
     public boolean removeAssignedWorker(String worker) {
-
-        if(workerRoles.remove(worker) != null){
-            assignedWorkers=workerRoles.keySet().stream().toList();
+        if (workerRoles.remove(worker) != null) {
+            assignedWorkers = workerRoles.keySet().stream().toList();
             return true;
         }
         return false;
