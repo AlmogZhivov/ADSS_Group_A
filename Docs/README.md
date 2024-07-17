@@ -6,6 +6,10 @@
 
 212840540
 
+325989135
+
+326118460
+
 ## Libraries Used
 
 [Maven](https://github.com/apache/maven)
@@ -14,12 +18,22 @@
 
 [JUnit 4](https://github.com/junit-team/junit4)
 
+[JUnit 5](https://github.com/junit-team/junit5)
+
 [SQLite](https://github.com/xerial/sqlite-jdbc)
 
 ## Instructions
 
-The interface is separated into two sections, one for the HR manager and one for regular workers.
-By default there are 11 workers registered into the system.
+Upon launching the program, the user will be required to log in.
+When a user logs in, they will be presented with a menu of options according to their role.
+
+The interface is separated into four main sections:
+1. Login Screen
+2. HR Manager Menu
+3. Supply Manager Menu
+4. Employee Menu
+
+By default there are 7 workers registered into the system.
 
 **List of available commands before login**:
 
@@ -56,7 +70,7 @@ Worker id 0 is the HR manager, login with:
 login 0 123
 ```
 
-Workers with id 1 to 10 are regular workers they all have the password "password", login with:
+Workers with id 1 to 5 are regular workers the worker with id 6 is the Supply Manager, they all have the password "password", login with:
 ```sh
 login <id> password
 ```
