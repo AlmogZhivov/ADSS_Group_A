@@ -1,6 +1,6 @@
-# HR Module
+# Superlee
 
-## Authors
+### Authors
 
 315858738
 
@@ -10,7 +10,7 @@
 
 326118460
 
-## Libraries Used
+### Libraries Used
 
 [Maven](https://github.com/apache/maven)
 
@@ -22,7 +22,9 @@
 
 [SQLite](https://github.com/xerial/sqlite-jdbc)
 
-## Instructions
+## HR Module
+
+### Instructions
 
 Upon launching the program, the user will be required to log in.
 When a user logs in, they will be presented with a menu of options according to their role.
@@ -58,7 +60,7 @@ exit the program
 exit
 ```
 
-### Login
+#### Login
 
 To login into the system use the command:
 ```sh
@@ -77,7 +79,7 @@ login <id> password
 
 <div style="page-break-after: always"></div>
 
-## HR manager Commands
+### HR manager Commands
 
 **The following commands are available to the HR manager**:
 
@@ -200,7 +202,7 @@ exit
 
 <div style="page-break-after: always"></div>
 
-## Regular Worker Commands
+### Regular Worker Commands
 
 **The following commands are available to regular workers**:
 
